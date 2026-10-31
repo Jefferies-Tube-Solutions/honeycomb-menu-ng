@@ -83,3 +83,38 @@ test('one Bee preset keeps asset, default paint and live build version while con
  const normal=bee.descriptor(),back=bee.descriptor({}, {collapse:true});assert.deepEqual(normal.colors,back.colors);assert.equal(normal.tap_action.action,'honeycomb-bee-flap');assert.equal(back.tap_action.action,'honeycomb-hub-collapse');assert.equal(back.hold_action.action,'honeycomb-bee-flap');assert.equal(bee.asset,require('../src/brand/bee.generated').HONEYCOMB_BEE_PNG);assert.equal(typeof bee.version.text,'string');assert.ok(bee.REVEAL_MS>=3000);
  const explicit=bee.descriptor({colors:{center:'#123456'},border:{inner_width:7}});assert.equal(explicit.colors.center,'#123456');assert.equal(explicit.colors.fill_gradient,false);assert.equal(explicit.border.inner_width,7);assert.equal(bee.descriptor({background:'#123456'}).colors.fill_gradient,false);assert.equal(bee.descriptor({styles:{card:[{'background-color':'#123456'}]}}).colors.fill_gradient,false);
 });
+test('small-screen free canvas fits actual four-cube Hub without shrinking or requiring 19 phantom cubes',()=>{
+ const f={left:-1.5,right:1,top:-1.44235,bottom:.57735},image={left:0,right:390,top:0,bottom:330},origin={x:195,y:165};
+ const old=g.place(f,viewport,image,100,null,origin),r=g.placeRoot(f,viewport,image,100,null,origin);
+ assert.equal(old.region.key,'viewport');assert.ok(g.smallScreen(f,viewport,100));
+ assert.equal(r.region.key,'below');assert.equal(r.size,old.size);assert.equal(r.x,195);
+ assert.ok(g.fits(f,r.size,r,r.region));assert.ok(g.boundsAt(f,r.size,r).top>=342);
+});
+test('small-screen detection uses usable working-envelope geometry, not a phone CSS-width boundary',()=>{
+ const f={left:-.5,right:.5,top:-g.HEIGHT/2,bottom:g.HEIGHT/2};
+ assert.equal(g.smallScreen(f,{left:16,right:828,top:16,bottom:374},100),true);
+ assert.equal(g.smallScreen(f,{left:16,right:784,top:16,bottom:1264},100),false);
+ assert.equal(g.smallScreen(f,viewport,50),false);
+});
+test('mobile prefers a fitting lower region even when another is larger; other zones use space and centering',()=>{
+ const f={left:-1,right:.5,top:-.6,bottom:.6},v={left:16,right:374,top:16,bottom:828};
+ const r=g.placeRoot(f,v,{left:0,right:390,top:450,bottom:650},100);
+ assert.equal(r.region.key,'below');assert.equal(r.size,100);assert.ok(g.fits(f,r.size,r,r.region));
+ const other=g.placeRoot(f,v,{left:200,right:390,top:400,bottom:844},100);
+ assert.equal(other.region.key,'left');assert.ok(g.fits(f,other.size,other,other.region));
+});
+test('mobile cannot discard extended controls or further shrink just to occupy a free strip',()=>{
+ const f={left:-3,right:3,top:-2,bottom:2},image={left:0,right:390,top:0,bottom:750},origin={x:195,y:375};
+ const old=g.place(f,viewport,image,100,null,origin),r=g.placeRoot(f,viewport,image,100,null,origin);
+ assert.deepEqual(r,old);assert.ok(g.fits(f,r.size,r,viewport));
+ assert.deepEqual(g.placeRoot(two,viewport,null,100,null,origin),g.place(two,viewport,null,100,null,origin));
+});
+test('desktop results and explicit small-screen opt-out preserve beta.6 scaling, anchor and thresholds exactly',()=>{
+ const v={left:16,right:1424,top:16,bottom:1064},origin={x:720,y:440};
+ for(const bottom of [480,672,676,680,880]) {
+  const image={left:0,right:1440,top:0,bottom};const old=g.place(two,v,image,100,null,origin);
+  assert.deepEqual(g.placeRoot(two,v,image,100,null,origin),old);
+ }
+ const image={left:0,right:390,top:0,bottom:330};
+ assert.deepEqual(g.placeRoot(two,viewport,image,100,null,origin,false),g.place(two,viewport,image,100,null,origin));
+});

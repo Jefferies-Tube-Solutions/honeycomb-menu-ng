@@ -45,6 +45,17 @@ an existing valid free-space placement is retained down to 84%. In the neutral
 84–85% band with no prior free-space choice, fallback wins deterministically.
 These thresholds are automatic and require no YAML.
 
+On a constrained screen, the full planning envelope may be wider or taller than
+its entire safe viewport at the requested expanded size. In that case, with the
+standard small-screen behavior enabled, placement checks the **actual visible
+controls** at the size already chosen above. If they fit outside the image, the
+Hub uses that free canvas instead of covering the image. A fitting region below
+the image wins; other regions are ranked by usable area and cube-0 centering.
+This changes placement priority without further shrinking cubes. It uses measured
+safe viewport/layout geometry, not a new device-width breakpoint or YAML option.
+The desktop planning/threshold rules remain intact when the working envelope fits.
+Explicit `small_screen: false` and the legacy `mobile` alias keep their meaning.
+
 When free space is too cramped, the Hub stays as close as safely possible to its
 original floorplan cube-0 anchor. It uses the largest size up to expanded_size
 that fits the safe viewport, reserving center + first ring (0–6) and all actual
