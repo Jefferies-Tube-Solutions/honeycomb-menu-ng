@@ -1,62 +1,63 @@
-# v1.10.0-beta.6 published — STOP for owner testing
+# beta.6 mobile free-canvas follow-up — implementation complete, not released
 
-Published: https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.10.0-beta.6
-Development PR: https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/157
-Exact tested/released source: 6db9e046da496c5d6d437d8d0da08346136ec11f
-Release branch: fix/v1.10-beta6-placement (kept at the exact released source).
-Baseline: published beta.5 83cbdd486a924f88f2ad399886dff4fb31d913db.
-This handoff-only branch is separate from the released source; no runtime changes.
+Branch: fix/beta6-mobile-free-space. Implementation commit:
+3d60a4d7b9f97d438ca3f99daa29e7c7973f7b7f (subsequent handoff is documentation only).
+Published beta.6 baseline: 6db9e046da496c5d6d437d8d0da08346136ec11f;
+its immutable tag/release and fix/v1.10-beta6-placement branch remain unchanged.
+Parent PR #157 remains open. The follow-up PR is stacked on that release branch.
+Use `gh pr view fix/beta6-mobile-free-space` for the latest review/head/CI evidence;
+verify actual runs rather than treating this checkpoint as proof of later CI.
 
-Issue #148 beta.6 only. Root image-free placement measures shared physical slots
-0–18 plus all actual controls, prefers full size, accepts new regions at >=85%,
-retains existing valid regions to 84%, and falls back near original physical cube
-0 when cramped. Fallback reserves first ring plus every actual control; submenus
-retain actual-footprint selected-cube promotion and exact parent Back. No extra
-YAML or phantom controls. Normal collapsed max82/expanded_size stay independent.
+Authorized scope: issue #148 mobile expanded-Hub placement only. Latest owner
+comment and user follow-up read. No Beam of Origin #156, architecture review #154,
+main/master merge, stable, production HA or environment configuration change.
+No new beta label or publication is authorized; do not overwrite beta.6 assets/tag.
+Owner mobile acceptance failed on published beta.6; full-size physical PC acceptance
+remains unverified. Synthetic desktop tests never establish owner real-HA acceptance.
 
-Validation COMPLETE for the released source:
-- Node20 core contract runner OK; 454 Node tests pass, 3 existing stable-only skips.
-- All 30 mandatory local CI groups pass. Initial core browser missing-reference
-  failure was repaired by fetching historical tags; complete rerun: 68 desktop +
-  68 phone cases pass. No unresolved failure or suppressed assertion.
-- Full module/browser/docs regressions, 49-case seven-viewport geometry matrix,
-  five new beta.6 browser cases, 100/85/84% hysteresis, extended actual slots,
-  nested exact Back, resize/rotation, safe areas, keyboard/editing/lifecycle pass.
-- Custom expanded_size 50/82/120/150/200 and visible-edge clamping pass.
-- HACS package, metadata/integrity, pinned checksum-verified actionlint, second
-  byte-identical Node20 rebuild and unchanged guarded release verification pass.
-- Owner A before/after: full 100px below image, pixel-identical screenshots.
-  Owner B: beta.5 85.16px in cramped strip -> beta.6 100px at original cube-0 anchor.
-  Four configured controls remain four. Screenshots use a pinned public HA floorplan.
-- Downloaded actual public bundle independently passes the five-case Chromium
-  placement/threshold/responsive/nested smoke suite; console/page-error checks pass.
+Root cause measured on 390x844: safe viewport [16,16..374,828], image bottom295.39,
+original cube0 (195,147.88). Actual four-cube footprint fits below at100px, but the
+19-slot planning envelope fits only71.6px, so beta.6 rejected it and overlaid image.
+Follow-up keeps100px and places cube0 at(195,567.70), fully below the image.
 
-Green exact-source runs:
-Push: https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41241999624
-PR: https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41242032668
-Official HACS: https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41242075650
-Guarded publication: https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41244207046
-Both build/lint jobs and both publication jobs completed successfully.
+Implementation: placeRoot first keeps beta.6's existing size/planning decision.
+Small-screen behavior is determined by whether the standard working envelope can
+fit the entire safe viewport at desired expanded size (not a new CSS breakpoint).
+If constrained and existing small_screen behavior is enabled, examine every free
+region using ALL actual visible controls at the already chosen size. Prefer below
+if it fits; otherwise usable area and logical cube0 centering. Overlay the image
+only when no external region fits. Desktop planning/85-84% hysteresis/origin fallback
+remain byte-for-byte equivalent in tested desktop outcomes. Child geometry remains
+actual-footprint based; original anchor and exact Back/collapse behavior retained.
+Existing compact-phone opt-out (including legacy mobile alias) is untouched.
 
-Public payload: 317009 bytes; SHA256
-f9ed6e5cc1ba171543f958798ee9848d979ca84988b48560309d1f2e661616d8.
-Public tag/source, bundle/checksum/provenance and all three API asset digests
-independently verified. All 114 pre-existing tags and 61 releases/assets retained;
-master ba95dade58fa64c5183a312e0d1d00044feeb096 and latest stable v1.9.0 unchanged.
-No source modules/Bee/image-sizing/release/retention workflow changes from beta.5.
+No YAML keys/names/defaults or package/release versions changed. Minimal
+collapsible:true and all existing configurations remain compatible. Only shared
+geometry/root lifecycle calls, tests/CI coverage, guide and rebuilt bundle changed.
 
-Evidence outside Git: /workspace/build-output/beta6/; before/, full/, public-smoke/,
-public-assets/, validation-resolved.json, geometry-summary.json, public-verification.json.
-Browser plugin not available; repository Playwright/system Chromium. Direct local
-CI artifact download was network-denied; the unchanged GitHub release workflow
-successfully performed the required CI/committed/staged byte comparisons.
+Implementation-checkpoint validation:
+- Node20 core contracts +459 Node tests pass, 3 existing stable-only skips.
+- Chromium follow-up: four phone/landscape/tablet cases plus desktop matrix/panel
+  cases pass; exact nested Back/collapse and no console/page errors verified.
+- 8 desktop before/after PNGs are pixel-identical: 1440x900,1920x1080,2560x1440,
+  3440x1440, each full19-slot full-size free region and cramped-strip origin fallback.
+- Two-sided narrow panel/safe insets, translated/cropped image, orientation pass.
+- Existing beta.6 five-case threshold/extended-slot suite passes. Full 49-case
+  geometry/navigation matrix is running at this checkpoint; consult final PR/CI.
+- HACS/local packaging/integrity, pinned actionlint and byte-identical rebuild pass.
+- Browser plugin not available; existing Playwright/system Chromium used. No live HA.
 
-Owner next: in HACS enable beta versions, select/redownload v1.10.0-beta.6, refresh
-frontend/resource cache, test both actual floorplans on Android/PC and report #148
-acceptance. Existing minimal collapsible:true YAML needs no additions. Browser
-fixtures use synthetic entities/services; no real HA, physical device or hardware
-acceptance is claimed. No production Home Assistant changes were made.
+Evidence outside Git: /workspace/build-output/beta6-mobile/; before/, after/,
+matrix/, desktop-regression/, node.log. JSON records actual/planning footprints,
+image/safe viewport, external candidates/rejection reasons, size, original/selected
+anchors and actual bounds. Before bundle is exact published beta.6 payload.
+Fixture corrections: restored a test-local bounding-box variable accidentally
+shadowed by a boolean; panel anchors must be visibly clickable. Existing chrome
+classification treats a full-height panel wider than half the viewport as a
+horizontal band too; chrome detection was not changed by this placement-only fix.
+The constrained-panel regression uses ordinary side panels leaving narrow canvas.
 
-STOP: do not merge main/master, publish stable, begin Beam of Origin #156 or the
-architecture/dead-code review #154. Await owner beta.6 acceptance/new instructions.
-No environment configuration was reapplied or published during this coding task.
+Next: finish/check complete geometry matrix and exact-head push/PR CI, report
+actual results on the follow-up PR. Keep follow-up unreleased for owner review.
+Do not auto-publish, overwrite beta.6, merge master, or begin #154/#156. Owner must
+verify Android/mobile and PC in real HA; next corrective beta label needs agreement.
