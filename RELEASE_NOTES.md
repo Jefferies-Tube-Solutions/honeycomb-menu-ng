@@ -1,3 +1,25 @@
+# Honeycomb NG v1.10.0-beta.6 — comfortable floorplan placement
+
+Cumulative from published beta.5 source `83cbdd486a924f88f2ad399886dff4fb31d913db`.
+Issue #148 only; no main/master merge, stable or production Home Assistant changes.
+
+- Plan image-free placement with the shared physical slots 0–18 envelope, unioned
+  with all actual visible controls. No phantom cubes or extra YAML.
+- Prefer full expanded size in any region above/below/left/right of the displayed
+  image. Accept new free-space placement at >=85% size; retain a previous valid
+  region down to 84% to avoid resize oscillation. With no prior choice, the neutral
+  84–85% band falls back deterministically to the original floorplan anchor.
+- Reject cramped strips and use the largest viewport-safe size near original cube
+  0, reserving center/inner ring and every actual visible control. Clamp only as
+  necessary. Normal collapsed auto max82 and expanded_size remain independent.
+- Preserve actual-footprint submenu promotion, exact parent Back, collapse/timeout,
+  safe areas, image clipping, shared Bee, Radio/Sonos/Climate and other modules.
+
+Automated synthetic Chromium geometry/screenshots cover both owner scenarios,
+100/85/84% boundaries, extended slots, resize and nested Back. Real Home Assistant,
+physical Android/PC and owner floorplans still require owner beta.6 acceptance.
+Beam of Origin #156 and architecture review #154 are deferred. Stop for owner testing.
+
 # Honeycomb NG v1.10.0-beta.5 — responsive expansion, promotion and shared Bee
 
 Cumulative from exact published beta.4. No stable promotion or master merge.

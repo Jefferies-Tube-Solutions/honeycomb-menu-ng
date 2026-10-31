@@ -37,12 +37,22 @@ do not constrain the expanded scene.
 
 The Hub measures the displayed image (including supported contain/cover and
 object-position), then considers free regions below, above, left and right. It
-fits the complete visible group, including asymmetric slots, while placing cube 0
-near the chosen region's center. It prefers a comfortable region rather than
-shrinking into a thin strip. If no region fits usefully, it falls back to the safe
-viewport. Measurable fixed/sticky HA headers, sidebars, visual viewport offsets
-and safe-area insets are respected. There is no screenshot-color detection and
-no extra YAML. Unsupported image transforms use the safe viewport fallback.
+plans with the complete physical slots 0–18 working envelope plus all actually
+visible controls beyond it. This reserves space without allocating extra cubes.
+It first prefers a full-size region and centers cube 0 as close to that region's
+center as safe bounds allow. New placements may shrink to 85% of expanded_size;
+an existing valid free-space placement is retained down to 84%. In the neutral
+84–85% band with no prior free-space choice, fallback wins deterministically.
+These thresholds are automatic and require no YAML.
+
+When free space is too cramped, the Hub stays as close as safely possible to its
+original floorplan cube-0 anchor. It uses the largest size up to expanded_size
+that fits the safe viewport, reserving center + first ring (0–6) and all actual
+visible controls. No active control is dropped or clipped. Measurable fixed/sticky
+HA headers, sidebars, visual viewport offsets and safe-area insets are respected.
+Unsupported image transforms use this same root-near safe viewport fallback.
+Submenus keep their actual footprint (no forced 0–18 envelope) so selected-cube
+promotion and exact parent restoration remain unchanged.
 
 Image/viewport resize, scrolling and rotation reevaluate placement. Equivalent
 regions remain stable; ordinary HA state updates do not move the group. Closing

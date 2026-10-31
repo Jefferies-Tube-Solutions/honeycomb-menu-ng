@@ -1,7 +1,21 @@
 // Geometry for expanded scenes. Coordinates come from the existing layout engine;
 // this module neither allocates slots nor renders controls.
 const HEIGHT=1.1547;
+const layout=require('./layout');
+// New free-space placements need >=85%; retain an existing one down to 84%.
+// The neutral band has no-prior fallback at the original floorplan anchor.
+const FREE_SCALE=Object.freeze({enter:.85,retain:.84});
 const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+function union(a,b) { return {left:Math.min(a.left,b.left),right:Math.max(a.right,b.right),top:Math.min(a.top,b.top),bottom:Math.max(a.bottom,b.bottom)}; }
+function workingFootprint(actual,lastSlot=18) {
+    const center=layout.sceneCenter(2),cx=center.x+.5,cy=center.y+HEIGHT/2;
+    let result={left:-.5,right:.5,top:-HEIGHT/2,bottom:HEIGHT/2};
+    for(let i=0;i<lastSlot;i++) {
+        const p=layout.buttonPosition(i,{inner:true,outer:true,radius:2});
+        result=union(result,{left:p.x-cx,right:p.x+1-cx,top:p.y-cy,bottom:p.y+HEIGHT-cy});
+    }
+    return union(result,actual);
+}
 function footprint(menu) {
     const center=menu._computeCenterPosition(),cx=center.x+.5,cy=center.y+HEIGHT/2;
     const points=[center];
@@ -31,23 +45,29 @@ function freeRegions(viewport,image,gap=12) {
         {...viewport,left:Math.max(viewport.left,image.right+gap),key:'right'}];
     return regions.filter(r=>r.right>r.left && r.bottom>r.top);
 }
-function place(f,viewport,image,desired=100,previous=null) {
-    const candidates=freeRegions(viewport,image).map(region=>({region,size:fittedSize(f,region,desired)}))
-        .filter(c=>c.size>=Math.min(80,desired) && c.size>=desired*.8);
+function place(f,viewport,image,desired=100,previous=null,origin=null,planning=workingFootprint(f)) {
+    const candidates=freeRegions(viewport,image).map(region=>({region,size:fittedSize(planning,region,desired)}));
     candidates.sort((a,b)=>b.size-a.size || (b.region.right-b.region.left)*(b.region.bottom-b.region.top)-(a.region.right-a.region.left)*(a.region.bottom-a.region.top));
-    let best=candidates[0];
-    // Retain a nearly equivalent region across tiny resizes instead of oscillating.
+    const reaches=(candidate,threshold)=>candidate.size/desired>=threshold-1e-9;
+    let best=candidates.find(c=>reaches(c,FREE_SCALE.enter));
     const retained=previous && previous.region && candidates.find(c=>c.region.key===previous.region.key);
-    if(best && retained && retained.size>=best.size-2 && (retained.region.right-retained.region.left)*(retained.region.bottom-retained.region.top)>=(best.region.right-best.region.left)*(best.region.bottom-best.region.top)*.95)best=retained;
-    if(!best)best={region:{...viewport,key:'viewport'},size:fittedSize(f,viewport,desired)};
-    return {...centerIn(f,best.size,best.region),...best};
+    // Full-size alternatives always beat reduced-size regions. In the neutral
+    // band retain a valid prior free-space decision, otherwise prefer the root.
+    if(retained && reaches(retained,FREE_SCALE.retain) && (!best ||
+        (best.size<desired && (retained.size/desired<FREE_SCALE.enter || retained.size>=best.size-2)) || retained.size===desired))best=retained;
+    if(best)return {...centerIn(planning,best.size,best.region,retained===best?previous:null),...best};
+    // Do not force the full outer planning ring into the viewport on phones.
+    // Reserve center + first ring, unioned with EVERY actual visible control.
+    const usable=planning===f?f:workingFootprint(f,6),size=fittedSize(usable,viewport,desired);
+    return {...centerIn(usable,size,viewport,origin),region:{...viewport,key:'viewport'},size};
 }
 function submenu(f,viewport,root,preferred,desired,image=null) {
     const region=root.region && !['viewport','compact'].includes(root.region.key) && fittedSize(f,root.region,desired)>=desired-.001?root.region:viewport;
     if(fits(f,desired,preferred,region))return {...preferred,size:desired,reason:'selected'};
     if(fits(f,desired,root,region))return {x:root.x,y:root.y,size:desired,reason:'root'};
     if(region!==viewport)return {...centerIn(f,desired,region,root),size:desired,reason:'region'};
-    const alternate=place(f,viewport,image,desired,root);
+    // Tiny children use their actual footprint, never the root planning ring.
+    const alternate=place(f,viewport,image,desired,root,root,f);
     if(alternate.region.key!=='viewport')return {...alternate,reason:'region'};
     const size=fittedSize(f,viewport,desired);
     return {...centerIn(f,size,viewport,root),size,reason:'viewport'};
@@ -83,4 +103,4 @@ function environment(menu,owner,image=null) {
     }
     return {viewport,image,key:JSON.stringify([viewport,image])};
 }
-module.exports={HEIGHT,footprint,boundsAt,fits,fittedSize,centerIn,freeRegions,place,submenu,chromeElements,environment};
+module.exports={HEIGHT,FREE_SCALE,workingFootprint,footprint,boundsAt,fits,fittedSize,centerIn,freeRegions,place,submenu,chromeElements,environment};

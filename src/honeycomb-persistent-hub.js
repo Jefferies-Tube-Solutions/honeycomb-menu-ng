@@ -413,20 +413,20 @@ class HoneycombPersistentHub extends CubeElement
         }
         const environment=this._expansionEnvironment();
         if(navigationCore.isHubRoot(context.currentConfig)) {
-            const f=expandedLayout.footprint(menu),rect=this.getBoundingClientRect(),key=environment.key+JSON.stringify(f)+(compact?JSON.stringify([rect.left,rect.top,this.size]):'');
+            const f=expandedLayout.footprint(menu),rect=this.getBoundingClientRect(),origin={x:rect.left+rect.width/2,y:rect.top+rect.height/2},key=environment.key+JSON.stringify([f,origin,compact?this.size:null]);
             if(this._expandedRoot && this._expandedRoot.key===key && !options.entering){
                 if(Math.abs(menu.sizes.item-this._expandedRoot.size)>.001)menu.resizeCubes(this._expandedRoot.size,{preserveStack:true});
                 menu.reanchor(this._expandedRoot.x,this._expandedRoot.y);return;
             }
-            const result=compact?{x:rect.left+rect.width/2,y:rect.top+rect.height/2,size:this._floorplanSize(rect),region:{...environment.viewport,key:'compact'}}:expandedLayout.place(f,environment.viewport,environment.image,this._collapseOptions.expanded_size,this._expandedRoot);
+            const result=compact?{...origin,size:this._floorplanSize(rect),region:{...environment.viewport,key:'compact'}}:expandedLayout.place(f,environment.viewport,environment.image,this._collapseOptions.expanded_size,this._expandedRoot,origin);
             this._expandedRoot={...result,footprint:f,key};
             menu.resizeCubes(result.size,{preserveStack:true});menu.reanchor(result.x,result.y);
         } else {
             const root=this._expandedRoot;
             if(!root)return;
-            const rect=this.getBoundingClientRect(),key=environment.key+JSON.stringify(root.footprint)+(compact?JSON.stringify([rect.left,rect.top,this.size]):'');
+            const rect=this.getBoundingClientRect(),origin={x:rect.left+rect.width/2,y:rect.top+rect.height/2},key=environment.key+JSON.stringify([root.footprint,origin,compact?this.size:null]);
             if(root.key!==key) {
-                const result=compact?{x:rect.left+rect.width/2,y:rect.top+rect.height/2,size:this._floorplanSize(rect),region:{...environment.viewport,key:'compact'}}:expandedLayout.place(root.footprint,environment.viewport,environment.image,this._collapseOptions.expanded_size,root);
+                const result=compact?{...origin,size:this._floorplanSize(rect),region:{...environment.viewport,key:'compact'}}:expandedLayout.place(root.footprint,environment.viewport,environment.image,this._collapseOptions.expanded_size,root,origin);
                 this._expandedRoot={...result,footprint:root.footprint,key};
                 const base=context.stack[0] && (context.stack[0].config || context.stack[0]);
                 if(base){base.anchor_x=this._expandedRoot.x;base.anchor_y=this._expandedRoot.y;base.size=this._expandedRoot.size*3.586;if(base.persistent_center)base.persistent_center.size=this._expandedRoot.size;}

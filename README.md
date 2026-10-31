@@ -26,13 +26,15 @@ by Nicolai Tandrup. [Original author support](https://www.buymeacoffee.com/SianL
 > is still pending. Continue using the HACS custom-repository installation below.
 > [Catalog submission review package](docs/HACS_CATALOG_SUBMISSION.md).
 
-## v1.10.0-beta.5: responsive room controls
+## v1.10.0-beta.6: responsive room controls
 
 Add `collapsible: true` and a primary item in slot 0 to place a compact,
 responsive room control on a floorplan. Tap performs its action; hold expands.
 On phones, tablets and PCs, the Hub opens at a comfortable size. It prefers
 space beside the floorplan, and fits safely in the viewport when there is no room.
-Tap its center to return. No extra sizing or positioning options are needed.
+It plans for slots 0–18, accepts at most 15% initial downscaling in free space,
+and otherwise stays near the original floorplan anchor. Only configured cubes
+render. Tap its center to return. No extra sizing or positioning options are needed.
 
 ```yaml
 type: custom:honeycomb-persistent-hub
@@ -58,16 +60,16 @@ clearly. Hubs without `collapsible` keep their existing defaults.
 Sonos Join prefers trusted station artwork with room name and individual volume.
 Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
 precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
-Enable beta versions in HACS and select v1.10.0-beta.5 after publication.
+Enable beta versions in HACS and select v1.10.0-beta.6 after publication.
 Latest stable remains v1.9.0; physical-device acceptance is separate from QA.
 
-## Climate beta testing — v1.10.0-beta.5
+## Climate beta testing — v1.10.0-beta.6
 
 This cumulative beta adds generic Home Assistant Climate controls to the complete
 v1.9.0 stable feature set. It uses the same shared renderer and navigation.
 See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
 and [standalone Control](examples/climate-control.yaml). Real HVAC acceptance is pending.
-Enable beta versions in HACS and select v1.10.0-beta.5 once the release is public.
+Enable beta versions in HACS and select v1.10.0-beta.6 once the release is public.
 Stable remains v1.9.0; no master merge is part of this beta.
 
 ## What you can build
@@ -78,7 +80,7 @@ Stable remains v1.9.0; no master merge is part of this beta.
 - Live Hub item visibility, reserved/preferred/free slots and stable placement.
 - Nested menus, drag-select and classic popup compatibility, templates and XY Pad.
 
-Climate is available in the **v1.10.0-beta.5 candidate**, cumulative with v1.9.0 stable.
+Climate is available in the **v1.10.0-beta.6 candidate**, cumulative with v1.9.0 stable.
 See the [Climate guide](docs/CLIMATE_MODULE.md) and [Hub example](examples/climate-hub.yaml).
 Car is not implemented. Charging automation remains external.
 Honeycomb calls configured HA actions; device automation belongs in Home Assistant.

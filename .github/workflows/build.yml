@@ -146,6 +146,8 @@ jobs:
         run: python test/browser/beta4_defaults.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/beta4-defaults"
       - name: Verify beta.5 universal expansion, free-image regions, promotion and shared Bee
         run: python test/browser/beta5_geometry.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/beta5-geometry"
+      - name: Verify beta.6 planning envelope, original-anchor fallback and scale hysteresis
+        run: python test/browser/beta6_placement.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --floorplan "$RUNNER_TEMP/floorplan.png" --evidence-dir "$RUNNER_TEMP/cube-evidence/beta6-placement"
       - name: Validate documentation and complete YAML examples
         run: python test/docs/run.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/docs"
 
