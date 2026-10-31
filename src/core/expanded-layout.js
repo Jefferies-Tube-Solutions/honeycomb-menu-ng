@@ -61,6 +61,25 @@ function place(f,viewport,image,desired=100,previous=null,origin=null,planning=w
     const usable=planning===f?f:workingFootprint(f,6),size=fittedSize(usable,viewport,desired);
     return {...centerIn(usable,size,viewport,origin),region:{...viewport,key:'viewport'},size};
 }
+function smallScreen(f,viewport,desired=100) {
+    // A screen is constrained when the standard working envelope cannot fit at
+    // the requested expanded size. Use safe geometry, not a device/width cutoff.
+    return fittedSize(workingFootprint(f),viewport,desired)<desired-.001;
+}
+function placeRoot(f,viewport,image,desired=100,previous=null,origin=null,allowSmallScreen=true) {
+    const result=place(f,viewport,image,desired,previous,origin);
+    if(!allowSmallScreen || !smallScreen(f,viewport,desired))return result;
+    // Preserve the existing size decision. On constrained screens the planning
+    // ring must not veto free canvas that fits ALL actually visible controls.
+    const candidates=freeRegions(viewport,image)
+        .filter(region=>fittedSize(f,region,result.size)>=result.size-.001)
+        .map(region=>({...centerIn(f,result.size,region),size:result.size,region}));
+    const area=r=>(r.right-r.left)*(r.bottom-r.top);
+    const centering=c=>(c.x-(c.region.left+c.region.right)/2)**2+(c.y-(c.region.top+c.region.bottom)/2)**2;
+    candidates.sort((a,b)=>Number(b.region.key==='below')-Number(a.region.key==='below') ||
+        area(b.region)-area(a.region) || centering(a)-centering(b));
+    return candidates[0] || result;
+}
 function submenu(f,viewport,root,preferred,desired,image=null) {
     const region=root.region && !['viewport','compact'].includes(root.region.key) && fittedSize(f,root.region,desired)>=desired-.001?root.region:viewport;
     if(fits(f,desired,preferred,region))return {...preferred,size:desired,reason:'selected'};
@@ -103,4 +122,4 @@ function environment(menu,owner,image=null) {
     }
     return {viewport,image,key:JSON.stringify([viewport,image])};
 }
-module.exports={HEIGHT,FREE_SCALE,workingFootprint,footprint,boundsAt,fits,fittedSize,centerIn,freeRegions,place,submenu,chromeElements,environment};
+module.exports={HEIGHT,FREE_SCALE,workingFootprint,footprint,boundsAt,fits,fittedSize,centerIn,freeRegions,smallScreen,placeRoot,place,submenu,chromeElements,environment};

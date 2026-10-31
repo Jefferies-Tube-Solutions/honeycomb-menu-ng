@@ -50,6 +50,10 @@ class Geometry(Beta4):
     elif expected=='left':width=image['left']-12-v['left']
     else:width=v['right']-image['right']-12
     free=min(width/5,height/4.6097)>=85-.001
+    # Constrained-screen follow-up: actual controls may fit where the planning
+    # envelope cannot; placement must preserve the already selected cube size.
+    f=s['root']['footprint'];is_small=min((v['right']-v['left'])/5,(v['bottom']-v['top'])/4.6097)<100-.001
+    if is_small:free=width/(f['right']-f['left'])>=s['size']-.001 and height/(f['bottom']-f['top'])>=s['size']-.001
     region=s['root']['region'];self.assertEqual(region['key'],expected if free else 'viewport');self.assert_fit(region)
     if free:self.assertGreaterEqual(s['size'],85-.05)
    self.capture('expanded-free-'+location);self.activate(self.cell().locator('.interaction-surface'));self.settle();self.assert_same(small,self.box());self.assertEqual(self.page.evaluate('calls.length'),0);self.capture('restored-'+location);self.reset()
@@ -58,7 +62,9 @@ class Geometry(Beta4):
   self.page.evaluate("document.querySelector('#test-header').style.height='88px'");self.page.wait_for_timeout(130);self.assertGreaterEqual(self.state()['environment']['viewport']['top'],104);self.assert_fit()
   self.page.evaluate("floor.style.height='240px';imageHost.style.height='240px';floorImage.style.objectFit='contain';floorImage.style.objectPosition='right top'");self.page.wait_for_timeout(130);s=self.state();self.assertLessEqual(s['image']['bottom']-s['image']['top'],240.1);self.assert_fit()
   self.page.evaluate("floor.style.transform='scale(.9)'");self.page.wait_for_timeout(130);self.assertIsNone(self.state()['image']);self.assert_fit();self.capture('unsupported-transform-safe-fallback')
-  self.page.evaluate("floor.style.transform='';view.style.cssText='position:fixed;left:0;top:56px;width:'+innerWidth+'px;height:300px;overflow:auto';floor.style.cssText='position:relative;left:0;top:0;width:'+innerWidth+'px;height:600px;margin:0';imageHost.style.height='600px';floorImage.style.objectFit='cover';view.scrollTop=120");self.page.wait_for_timeout(150);self.settle();image=self.state()['image'];self.assertGreaterEqual(image['top'],56);self.assertLessEqual(image['bottom'],356.1);self.assertEqual(self.state()['root']['region']['key'],'below' if self.viewport['width']-32>=425 and self.state()['environment']['viewport']['bottom']-image['bottom']-12>=460.97*.85 else 'viewport');self.assert_fit(self.state()['root']['region']);self.capture('shadow-scroll-clipped-image-free-below');self.back();self.settle();self.assertFalse(self.page.evaluate('hub._hubExpanded'))
+  self.page.evaluate("floor.style.transform='';view.style.cssText='position:fixed;left:0;top:56px;width:'+innerWidth+'px;height:300px;overflow:auto';floor.style.cssText='position:relative;left:0;top:0;width:'+innerWidth+'px;height:600px;margin:0';imageHost.style.height='600px';floorImage.style.objectFit='cover';view.scrollTop=120");self.page.wait_for_timeout(150);self.settle();image=self.state()['image'];self.assertGreaterEqual(image['top'],56);self.assertLessEqual(image['bottom'],356.1);s=self.state();v=s['environment']['viewport'];f=s['root']['footprint'];width=v['right']-v['left'];height=v['bottom']-image['bottom']-12;free=min(width/5,height/4.6097)>=85-.001
+  if min(width/5,(v['bottom']-v['top'])/4.6097)<100-.001:free=min(width/(f['right']-f['left']),height/(f['bottom']-f['top']))>=s['size']-.001
+  self.assertEqual(s['root']['region']['key'],'below' if free else 'viewport');self.assert_fit(s['root']['region']);self.capture('shadow-scroll-clipped-image-free-below');self.back();self.settle();self.assertFalse(self.page.evaluate('hub._hubExpanded'))
  def test_smart_promotion_all_modules_and_exact_parent_Back(self):
   cases=[('Sonos',self.sonos_item(),True),('Light',{'type':'light','entity':'light.zone_a'},True),('Climate',{'type':'climate','entity':'climate.room_a'},False),('Charger',charger(1),True),('Generic',{'type':'generic','entity':'sensor.value_a','icon':'mdi:circle','tap_action':{'action':'honeycomb-open-nested','honeycomb_nested_menu':{'nested_expand':True,'promote_to_center':True,'promoted_center':{'mode':'generic','entity':'sensor.value_a','icon':'mdi:circle'},'buttons':[{'slot':1,'icon':'mdi:circle','tap_action':{'action':'none'}}]}}},False)]
   for name,item,hold in cases:
