@@ -27,7 +27,11 @@ class Beta3(Cubes):
   for policy in ['primary','bee']:
    self.setup_floor(policy,True);before=self.assert_collapsed();self.capture('collapsed-'+policy)
    self.hold_input(self.cell().locator('.interaction-surface'));self.settle();self.assertTrue(self.page.evaluate('hub._hubExpanded'));self.assertEqual(self.page.evaluate('calls.length'),0);self.capture('expanded-'+policy)
-   if self.viewport['width']<500:self.assertGreaterEqual(self.cell().bounding_box()['width'],80)
+   width=self.cell().bounding_box()['width'];self.assertLessEqual(width,82+.15)
+   self.assertAlmostEqual(width,self.page.evaluate('hub._expandedRoot.size'),delta=.15)
+   if self.viewport['width']<500:
+    # Auto now targets 82; retain useful enlargement and the existing 15% fit bound.
+    self.assertGreaterEqual(width,82*.85-.15);self.assertGreater(width,before['center']['width']*2)
    self.page.wait_for_timeout(550);self.page.locator('honeycomb-menu-ng').first.locator('.center-item .interaction-surface').click();self.settle();after=self.assert_collapsed();self.assertAlmostEqual(after['center']['width'],before['center']['width'],delta=.12);self.capture('collapsed-again-'+policy)
    for axis in ['x','y']:self.assertAlmostEqual(after['center'][axis],before['center'][axis],delta=.15)
    self.page.evaluate('hub.remove();reference.remove();floor.remove();calls.length=0')

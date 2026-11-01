@@ -14,12 +14,16 @@ from dev_build import DevBuild
 from charger import SEED as CHARGER,charger
 
 class Geometry(Beta4):
+ # These placement regressions deliberately exercise the accepted 100px working
+ # envelope. Beta.8 requires an explicit parent ceiling; its default/auto82 matrix
+ # is independently covered by beta8_size.py.
+ configured_size=100
  def settle(self):
   super().settle()
   self.page.evaluate("""async()=>{await new Promise(requestAnimationFrame);const menu=window.hub?._menuContext?.honeycomb;if(menu){await menu.updateComplete;await Promise.all(menu.shadowRoot.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})))}}""")
  def floor(self,region='above',items=None,policy='primary',extra=None):
   self.page.evaluate(CLIMATE);self.page.evaluate(CHARGER);self.sonos_setup()
-  config={'collapsible':{'expanded_center':policy,**({'primary_slot':1} if policy=='bee' else {})},'items':items or [{'type':'light','entity':'light.zone_a','slot':0},{'type':'light','entity':'light.zone_b','slot':2}],**(extra or {})}
+  config={**({'size':self.configured_size} if self.configured_size is not None else {}),'collapsible':{'expanded_center':policy,**({'primary_slot':1} if policy=='bee' else {})},'items':items or [{'type':'light','entity':'light.zone_a','slot':0},{'type':'light','entity':'light.zone_b','slot':2}],**(extra or {})}
   self.page.evaluate(FLOORPLAN,config);self.page.wait_for_function('hub._hubMenu?.isConnected')
   w,h=self.viewport['width'],self.viewport['height']
   if region=='above':rect=[16,72,w-32,min(h*.38,350)]

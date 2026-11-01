@@ -23,7 +23,9 @@ class Beta2(Cubes):
   self.activate(self.cell().locator('.interaction-surface'));self.assertEqual(self.page.evaluate('calls.length'),1)
   self.expand();self.assertEqual(self.page.evaluate('calls.length'),1);self.assert_visible_unique_cells(2);self.capture('hub-expanded')
   if self.viewport['width']<500:
-   self.assertTrue(self.page.locator('honeycomb-menu-ng').evaluate("e=>e.matches(':popover-open')"));self.assertGreater(self.cell().bounding_box()['width'],80)
+   self.assertTrue(self.page.locator('honeycomb-menu-ng').evaluate("e=>e.matches(':popover-open')"))
+  # A fixed parent ceiling is authoritative even in the phone top layer.
+  self.assertAlmostEqual(self.cell().bounding_box()['width'],41,delta=.15)
   self.cell().locator('.interaction-surface').click();self.settle();self.assert_visible_unique_cells(1);self.assertFalse(self.page.evaluate('hub._hubExpanded'))
   self.assertAlmostEqual(self.cell().bounding_box()['width'],41,delta=.2)
   self.page.evaluate("pushState('light.zone_a','off',{brightness:0})");self.settle();self.assertEqual(self.cell().locator('.secondary').inner_text(),'OFF')

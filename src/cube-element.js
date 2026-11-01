@@ -54,6 +54,8 @@ class CubeElement extends LitElement
         this._beeFlapping = false;
         this._beeFlapTimer = null;
         this._beeAnimationFrame = null;
+        this._beeSizeText='N/A';
+        this._beeSizeFrame=null;
     }
 
     static get styles()
@@ -170,6 +172,8 @@ class CubeElement extends LitElement
                 margin-top:calc(var(--honeycomb-persistent-size,82px)*.015);
             }
             .bee-version span { display:block; }
+            .content.with-bee-size .bee-icon { width:25%;height:25%; }
+            .content.with-bee-size .bee-version { line-height:1.02; }
 
             .bee-icon.flap {
                 animation: honeycomb-bee-flight ${bee.FLIGHT_MS}ms ease-in-out;
@@ -461,6 +465,7 @@ class CubeElement extends LitElement
             cancelAnimationFrame(this._beeAnimationFrame);
         this._beeAnimationFrame = null;
         this._beeFlapping = false;
+        this._stopBeeSizeDebug();
     }
 
     getCardSize()
@@ -935,6 +940,7 @@ class CubeElement extends LitElement
             this._beeAnimationFrame = null;
             if( !this.isConnected ) return;
             this._beeFlapping = true;
+            if(this._beeDebugEnabled())this._measureBeeSize();
             this.requestUpdate();
 
             if( this._beeFlapTimer )
@@ -943,9 +949,52 @@ class CubeElement extends LitElement
             this._beeFlapTimer = setTimeout(() => {
                 this._beeFlapping = false;
                 this._beeFlapTimer = null;
+                this._stopBeeSizeDebug();
                 this.requestUpdate();
             }, bee.REVEAL_MS);
         });
+    }
+
+    _beeDebugEnabled()
+    {
+        const context=(this.getRootNode().host || {})._menuContext || this._menuContext;
+        return (context && context.owner ? context.owner._sizeDebug : this.config && this.config.size_debug)===true;
+    }
+
+    _measureBeeSize()
+    {
+        const hex=this.isConnected && this.shadowRoot && this.shadowRoot.querySelector('.hex-svg');
+        const text=bee.pixelLabel(hex ? hex.getBoundingClientRect().width : null);
+        if(text!==this._beeSizeText){this._beeSizeText=text;this.requestUpdate();}
+    }
+
+    _stopBeeSizeDebug()
+    {
+        if(this._beeSizeFrame!==null)cancelAnimationFrame(this._beeSizeFrame);
+        this._beeSizeFrame=null;
+        if(this._beeSizeCleanup)this._beeSizeCleanup();
+        this._beeSizeCleanup=null;
+    }
+
+    _syncBeeSizeDebug()
+    {
+        const icon=this._model && this._model.icon;
+        if(!this.isConnected || !this._beeFlapping || !(icon==='' || icon==='honeycomb:bee') || !this._beeDebugEnabled()) {this._stopBeeSizeDebug();return;}
+        if(this._beeSizeCleanup)return;
+        const schedule=()=>{
+            if(this._beeSizeFrame!==null)return;
+            this._beeSizeFrame=requestAnimationFrame(()=>{this._beeSizeFrame=null;if(this._beeFlapping && this._beeDebugEnabled())this._measureBeeSize();});
+        };
+        const hex=this.shadowRoot.querySelector('.hex-svg');
+        const resize=new ResizeObserver(schedule);if(hex)resize.observe(hex);
+        const mutation=new MutationObserver(schedule);
+        if(hex)mutation.observe(hex,{attributes:true,attributeFilter:['style','class']});
+        for(let node=this;node;node=node.parentElement || (node.getRootNode && node.getRootNode().host))
+            mutation.observe(node,{attributes:true,attributeFilter:['style','class']});
+        window.addEventListener('resize',schedule);
+        const viewport=window.visualViewport;if(viewport)viewport.addEventListener('resize',schedule);
+        this._beeSizeCleanup=()=>{resize.disconnect();mutation.disconnect();window.removeEventListener('resize',schedule);if(viewport)viewport.removeEventListener('resize',schedule);};
+        schedule();
     }
 
     _isPreview()
@@ -1132,6 +1181,7 @@ class CubeElement extends LitElement
             key.startsWith('background-') && key !== 'background-color'));
         const mediaBackground=['sonos','media','sonos-join'].includes(this.config.mode) && !!artwork['background-image'];
         const showBeeVersion=(m.icon === '' || m.icon === 'honeycomb:bee') && this._beeFlapping;
+        const showBeeSize=showBeeVersion && this._beeDebugEnabled();
         const versionFont=bee.versionFont();
         const external = this.config.custom_fields || (this.config.type &&
             !['custom:button-card','custom:honeycomb-persistent-control','custom:honeycomb-persistent-hub'].includes(this.config.type));
@@ -1159,13 +1209,13 @@ class CubeElement extends LitElement
                     @error=${()=>{if(this._model.artwork && this._model.artwork.key===m.artwork.key){this._failedArtworkKey=m.artwork.key;this._updatePresentation();}}}>` : ''}
             </div>
             ${external ? html`<div class="external-content"></div>` : html`
-            <div class="content ${showBeeVersion ? 'with-bee-version' : ''} ${m.artwork || mediaBackground ? 'has-artwork' : ''} ${m.secondary ? 'has-secondary' : ''} ${m.name ? 'has-primary' : ''} ${m.labelLayout === 'two-row' ? 'two-row' : ''}"
+            <div class="content ${showBeeVersion ? 'with-bee-version' : ''} ${showBeeSize ? 'with-bee-size' : ''} ${m.artwork || mediaBackground ? 'has-artwork' : ''} ${m.secondary ? 'has-secondary' : ''} ${m.name ? 'has-primary' : ''} ${m.labelLayout === 'two-row' ? 'two-row' : ''}"
                 style=${styleMap(Object.keys(m.grid).length ? {display:'grid',...m.grid} : {})}>
                 ${m.icon === '' || m.icon === 'honeycomb:bee' ? html`<img class="bee-icon ${this._beeFlapping?'flap':''}" src=${bee.asset} alt="" aria-hidden="true">`
                     : m.iconBadge ? html`<div class="icon-with-badge"><ha-icon .icon=${m.icon}></ha-icon><span class="power-badge">${m.iconBadge}</span></div>`
                     : m.icon ? html`<ha-icon style=${styleMap({'grid-area':Object.keys(m.grid).length?'i':undefined,...m.iconStyle})} .icon=${m.icon}></ha-icon>` : ''}
-                ${showBeeVersion ? html`<span class="bee-version" role="status" aria-live="polite" aria-label=${beeVersion.text}
-                    style=${styleMap({fontSize:`calc(var(--honeycomb-persistent-size,82px)*${versionFont})`})}><span>${beeVersion.base}</span>${beeVersion.stage ? html` <span>${beeVersion.stage}</span>` : ''}</span>` : ''}
+                ${showBeeVersion ? html`<span class="bee-version" role="status" aria-live="polite" aria-label=${showBeeSize ? `${beeVersion.text} ${this._beeSizeText}` : beeVersion.text}
+                    style=${styleMap({fontSize:`calc(var(--honeycomb-persistent-size,82px)*${versionFont})`})}><span>${beeVersion.base}</span>${beeVersion.stage ? html` <span>${beeVersion.stage}</span>` : ''}${showBeeSize ? html`<span class="bee-size">${this._beeSizeText}</span>` : ''}</span>` : ''}
                 ${m.name ? html`<div class="primary" style=${styleMap({'grid-area':Object.keys(m.grid).length?'n':undefined,...m.nameStyle})}>${m.name}</div>` : ''}
                 ${m.secondary ? html`<div class="secondary" style=${styleMap({'grid-area':Object.keys(m.grid).length?'l':undefined,...m.labelStyle})}>${m.secondary}</div>` : ''}
                 ${m.tertiary ? html`<div class="tertiary">${m.tertiary}</div>` : ''}
@@ -1195,6 +1245,7 @@ class CubeElement extends LitElement
 
     updated()
     {
+        this._syncBeeSizeDebug();
         if(this._waveCleanup)energyWave.sync(this);
         const target = this.shadowRoot.querySelector('.external-content');
         if (target && !this._contentCard) {
