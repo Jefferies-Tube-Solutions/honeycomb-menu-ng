@@ -30,10 +30,27 @@ ordinary setups need no reference setting. When image geometry cannot be resolve
 (e.g. unsupported stretching/transforms or no image), the safe numeric fallback
 is 82px. Explicit `size: auto` and `auto_reference_width` remain supported.
 
-Expansion is enabled on every screen size, with a desired 100px cube width.
+Expansion is enabled on every screen size. Its desired maximum comes from the
+original Hub configuration: auto/omitted size has a nominal 82 CSS px ceiling;
+explicit numeric `size: N` has ceiling N. A responsive collapsed auto cube can be
+55px while expansion grows to 82px. Deliberate numeric sizes above 82 stay valid.
+Optional `collapsible.expanded_size` is a lower target, clamped to the parent
+ceiling; when omitted it defaults to that ceiling. Root and every nested menu,
+including palettes, Radio, Climate, Charger and recursive menus, obey the same
+bound. Viewport fitting may reduce actual size. Back restores the exact parent.
+
+| Hub size | expanded_size | Expanded/nested maximum |
+| --- | --- | --- |
+| omitted / auto | omitted | 82px |
+| auto | 82 or 100 | 82px |
+| 60 | omitted or 100 | 60px |
+| 82 | omitted | 82px |
+| 100 | omitted | 100px |
+| 100 | 70 | 70px |
+
 It uses a separate browser top-layer overlay to escape clipped/transformed
-parents and prevent click-through. Normal floorplan sizing and the 82px auto cap
-do not constrain the expanded scene.
+parents and prevent click-through. Normal floorplan configuration supplies the nominal ceiling;
+the currently downscaled collapsed width is not the ceiling.
 
 The Hub measures the displayed image (including supported contain/cover and
 object-position), then considers free regions below, above, left and right. It
@@ -102,7 +119,8 @@ has a visible hexagonal ring. See [shared Bee behavior](SHARED_BEE.md).
 | `collapsible.primary_slot` | Required for `bee` | Available slot 1–216. Hard collisions including hidden reservations fail; soft/priority use existing allocation. |
 | `collapsible.idle_timeout` | `30000` | At least 1000ms. Meaningful user activity resets it; HA updates and resize do not. |
 | `collapsible.small_screen` | `true` | Explicit `false` retains the legacy compact-phone opt-out. Desktop enlargement stays enabled. |
-| `collapsible.expanded_size` | `100` | Desired expanded cube width, 44–200px; viewport fitting may constrain it. |
+| `collapsible.expanded_size` | Parent ceiling | Optional 44–200px requested target. Effective target is min(request, parent ceiling); fitting may shrink further. |
+| `size_debug` | `false` | Optional boolean developer diagnostic: show measured CSS-pixel width only during Bee version reveal. |
 
 Fixed collapsed size:
 
@@ -119,12 +137,31 @@ collapsible:
   primary_slot: 1
 ```
 
-Custom overlay size:
+A smaller expanded target (all nested cubes also stay at or below 70px):
 
 ```yaml
+size: 100
 collapsible:
-  expanded_size: 110
+  expanded_size: 70
 ```
+
+Optional shared Bee measurement, without changing normal minimal YAML:
+
+```yaml
+size: 65
+size_debug: true
+collapsible:
+  expanded_center: bee
+  primary_slot: 1
+```
+
+Add your ordinary primary item in slot 0 and other items as usual. Hold the expanded
+Bee (or Shift+Enter) to read the version plus measured cube width. Short tap remains
+Back/Collapse. The width is the visible hex rectangle in CSS pixels, not configured
+size, container width or device pixels. It updates on reveal and geometry changes,
+uses whole pixels or one decimal, and reports `Size unavailable` when not measurable.
+No continuous polling or permanent label is introduced. With debug omitted/false,
+version-only presentation stays unchanged. [Shared Bee guide](SHARED_BEE.md).
 
 Retain the legacy compact presentation on narrow phones (explicit opt-out only):
 

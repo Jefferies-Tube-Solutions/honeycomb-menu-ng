@@ -1,3 +1,27 @@
+# Honeycomb NG v1.10.0-beta.8 — Configured Hub Size Ceiling and Bee Diagnostics
+
+Cumulative from immutable beta.7 `87c192a0a5f16bd880cf93692d5275d1d6130ed2`.
+
+- Original Hub configuration supplies one ceiling: auto/omitted max 82 CSS px,
+  explicit numeric size N max N, optional expanded_size only lowers the target.
+  Responsive root fitting, every nested module, recursive menu and exact Back
+  obey the same limit. No CSS-only post-fit correction; hover cannot exceed it.
+- Optional top-level size_debug:true adds measured rendered CSS-pixel width to the
+  shared Bee's existing temporary version reveal. Default false remains version
+  only. Actual SVG geometry is measured on reveal/live resize/style events, without
+  polling. All observers/frames clean up; normal and expanded Bee gestures remain.
+- Keep beta.7 placement solver, mobile free lower canvas, desktop origin fallback,
+  0–18 planning, thresholds/hysteresis, renderer/artwork/module behavior unchanged.
+- Minimal YAML still needs only collapsible:true. Oversized expanded_size safely
+  clamps; deliberately numeric sizes above 82 remain supported. See README and
+  Collapsible Hub/shared Bee guides for policy table and optional debug examples.
+
+Mandatory synthetic Node/Chromium/module/geometry/HACS/docs/integrity gates and
+fresh exact-head CI are required before the authorized guarded beta.8 publication.
+No previous release changes, main/master merge, stable or production HA actions.
+Owner physical Home Assistant/Android/PC acceptance remains separate. Beam of Origin
+#156 is deferred to beta.9; #154 remains separate. Stop for owner testing after release.
+
 # Honeycomb NG v1.10.0-beta.7 — Mobile Placement Fix
 
 Publishes the completed PR #158 mobile correction from exact source

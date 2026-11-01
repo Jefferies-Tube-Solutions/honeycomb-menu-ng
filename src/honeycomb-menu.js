@@ -759,7 +759,7 @@ class HoneycombMenu extends LitElement
             }
             honeycomb-menu-ng-item.drag-hover {
                 filter: brightness(1.18);
-                transform: scale3d(1.08, 1.08, 1.08);
+                transform: scale3d(var(--hub-hover-scale,1.08), var(--hub-hover-scale,1.08), var(--hub-hover-scale,1.08));
                 z-index: 3;
             }
             honeycomb-menu-ng-item.center-item.center-auto-style.drag-hover {
@@ -931,7 +931,8 @@ class HoneycombMenu extends LitElement
         // outer-ring submenu is expanded in place later.
         this._layoutEnvelopeOuter = this._computeLayoutEnvelopeOuter(this.config);
 
-        let itemSize = this.config.size / 3.586;
+        let itemSize = navigationCore.boundedCubeSize(this._menuContext,this.config.size / 3.586);
+        this.config.size=itemSize*3.586;
         let outerRing = this._hasOuterRing();
 
         this.sizes = {
@@ -1015,6 +1016,7 @@ class HoneycombMenu extends LitElement
     resizeCubes(size,{preserveStack=false}={})
     {
         if(this.closing || !Number.isFinite(size) || size<=0)return;
+        size=navigationCore.boundedCubeSize(this._menuContext,size);
         const ratio=size/this.sizes.item;
         this.sizes={item:size,containerWidth:this.sizes.containerWidth*ratio,containerHeight:this.sizes.containerHeight*ratio};
         const context=this._menuContext;
@@ -1400,6 +1402,7 @@ class HoneycombMenu extends LitElement
     _setCssVars()
     {
         this.style.setProperty('--item-size', `${this.sizes.item}px` );
+        this.style.setProperty('--hub-hover-scale',String(Math.min(1.08,navigationCore.cubeSizeLimit(this._menuContext)/this.sizes.item)));
         this.style.setProperty('--container-width', `${this.sizes.containerWidth}px`);
         this.style.setProperty('--container-height', `${this.sizes.containerHeight}px`);
 

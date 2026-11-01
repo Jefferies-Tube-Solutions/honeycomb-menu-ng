@@ -1,43 +1,59 @@
-# v1.10.0-beta.7 — release preparation from approved PR #158
+# v1.10.0-beta.8 — configured size ceiling and optional Bee diagnostics
 
-Owner authorizes standard beta.7 publication after ALL mandatory fresh exact-head
-CI and existing guarded release checks. No main/master merge, stable, production
-HA, HACS/AwesomeVersion changes or new version format. Beam of Origin #156 is
-planned for beta.8 and is OUT of beta.7. Architecture review #154 stays deferred.
+Owner authorizes beta.8 publication only after all mandatory validation and fresh
+exact-head CI pass. Branch: feature/v1.10-beta8-size-ceiling. Exact published
+baseline: v1.10.0-beta.7 / 87c192a0a5f16bd880cf93692d5275d1d6130ed2 (PR #159).
+Read primary issue #160 and shared Bee issue #153, including current owner comments.
+Owner has accepted beta.7 mobile/PC placement; preserve that solver and navigation.
+Beam of Origin #156 is deferred to beta.9. Architecture review #154 remains separate.
+No main/master merge, stable publication, production HA commands or prior-release edits.
 
-Release branch: release/v1.10.0-beta7-mobile.
-Exact approved implementation: 7dcf7f252aac1930d65ae71cab8477bf4cedf269 (PR #158),
-verified green push41246504454 and PR41246507979. Those runs DO NOT validate the
-new release commit. Published beta.6 baseline6db9e046da496c5d6d437d8d0da08346136ec11f
-and its tag/release remain immutable. No source/test/workflow/script changes from
-PR #158: only version/lock/release metadata, generated bundle and release docs.
+Implemented one original-config Hub ceiling (auto/omitted 82px; numeric N including
+N > 82). Omitted expanded_size defaults to that ceiling; explicit expanded_size
+only lowers the effective target. Root uses that effective target through the
+existing placement engine; shared context clamps nested setup/resize/fitting before
+rendering, with hover bounded too. Root solver, planning envelope, thresholds,
+hysteresis, selected-cube promotion and exact Back mechanisms remain unchanged.
 
-Prepared package/lock1.10.0-beta.7, prerelease title
-Honeycomb NG v1.10.0-beta.7 — Mobile Placement Fix. Existing shared formatter emits
-v1.10.0 beta 7. Generated317609-byte bundle differs from PR #158 only in exact
-version literals; SHA2560f514fdf0a33e020ccc3e36dba31d9db8e1bc190b3a7bc11b3f84959f38f3681.
-Node20 core runner +459 Node tests pass, 3 existing stable-only skips. Local HACS
-packaging, beta metadata and pinned checksum-verified actionlint pass.
+Shared CubeElement Bee optionally reveals actual measured SVG CSS-pixel width with
+the installed version when top-level size_debug:true. Strict boolean validation,
+default false, same ordinary version-only/resting presentation. Resize/style/viewport
+observers refresh while visible, without polling, and clean up on hide/detach.
+Normal tap and expanded hold/Shift+Enter version gestures remain shared and safe.
+README, Collapsible Hub and shared Bee guides document policy and optional YAML.
 
-Next gate: run the entire existing mandatory pipeline against this release commit,
-including core/browser/modules, both normal/expanded Bee, mobile/landscape/tablet,
-desktop matrix, safe bounds, selected-cube promotion, exact Back and docs/YAML.
-Require fresh complete green push+PR build/lint jobs at exact FINAL branch SHA,
-o skipped mandatory jobs, official HACS, reproducibility and SHA256. Use only the
-unchanged guarded release.yml with expected_commit, expected_tag=v1.10.0-beta.7
-and publish=true after every gate passes. Freeze the branch during verification.
-Do not change its head for unrelated handoff while publishing.
+Prepared package/lock version 1.10.0-beta.8 and prerelease metadata; shared build
+formatter produces v1.10.0 beta 8. Current deterministic 320624-byte bundle SHA256:
+83287e8d3c63a1a2e8bc976923e9b24a5e9d3394680cb9d32ebb7cb1550b8263.
 
-After publication independently verify public tag/source/assets/provenance/digests,
-HACS beta update detection, correct Bee label and downloadable bundle smoke tests.
-Preserve every existing tag/release and master/latest stable. Record final handoff
-on a separate docs branch if needed, preserving the exact published source head.
+Validation checkpoint before release commit:
+- Node20 core runner and 461 Node tests pass; 3 existing stable-only skips.
+- Focused 390x844 nine-policy size matrix passes across root/ring/Bee, Light,
+  White/Color/Kelvin, Sonos/Radio/Join/Sleep, Climate, Charger, recursive and Back.
+- Focused diagnostics pass DOM-vs-display measurement, actual fractional transforms,
+  live resize, unavailable geometry, containment/accessibility and detach cleanup.
+  Omitted/false screenshots are pixel-identical; no service calls escape the mocks.
+- Existing beta.7 mobile placement suite passes on the beta.8 bundle.
+- HACS local payload, beta metadata, actionlint and diff whitespace checks pass.
+- Existing 100px placement fixtures now explicitly set parent size:100, preserving
+  their original accepted geometry assertions. Independent beta.8 tests cover the
+  full default/auto82 and explicit numeric matrix at all five required viewports.
 
-Evidence outside Git: /workspace/build-output/beta7/, full/ and public-assets/.
-Browser plugin unavailable; repository Playwright/system Chromium with synthetic
-HA fixtures. No real physical Android/PC or production HA commands are authorized.
-Owner actual Android/mobile and full-size desktop acceptance remain pending.
+Full mandatory local suite and fresh push/PR CI must still finish on final code;
+DO NOT treat this preparation checkpoint as release completion. New beta8_size.py
+is mandatory in build.yml. Release workflow and integrity scripts are unchanged.
+Evidence outside Git: /workspace/build-output/beta8/. Browser plugin unavailable;
+use repository Playwright/system Chromium and synthetic HA fixtures only.
 
-HACS owner action after verified release: enable beta versions, select/redownload
-v1.10.0-beta.7 and refresh frontend/resource cache. No YAML changes. Stop for owner
-real Home Assistant testing after release verification, without beginning #154/#156.
+Next: create/push development PR against beta.7 release branch, obtain all green
+Node/Chromium/modules/docs/HACS and workflow checks at exact final SHA, reproduce
+the committed bundle, then freeze head and dispatch existing release.yml with
+expected_tag=v1.10.0-beta.8, exact expected_commit and publish=true. Independently
+verify public tag/assets/provenance/checksums/HACS beta discovery, all previous
+releases/tags and unchanged master/latest stable v1.9.0. Record publication handoff
+on a separate docs branch, keeping the published source branch immutable.
+
+Stop after verified release for owner physical Home Assistant acceptance. Synthetic
+Chromium evidence does not establish real Android/iOS/desktop HA or hardware tests.
+HACS owner step: enable beta versions, select/redownload v1.10.0-beta.8 and refresh
+frontend/resource cache. Existing YAML remains compatible; debug is optional.

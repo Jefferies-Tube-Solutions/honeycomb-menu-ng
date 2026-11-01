@@ -88,6 +88,7 @@ class HoneycombPersistentHub extends CubeElement
 
     updated()
     {
+        super.updated();
         this._scheduleHubOpen();
     }
 
@@ -608,9 +609,11 @@ class HoneycombPersistentHub extends CubeElement
             throw new Error('Honeycomb Persistent Hub requires a configuration.');
 
         validateCubeConfig(config, {hubItems:true});
-        const collapseOptions=collapsibleHub.settings(config.collapsible);
+        const collapseOptions=collapsibleHub.settings(config.collapsible,config.size);
         if(this._hubExpanded)this._collapseHub();
         this._collapseOptions=collapseOptions;
+        this._hubSizeCeiling=collapsibleHub.sizeCeiling(config.size);
+        this._sizeDebug=config.size_debug===true;
         if (!this._hasHassProvider) { this._hasHassProvider=true; provideHass(this); }
         const next = merge({}, config);
         this._logoExplicitCenter=!!(config.colors && config.colors.center && config.colors.center!=='auto');
@@ -618,6 +621,7 @@ class HoneycombPersistentHub extends CubeElement
 
         _defaults(next, {
             mode: 'hub',
+            size_debug: false,
             size: collapseOptions ? 'auto' : 82,
             icon: 'honeycomb:bee',
             name: 'Honeycomb',

@@ -25,4 +25,7 @@ function accessible(config,fallback) {
     return back?'Back / Collapse Hub. Hold or Shift+Enter to inspect installed Honeycomb version.':'Honeycomb Bee. Inspect installed version; hold or Shift+Enter.';
 }
 function versionFont(){return Math.min(.12,.57/(Math.max(version.base.length,version.stage.length)*.65));}
-module.exports={COLORS,asset:HONEYCOMB_BEE_PNG,version,FLIGHT_MS,REVEAL_MS,ICON_PERCENT,VERSION_ICON_PERCENT,isBee,isBrand,descriptor,accessible,versionFont};
+function pixelLabel(width) {
+    return Number.isFinite(width) && width>0 ? `${Math.round(width*10)/10} px` : 'Size unavailable';
+}
+module.exports={pixelLabel,COLORS,asset:HONEYCOMB_BEE_PNG,version,FLIGHT_MS,REVEAL_MS,ICON_PERCENT,VERSION_ICON_PERCENT,isBee,isBrand,descriptor,accessible,versionFont};
