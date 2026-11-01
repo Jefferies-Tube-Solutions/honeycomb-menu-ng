@@ -1,3 +1,24 @@
+# Honeycomb NG v1.10.0-beta.7 — Mobile Placement Fix
+
+Publishes the completed PR #158 mobile correction from exact source
+`7dcf7f252aac1930d65ae71cab8477bf4cedf269`, cumulative with immutable beta.6
+`6db9e046da496c5d6d437d8d0da08346136ec11f`. Placement code is unchanged from PR #158.
+
+- Constrained-screen expansion checks the actual visible Hub footprint at the
+  already selected size. Prefer fitting free canvas below the floorplan, then
+  other external regions by usable space and cube-0 centering. No new breakpoint.
+- Preserve desktop beta.6 planning/thresholds/origin fallback, collapsed sizing,
+  safe bounds, selected-cube submenu promotion, exact Back, timeout and all modules.
+- Shared Bee displays `v1.10.0 beta 7` using the existing version formatter.
+- No YAML changes. In HACS enable beta versions, select/redownload v1.10.0-beta.7,
+  then refresh the frontend/resource cache. Root bundle/checksums/provenance are
+  published through the existing guarded beta-release workflow.
+
+No master/main merge, stable or production HA changes. Beta.6 remains immutable.
+Chromium tests are synthetic; owner physical Android/desktop and real Home Assistant
+acceptance remain pending. Beam of Origin #156 is deferred to beta.8; #154 remains
+separate after layout acceptance. Stop for owner testing after release verification.
+
 # Honeycomb NG v1.10.0-beta.6 — comfortable floorplan placement
 
 Cumulative from published beta.5 source `83cbdd486a924f88f2ad399886dff4fb31d913db`.

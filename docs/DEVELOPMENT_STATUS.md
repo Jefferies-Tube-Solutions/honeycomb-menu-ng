@@ -1,63 +1,43 @@
-# beta.6 mobile free-canvas follow-up — implementation complete, not released
+# v1.10.0-beta.7 — release preparation from approved PR #158
 
-Branch: fix/beta6-mobile-free-space. Implementation commit:
-3d60a4d7b9f97d438ca3f99daa29e7c7973f7b7f (subsequent handoff is documentation only).
-Published beta.6 baseline: 6db9e046da496c5d6d437d8d0da08346136ec11f;
-its immutable tag/release and fix/v1.10-beta6-placement branch remain unchanged.
-Parent PR #157 remains open. The follow-up PR is stacked on that release branch.
-Use `gh pr view fix/beta6-mobile-free-space` for the latest review/head/CI evidence;
-verify actual runs rather than treating this checkpoint as proof of later CI.
+Owner authorizes standard beta.7 publication after ALL mandatory fresh exact-head
+CI and existing guarded release checks. No main/master merge, stable, production
+HA, HACS/AwesomeVersion changes or new version format. Beam of Origin #156 is
+planned for beta.8 and is OUT of beta.7. Architecture review #154 stays deferred.
 
-Authorized scope: issue #148 mobile expanded-Hub placement only. Latest owner
-comment and user follow-up read. No Beam of Origin #156, architecture review #154,
-main/master merge, stable, production HA or environment configuration change.
-No new beta label or publication is authorized; do not overwrite beta.6 assets/tag.
-Owner mobile acceptance failed on published beta.6; full-size physical PC acceptance
-remains unverified. Synthetic desktop tests never establish owner real-HA acceptance.
+Release branch: release/v1.10.0-beta7-mobile.
+Exact approved implementation: 7dcf7f252aac1930d65ae71cab8477bf4cedf269 (PR #158),
+verified green push41246504454 and PR41246507979. Those runs DO NOT validate the
+new release commit. Published beta.6 baseline6db9e046da496c5d6d437d8d0da08346136ec11f
+and its tag/release remain immutable. No source/test/workflow/script changes from
+PR #158: only version/lock/release metadata, generated bundle and release docs.
 
-Root cause measured on 390x844: safe viewport [16,16..374,828], image bottom295.39,
-original cube0 (195,147.88). Actual four-cube footprint fits below at100px, but the
-19-slot planning envelope fits only71.6px, so beta.6 rejected it and overlaid image.
-Follow-up keeps100px and places cube0 at(195,567.70), fully below the image.
+Prepared package/lock1.10.0-beta.7, prerelease title
+Honeycomb NG v1.10.0-beta.7 — Mobile Placement Fix. Existing shared formatter emits
+v1.10.0 beta 7. Generated317609-byte bundle differs from PR #158 only in exact
+version literals; SHA2560f514fdf0a33e020ccc3e36dba31d9db8e1bc190b3a7bc11b3f84959f38f3681.
+Node20 core runner +459 Node tests pass, 3 existing stable-only skips. Local HACS
+packaging, beta metadata and pinned checksum-verified actionlint pass.
 
-Implementation: placeRoot first keeps beta.6's existing size/planning decision.
-Small-screen behavior is determined by whether the standard working envelope can
-fit the entire safe viewport at desired expanded size (not a new CSS breakpoint).
-If constrained and existing small_screen behavior is enabled, examine every free
-region using ALL actual visible controls at the already chosen size. Prefer below
-if it fits; otherwise usable area and logical cube0 centering. Overlay the image
-only when no external region fits. Desktop planning/85-84% hysteresis/origin fallback
-remain byte-for-byte equivalent in tested desktop outcomes. Child geometry remains
-actual-footprint based; original anchor and exact Back/collapse behavior retained.
-Existing compact-phone opt-out (including legacy mobile alias) is untouched.
+Next gate: run the entire existing mandatory pipeline against this release commit,
+including core/browser/modules, both normal/expanded Bee, mobile/landscape/tablet,
+desktop matrix, safe bounds, selected-cube promotion, exact Back and docs/YAML.
+Require fresh complete green push+PR build/lint jobs at exact FINAL branch SHA,
+o skipped mandatory jobs, official HACS, reproducibility and SHA256. Use only the
+unchanged guarded release.yml with expected_commit, expected_tag=v1.10.0-beta.7
+and publish=true after every gate passes. Freeze the branch during verification.
+Do not change its head for unrelated handoff while publishing.
 
-No YAML keys/names/defaults or package/release versions changed. Minimal
-collapsible:true and all existing configurations remain compatible. Only shared
-geometry/root lifecycle calls, tests/CI coverage, guide and rebuilt bundle changed.
+After publication independently verify public tag/source/assets/provenance/digests,
+HACS beta update detection, correct Bee label and downloadable bundle smoke tests.
+Preserve every existing tag/release and master/latest stable. Record final handoff
+on a separate docs branch if needed, preserving the exact published source head.
 
-Implementation-checkpoint validation:
-- Node20 core contracts +459 Node tests pass, 3 existing stable-only skips.
-- Chromium follow-up: four phone/landscape/tablet cases plus desktop matrix/panel
-  cases pass; exact nested Back/collapse and no console/page errors verified.
-- 8 desktop before/after PNGs are pixel-identical: 1440x900,1920x1080,2560x1440,
-  3440x1440, each full19-slot full-size free region and cramped-strip origin fallback.
-- Two-sided narrow panel/safe insets, translated/cropped image, orientation pass.
-- Existing beta.6 five-case threshold/extended-slot suite passes. Full 49-case
-  geometry/navigation matrix is running at this checkpoint; consult final PR/CI.
-- HACS/local packaging/integrity, pinned actionlint and byte-identical rebuild pass.
-- Browser plugin not available; existing Playwright/system Chromium used. No live HA.
+Evidence outside Git: /workspace/build-output/beta7/, full/ and public-assets/.
+Browser plugin unavailable; repository Playwright/system Chromium with synthetic
+HA fixtures. No real physical Android/PC or production HA commands are authorized.
+Owner actual Android/mobile and full-size desktop acceptance remain pending.
 
-Evidence outside Git: /workspace/build-output/beta6-mobile/; before/, after/,
-matrix/, desktop-regression/, node.log. JSON records actual/planning footprints,
-image/safe viewport, external candidates/rejection reasons, size, original/selected
-anchors and actual bounds. Before bundle is exact published beta.6 payload.
-Fixture corrections: restored a test-local bounding-box variable accidentally
-shadowed by a boolean; panel anchors must be visibly clickable. Existing chrome
-classification treats a full-height panel wider than half the viewport as a
-horizontal band too; chrome detection was not changed by this placement-only fix.
-The constrained-panel regression uses ordinary side panels leaving narrow canvas.
-
-Next: finish/check complete geometry matrix and exact-head push/PR CI, report
-actual results on the follow-up PR. Keep follow-up unreleased for owner review.
-Do not auto-publish, overwrite beta.6, merge master, or begin #154/#156. Owner must
-verify Android/mobile and PC in real HA; next corrective beta label needs agreement.
+HACS owner action after verified release: enable beta versions, select/redownload
+v1.10.0-beta.7 and refresh frontend/resource cache. No YAML changes. Stop for owner
+real Home Assistant testing after release verification, without beginning #154/#156.
