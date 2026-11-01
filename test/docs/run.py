@@ -97,8 +97,9 @@ def card(config,where):
     assert isinstance(config,dict),where
     if config['type']=='custom:honeycomb-persistent-hub':
         if 'collapsible' in config:
-            subprocess.run(['node','-e',"require('./src/core/collapsible-hub').settings(JSON.parse(process.argv[1]))",json.dumps(config['collapsible'])],check=True,cwd=ROOT)
-        known(config,{'type','name','size','logo','items','auto_open','menu','style','auto_reference_width','collapsible'},where)
+            subprocess.run(['node','-e',"const c=JSON.parse(process.argv[1]);require('./src/core/collapsible-hub').settings(c.collapsible,c.size)",json.dumps(config)],check=True,cwd=ROOT)
+        if 'size_debug' in config:assert type(config['size_debug']) is bool,where
+        known(config,{'type','name','size','size_debug','logo','items','auto_open','menu','style','auto_reference_width','collapsible'},where)
         for i,value in enumerate(config['items']): item(value,f'{where} item {i}')
     elif config['type']=='custom:honeycomb-persistent-control':
         known(config,SHARED|SONOS|CHARGER|CLIMATE|{'type','module','size','style','auto_reference_width'},where)
@@ -136,7 +137,7 @@ def fragment(config,where):
     elif set(config)<={'presets'} or set(config)<=SONOS:
         return {'type':'custom:honeycomb-persistent-control','module':'light' if 'presets' in config else 'sonos',
                 'entity':'light.zone_a' if 'presets' in config else 'media_player.player_a',**config}
-    elif 'collapsible' in config:
+    elif 'collapsible' in config or 'size_debug' in config:
         return {'type':'custom:honeycomb-persistent-hub','items':[{'type':'light','entity':'light.zone_a','slot':0}],**config}
     elif 'visibility' in config:
         return {'type':'custom:honeycomb-persistent-hub','items':[{'type':'generic','entity':'sensor.value_a',**config}]}

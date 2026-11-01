@@ -99,7 +99,7 @@ class Size(Geometry):
   self.page.wait_for_timeout(3100);self.assertEqual(cell.locator('.bee-size').count(),0);self.assertEqual(cell.evaluate('e=>[e._beeSizeFrame,e._beeSizeCleanup]'),[None,None])
   self.back();self.settle();self.assertFalse(self.page.evaluate('hub._hubExpanded'))
   errors=self.page.evaluate("()=>[null,0,1,'true',{},[]].map(size_debug=>{try{hub.setConfig({...hub.config,size_debug});return null}catch(e){return e.message}})");self.assertTrue(all(e and 'size_debug' in e for e in errors))
-  self.reset();self.page.set_viewport_size({'width':390,'height':844});self.setup_room(100,70,True);self.page.evaluate('hub.setConfig({...hub.config,collapsible:{...hub.config.collapsible,small_screen:false}})');self.settle();self.expand();self.settle();self.check('legacy-compact-opt-out',70,'fixed100_70');self.assertAlmostEqual(self.state()['root']['size'],self.box()['width'],delta=.15);self.back();self.settle();self.assertAlmostEqual(self.box()['width'],100,delta=.15)
+  self.reset();self.viewport={'width':390,'height':844};self.page.set_viewport_size(self.viewport);self.setup_room(100,70,True);self.page.evaluate('hub.setConfig({...hub.config,collapsible:{...hub.config.collapsible,small_screen:false}})');self.settle();self.expand();self.settle();self.check('legacy-compact-opt-out',70,'fixed100_70');self.assertAlmostEqual(self.state()['root']['size'],self.box()['width'],delta=.15);self.back();self.settle();self.assertAlmostEqual(self.box()['width'],100,delta=.15)
 
  def setUp(self):super().setUp();self.measurements=[]
 

@@ -45,14 +45,26 @@ Validation checkpoint before release commit:
   beyond 80. Beta.3 auto asserts the 82px ceiling, useful enlargement, preserved
   15% fitting bound and equality of physical/root-engine dimensions. Lifecycle,
   complete-card comparison and exact Back assertions remain intact.
+- Forced-phone orientation fixture now updates its viewport metadata along with
+  Playwright dimensions. All five complete orientation/zoom/compact diagnostic
+  reruns pass; this correction changes no production code or bundle bytes.
+- Documentation validation registers size_debug as strictly boolean, provides
+  parent size when checking collapsible settings, and supplies Hub context for
+  standalone size_debug fragments. Complete docs/YAML rerun passes.
 
-Full mandatory local suite and fresh push/PR CI must still finish on final code;
-DO NOT treat this preparation checkpoint as release completion. New beta8_size.py
+All 32 mandatory local groups now pass, including complete affected-suite reruns:
+461 Node passes (3 existing stable-only skips), 571 Python/browser/contract cases,
+45 size/module policies across all five viewports, 765 measured surface rows, and
+complete docs/YAML validation. Initial stale-assertion/fixture failure evidence and
+successful reruns are retained outside Git. Fresh exact-final-head push/PR CI and
+HACS must still finish; DO NOT treat local completion as release completion.
+New beta8_size.py
 is mandatory in build.yml. Release workflow and integrity scripts are unchanged.
 Evidence outside Git: /workspace/build-output/beta8/. Browser plugin unavailable;
 use repository Playwright/system Chromium and synthetic HA fixtures only.
 
-Next: create/push development PR against beta.7 release branch, obtain all green
+Development PR #161 is open/unmerged against the exact beta.7 release branch.
+Next: push this final test integration and obtain all green
 Node/Chromium/modules/docs/HACS and workflow checks at exact final SHA, reproduce
 the committed bundle, then freeze head and dispatch existing release.yml with
 expected_tag=v1.10.0-beta.8, exact expected_commit and publish=true. Independently
