@@ -419,7 +419,7 @@ class HoneycombPersistentHub extends CubeElement
                 if(Math.abs(menu.sizes.item-this._expandedRoot.size)>.001)menu.resizeCubes(this._expandedRoot.size,{preserveStack:true});
                 menu.reanchor(this._expandedRoot.x,this._expandedRoot.y);return;
             }
-            const result=compact?{...origin,size:this._floorplanSize(rect),region:{...environment.viewport,key:'compact'}}:expandedLayout.placeRoot(f,environment.viewport,environment.image,this._collapseOptions.expanded_size,this._expandedRoot,origin,this._collapseOptions.small_screen);
+            const result=compact?{...origin,size:Math.min(this._floorplanSize(rect),this._collapseOptions.expanded_size),region:{...environment.viewport,key:'compact'}}:expandedLayout.placeRoot(f,environment.viewport,environment.image,this._collapseOptions.expanded_size,this._expandedRoot,origin,this._collapseOptions.small_screen);
             this._expandedRoot={...result,footprint:f,key};
             menu.resizeCubes(result.size,{preserveStack:true});menu.reanchor(result.x,result.y);
         } else {
@@ -427,7 +427,7 @@ class HoneycombPersistentHub extends CubeElement
             if(!root)return;
             const rect=this.getBoundingClientRect(),origin={x:rect.left+rect.width/2,y:rect.top+rect.height/2},key=environment.key+JSON.stringify([root.footprint,origin,compact?this.size:null]);
             if(root.key!==key) {
-                const result=compact?{...origin,size:this._floorplanSize(rect),region:{...environment.viewport,key:'compact'}}:expandedLayout.placeRoot(root.footprint,environment.viewport,environment.image,this._collapseOptions.expanded_size,root,origin,this._collapseOptions.small_screen);
+                const result=compact?{...origin,size:Math.min(this._floorplanSize(rect),this._collapseOptions.expanded_size),region:{...environment.viewport,key:'compact'}}:expandedLayout.placeRoot(root.footprint,environment.viewport,environment.image,this._collapseOptions.expanded_size,root,origin,this._collapseOptions.small_screen);
                 this._expandedRoot={...result,footprint:root.footprint,key};
                 const base=context.stack[0] && (context.stack[0].config || context.stack[0]);
                 if(base){base.anchor_x=this._expandedRoot.x;base.anchor_y=this._expandedRoot.y;base.size=this._expandedRoot.size*3.586;if(base.persistent_center)base.persistent_center.size=this._expandedRoot.size;}

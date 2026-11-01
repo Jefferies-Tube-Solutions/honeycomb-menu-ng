@@ -14,6 +14,8 @@ only lowers the effective target. Root uses that effective target through the
 existing placement engine; shared context clamps nested setup/resize/fitting before
 rendering, with hover bounded too. Root solver, planning envelope, thresholds,
 hysteresis, selected-cube promotion and exact Back mechanisms remain unchanged.
+The legacy small_screen:false compact path also uses the effective lower target
+for stored root geometry, so its engine dimensions agree with physical cubes.
 
 Shared CubeElement Bee optionally reveals actual measured SVG CSS-pixel width with
 the installed version when top-level size_debug:true. Strict boolean validation,
@@ -24,8 +26,8 @@ Normal tap and expanded hold/Shift+Enter version gestures remain shared and safe
 README, Collapsible Hub and shared Bee guides document policy and optional YAML.
 
 Prepared package/lock version 1.10.0-beta.8 and prerelease metadata; shared build
-formatter produces v1.10.0 beta 8. Current deterministic 320598-byte bundle SHA256:
-7e72fb1e36f249704178e581566890122dcf18778eca9cf033bdd79940af9705.
+formatter produces v1.10.0 beta 8. Current deterministic 320690-byte bundle SHA256:
+59fff63d433c8a0ff123292c79ec1b5ae478c4804af2ddbaf7380fb65e0bbc05.
 
 Validation checkpoint before release commit:
 - Node20 core runner and 461 Node tests pass; 3 existing stable-only skips.
