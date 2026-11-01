@@ -50,7 +50,7 @@ beta 8
 The value comes directly from the rendered visible hex SVG bounding rectangle in
 CSS pixels. It includes applicable transforms/scale and never substitutes configured
 size, expanded_size, menu width or physical device pixels. Values use whole pixels
-or one decimal (for example `79.4 px`); missing geometry says `Size unavailable`.
+or one decimal (for example `79.4 px`); missing geometry says `N/A`.
 Measurement runs on reveal and resize/ancestor-style events while visible, without
 polling; observers/listeners/queued measurement frames are removed on hide/detach.
 The accessible live status includes the measured size only in debug mode. Debug

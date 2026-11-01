@@ -19,12 +19,13 @@ Shared CubeElement Bee optionally reveals actual measured SVG CSS-pixel width wi
 the installed version when top-level size_debug:true. Strict boolean validation,
 default false, same ordinary version-only/resting presentation. Resize/style/viewport
 observers refresh while visible, without polling, and clean up on hide/detach.
+Unavailable geometry uses compact N/A so even small debug cubes keep text contained.
 Normal tap and expanded hold/Shift+Enter version gestures remain shared and safe.
 README, Collapsible Hub and shared Bee guides document policy and optional YAML.
 
 Prepared package/lock version 1.10.0-beta.8 and prerelease metadata; shared build
-formatter produces v1.10.0 beta 8. Current deterministic 320624-byte bundle SHA256:
-83287e8d3c63a1a2e8bc976923e9b24a5e9d3394680cb9d32ebb7cb1550b8263.
+formatter produces v1.10.0 beta 8. Current deterministic 320598-byte bundle SHA256:
+7e72fb1e36f249704178e581566890122dcf18778eca9cf033bdd79940af9705.
 
 Validation checkpoint before release commit:
 - Node20 core runner and 461 Node tests pass; 3 existing stable-only skips.

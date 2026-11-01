@@ -45,5 +45,5 @@ test('optional size_debug validates booleans and shared pixel label never guesse
  const {validateCubeConfig}=require('../src/core/cube-config'),{pixelLabel}=require('../src/core/bee');
  for(const value of [undefined,false,true])assert.doesNotThrow(()=>validateCubeConfig({size_debug:value}));
  for(const value of [null,0,1,'true',{},[]])assert.throws(()=>validateCubeConfig({size_debug:value}),/size_debug/);
- for(const [width,label]of [[82,'82 px'],[79.4,'79.4 px'],[79.44,'79.4 px'],[0,'Size unavailable'],[NaN,'Size unavailable'],[null,'Size unavailable']])assert.equal(pixelLabel(width),label);
+ for(const [width,label]of [[82,'82 px'],[79.4,'79.4 px'],[79.44,'79.4 px'],[0,'N/A'],[NaN,'N/A'],[null,'N/A']])assert.equal(pixelLabel(width),label);
 });

@@ -54,7 +54,7 @@ class CubeElement extends LitElement
         this._beeFlapping = false;
         this._beeFlapTimer = null;
         this._beeAnimationFrame = null;
-        this._beeSizeText='Size unavailable';
+        this._beeSizeText='N/A';
         this._beeSizeFrame=null;
     }
 

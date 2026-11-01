@@ -43,7 +43,8 @@ class Size(Geometry):
   for policy,size,expanded,limit in MATRIX:
    print('MATRIX',self.viewport,policy,flush=True);self.setup_room(size,expanded,True);collapsed=self.box();self.assertLessEqual(collapsed['width'],82.15 if size in (None,'auto') else size+.15)
    self.page.evaluate("limit=>{window.sizeOvershoots=[];const sample=()=>{if(hub?._hubExpanded)for(const e of hub._hubMenu.shadowRoot.querySelectorAll('honeycomb-menu-ng-item,honeycomb-persistent-control')){const width=e.shadowRoot.querySelector('.hex-svg').getBoundingClientRect().width;if(width>limit+.15)sizeOvershoots.push(width)}window.sizeFrame=requestAnimationFrame(sample)};window.sizeFrame=requestAnimationFrame(sample)}",limit)
-   self.expand();self.page.wait_for_timeout(550);self.check('root-center-ring-Bee',limit,policy);root=self.boxes()
+   self.measurements.append({'viewport':self.viewport,'policy':policy,'surface':'collapsed','limit':82 if size in (None,'auto') else size,'min':collapsed['width'],'max':collapsed['width'],'count':1})
+   self.expand();self.page.wait_for_timeout(550);self.check('root-center-ring-Bee',limit,policy);self.assertEqual(self.state()['root']['region']['key'],'below');self.assert_fit(self.state()['root']['region']);root=self.boxes()
    self.cell(2).locator('.interaction-surface').hover();self.check('hover-no-overshoot',limit,policy);self.page.mouse.move(0,0)
    self.hold_input(self.cell(2).locator('.interaction-surface'));self.settle();self.check('Light',limit,policy)
    self.activate(self.cell(3).locator('.interaction-surface'));self.settle();self.check('White-palette',limit,policy);palette=self.boxes();depth=self.page.evaluate('hub._menuContext.stack.length')
@@ -94,7 +95,7 @@ class Size(Geometry):
   for width,height in [(390,844),(844,390),(800,1280),(1920,1080),(430,932)]:
    self.page.set_viewport_size({'width':width,'height':height});self.page.wait_for_timeout(130);self.settle();self.check('resize-orientation',82,'auto100')
   cdp=self.page.context.new_cdp_session(self.page);cdp.send('Emulation.setPageScaleFactor',{'pageScaleFactor':1.25});self.page.wait_for_timeout(100);self.check('browser-pinch-zoom',82,'auto100');cdp.send('Emulation.setPageScaleFactor',{'pageScaleFactor':1});cdp.detach()
-  cell=self.reveal(expanded=True);self.assert_debug(cell);cell.locator('.hex-svg').evaluate("e=>e.style.display='none'");self.page.wait_for_timeout(100);self.assertEqual(cell.locator('.bee-size').inner_text(),'Size unavailable');cell.locator('.hex-svg').evaluate("e=>e.style.display=''");self.page.wait_for_timeout(100);self.assert_debug(cell)
+  cell=self.reveal(expanded=True);self.assert_debug(cell);cell.locator('.hex-svg').evaluate("e=>e.style.display='none'");self.page.wait_for_timeout(100);self.assertEqual(cell.locator('.bee-size').inner_text(),'N/A');cell.locator('.hex-svg').evaluate("e=>e.style.display=''");self.page.wait_for_timeout(100);self.assert_debug(cell)
   self.page.wait_for_timeout(3100);self.assertEqual(cell.locator('.bee-size').count(),0);self.assertEqual(cell.evaluate('e=>[e._beeSizeFrame,e._beeSizeCleanup]'),[None,None])
   self.back();self.settle();self.assertFalse(self.page.evaluate('hub._hubExpanded'))
   errors=self.page.evaluate("()=>[null,0,1,'true',{},[]].map(size_debug=>{try{hub.setConfig({...hub.config,size_debug});return null}catch(e){return e.message}})");self.assertTrue(all(e and 'size_debug' in e for e in errors))

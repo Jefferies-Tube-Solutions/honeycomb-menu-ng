@@ -159,7 +159,7 @@ Add your ordinary primary item in slot 0 and other items as usual. Hold the expa
 Bee (or Shift+Enter) to read the version plus measured cube width. Short tap remains
 Back/Collapse. The width is the visible hex rectangle in CSS pixels, not configured
 size, container width or device pixels. It updates on reveal and geometry changes,
-uses whole pixels or one decimal, and reports `Size unavailable` when not measurable.
+uses whole pixels or one decimal, and reports `N/A` when not measurable.
 No continuous polling or permanent label is introduced. With debug omitted/false,
 version-only presentation stays unchanged. [Shared Bee guide](SHARED_BEE.md).
 
