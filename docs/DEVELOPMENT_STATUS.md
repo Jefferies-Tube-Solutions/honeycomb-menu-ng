@@ -41,6 +41,10 @@ Validation checkpoint before release commit:
 - Existing 100px placement fixtures now explicitly set parent size:100, preserving
   their original accepted geometry assertions. Independent beta.8 tests cover the
   full default/auto82 and explicit numeric matrix at all five required viewports.
+- Legacy beta.2 fixed41 assertions now require exact 41px rather than enlargement
+  beyond 80. Beta.3 auto asserts the 82px ceiling, useful enlargement, preserved
+  15% fitting bound and equality of physical/root-engine dimensions. Lifecycle,
+  complete-card comparison and exact Back assertions remain intact.
 
 Full mandatory local suite and fresh push/PR CI must still finish on final code;
 DO NOT treat this preparation checkpoint as release completion. New beta8_size.py
