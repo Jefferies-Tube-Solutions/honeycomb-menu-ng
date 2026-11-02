@@ -48,7 +48,7 @@ class Beam(Geometry):
    self.capture('live-origin-custom' if isinstance(options,dict) else 'live-origin-default')
    self.origin().evaluate("e=>{e._executeAction({action:'toggle'});e._dispatchAction({action:'toggle'});e.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));e.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))}")
    self.assertEqual(self.page.evaluate('calls.length'),0)
-   self.back();self.settle();self.assertEqual(self.scene().count(),0);self.assert_same(self.source,self.cell().locator('.hex-svg').bounding_box());self.assertEqual(self.controls().count(),1)
+   self.assertTrue(self.page.evaluate('()=>{ng.backInContext(hub._menuContext);return !hub._hubMenu.shadowRoot.querySelector(".origin-scene") && !hub._originFrame && !hub._originAnimationEnd}'));self.settle();self.assertEqual(self.scene().count(),0);self.assert_same(self.source,self.cell().locator('.hex-svg').bounding_box());self.assertEqual(self.controls().count(),1)
    self.activate(self.cell().locator('.interaction-surface'));self.assertEqual(self.page.evaluate('calls.length'),1);self.reset()
  def test_all_directions_actual_geometry_overlap_and_source_hidden(self):
   self.room(extra={'size':60});self.expand();self.linked()

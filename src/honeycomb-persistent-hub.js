@@ -519,6 +519,9 @@ class HoneycombPersistentHub extends CubeElement
             // Remove synchronously, before returning to the single active cube.
             const scene=menu.shadowRoot.querySelector('.origin-scene');if(scene)scene.hidden=true;
             menu._originReference=null;menu.requestUpdate();
+            // Complete the optional branch teardown now, including the passive
+            // renderer's timers/listeners, before another Hub action can run.
+            menu.performUpdate();
         }
     }
 
