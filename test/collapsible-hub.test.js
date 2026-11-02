@@ -74,3 +74,16 @@ test('Beam uses physical hex perimeter caps in every direction and suppresses ov
  assert.equal(connection(source,[]),null);
  assert.equal(connection(source,[hex({...source,left:source.left+3})]),null);
 });
+
+test('Beam fans toward the rendered cluster silhouette, not one neighbor or empty padding',()=>{
+ const {hex,connection}=require('../src/core/beam-of-origin');
+ const source={left:700,top:250,width:60,height:69.282};
+ const targets=[hex({left:100,top:210,width:82,height:94.6854}),hex({left:140,top:280,width:82,height:94.6854})];
+ const fan=connection(source,targets),single=connection(source,[targets[0]]);
+ const span=beam=>Math.abs(beam.points[2].y-beam.points[3].y);
+ assert.ok(span(fan)>span(single)*1.4);
+ for(const point of fan.points.slice(2))assert.ok(targets.some(poly=>poly.some((a,i)=>{
+  const b=poly[(i+1)%poly.length],dx=b.x-a.x,dy=b.y-a.y;
+  return Math.abs((point.x-a.x)*dy-(point.y-a.y)*dx)<1e-6 && point.x>=Math.min(a.x,b.x)-1e-6 && point.x<=Math.max(a.x,b.x)+1e-6 && point.y>=Math.min(a.y,b.y)-1e-6 && point.y<=Math.max(a.y,b.y)+1e-6;
+ })));
+});

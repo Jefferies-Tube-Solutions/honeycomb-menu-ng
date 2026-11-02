@@ -51,19 +51,44 @@ function cap(poly,toward,width) {
     }
     return null;
 }
+function hull(points) {
+    const sorted=[...points].sort((a,b)=>a.x-b.x || a.y-b.y),half=values=>{
+        const result=[];
+        for(const p of values){while(result.length>1 && cross(sub(result[result.length-1],result[result.length-2]),sub(p,result[result.length-1]))<=0)result.pop();result.push(p);}
+        return result;
+    };
+    const lower=half(sorted),upper=half([...sorted].reverse());lower.pop();upper.pop();return lower.concat(upper);
+}
+function nearestBoundary(point,targets) {
+    let best=null,bestDistance=Infinity;
+    for(const poly of targets)for(let i=0;i<poly.length;i++){
+        const a=poly[i],b=poly[(i+1)%poly.length],edge=sub(b,a),offset=sub(point,a);
+        const t=Math.max(0,Math.min(1,(offset.x*edge.x+offset.y*edge.y)/(edge.x*edge.x+edge.y*edge.y)));
+        const p={x:a.x+t*edge.x,y:a.y+t*edge.y},d=distance(point,p);
+        if(d<bestDistance){best=p;bestDistance=d;}
+    }
+    return best;
+}
 function connection(source,targets) {
     const origin=hex(source);
-    if(!targets.length || targets.some(p=>overlaps(origin,p)))return null;
-    const c=center(origin);
-    // Choose the nearest facing physical control, not a container's empty space.
-    const candidates=targets.map(target=>{
-        const tc=center(target),s=cap(origin,tc,source.width*.22),t=cap(target,c,distance(target[0],target[3])*.28);
-        return s&&t?{s,t,gap:distance(s.center,t.center)}:null;
-    }).filter(Boolean).sort((a,b)=>a.gap-b.gap);
-    const best=candidates[0];
-    if(!best || best.gap<Math.max(8,source.width*.12))return null;
-    const {s,t}=best;
-    const axis=sub(t.center,s.center),side=p=>cross(axis,sub(p,s.center));
+    if(!targets.length)return null;
+    const outline=hull(targets.flat()),c=center(origin),destination=center(outline);
+    if(overlaps(origin,outline))return null;
+    // Suppress short/ambiguous links using the nearest real physical boundary.
+    const gaps=targets.map(target=>{
+        const s=cap(origin,center(target),0),t=cap(target,c,0);
+        return s&&t?distance(s.center,t.center):Infinity;
+    });
+    if(Math.min(...gaps)<Math.max(8,source.width*.12))return null;
+    const axis=sub(destination,c),length=Math.hypot(axis.x,axis.y);
+    if(!length)return null;
+    const side=p=>cross(axis,sub(p,c))/length,projections=outline.map(side);
+    const s=cap(origin,destination,source.width*.32),t=cap(outline,c,(Math.max(...projections)-Math.min(...projections))*.45);
+    if(!s || !t)return null;
+    // A convex outline can bridge gaps between cubes. Attach each fan corner
+    // back to an actual rendered hex, never to empty scene/container padding.
+    t.ends=t.ends.map(point=>nearestBoundary(point,targets));
+    t.center=nearestBoundary(t.center,targets);
     s.ends.sort((a,b)=>side(a)-side(b));t.ends.sort((a,b)=>side(a)-side(b));
     return {source:s.center,target:t.center,points:[s.ends[0],s.ends[1],t.ends[1],t.ends[0]]};
 }

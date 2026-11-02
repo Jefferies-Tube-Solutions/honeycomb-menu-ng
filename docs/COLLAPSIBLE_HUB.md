@@ -46,7 +46,7 @@ brightness, borders and gradients. It is a **visual reference, not a second
 clickable control**. Only the expanded Honeycomb accepts actions.
 
 A soft, transparent SVG fan fades from that source toward the nearest facing
-hex boundary of the current expanded controls. It shares their top-layer popover,
+hex boundaries along the current expanded cluster silhouette. It shares their top-layer popover,
 above the backdrop and behind the cubes; Info Cube keeps higher priority. The
 beam follows measured navigation and responsive geometry without changing the
 approved placement, parent size ceiling or Bee behavior. No extra sizing,

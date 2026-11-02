@@ -107,6 +107,14 @@ class Beam(Geometry):
    self.linked();self.capture('zoomed-origin-'+str(size));self.page.evaluate("document.body.style.zoom=''");self.page.wait_for_timeout(100)
    self.back();self.settle();self.assertEqual(self.scene().count(),0);self.assertIsNone(self.page.evaluate('hub._originAnimationEnd'));self.assertEqual(self.page.evaluate('calls.length'),0);self.reset()
 
+ def test_reference_right_source_and_cluster_silhouette(self):
+  self.room('right' if self.viewport['width']>800 else 'above',items=[{'type':'light','entity':'light.zone_a','slot':0},{**self.sonos_item(),'slot':2},{'type':'light','entity':'light.zone_a','slot':3}],extra={'collapsible':{'beam_of_origin':True,'expanded_center':'bee','primary_slot':1}})
+  self.page.evaluate("pushState('light.zone_a','on',{...hass.states['light.zone_a'].attributes,brightness:204})")
+  self.expand();self.linked();self.assert_fit()
+  if self.viewport['width']>800:self.assertEqual(self.state()['root']['region']['key'],'left')
+  self.capture('reference-source-right-cluster-left' if self.viewport['width']>800 else 'reference-source-above-cluster-below')
+  self.back();self.settle();self.assertEqual(self.scene().count(),0);self.assertEqual(self.page.evaluate('calls.length'),0)
+
  def test_Escape_timeout_outside_and_fallback_cleanup(self):
   self.page.clock.install();self.room(extra={'collapsible':{'beam_of_origin':True,'idle_timeout':1000}});self.expand();self.page.clock.run_for(50);self.linked();self.page.clock.run_for(1100);self.settle();self.assertFalse(self.page.evaluate('hub._hubExpanded'));self.assertEqual(self.scene().count(),0)
   self.expand();self.page.clock.run_for(550);self.page.keyboard.press('Escape');self.settle();self.assertFalse(self.page.evaluate('hub._hubExpanded'));self.assertEqual(self.scene().count(),0)
