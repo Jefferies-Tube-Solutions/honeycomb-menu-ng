@@ -1,50 +1,70 @@
-# v1.10.0-beta.9 — Beam of Origin implementation and validation
+# Audit #154 complete; beta.10 published; owner acceptance required
 
-Branch: feature/v1.10-beta9-beam-of-origin. Exact cumulative baseline is the
-published, owner-real-HA-accepted beta.8 source
-3ff151adff815d933ddf786169a795ee704f5790. No master merge, stable release, live HA
-commands or architecture review #154 are authorized by this feature task.
+This docs-only audit branch retains the reviewed beta.9 runtime. The installable
+fix is on `fix/v1.10-beta10-xy-lifecycle`, not this review branch.
 
-Optional collapsible.beam_of_origin (true or {color}, default OFF) adds a live,
-inert source reference through the existing CubeElement renderer and owner-fed
-HA state. Internal visualOnly avoids independent module/device subscriptions;
-interactive:false plus inert/aria-hidden/pointer-events:none prevent actions and
-focus. Source retains measured collapsed geometry; active physical hex boundaries
-supply the softly feathered tapered SVG fan. The measured cluster silhouette
-sets its wide end; each attachment is projected to a real hex boundary. Unique per-Hub gradients share the
-existing popover, above its shield/backdrop and below controls and Info overlays.
-Near/overlap/offscreen/unsupported sources suppress the reference. Existing
-placement solver, original parent size ceilings, Bee and navigation are unchanged.
-Bounded rAF updates follow existing layout/resize/scroll/visualViewport/navigation
-notifications and animation completion; no new long-lived observers or polling.
-Collapse/close/dispose/removal/reconfigure tear down the optional scene.
+## Immutable source and release
 
-Current local evidence in /workspace/build-output/beta9 (outside Git):
-- Node20 core contracts and 464 Node tests pass; 3 existing stable-only skips.
-- Beam suite covers mobile/desktop live state, inert source, measured geometry in
-  every direction, all module entry/Back, Radio/White, Info priority, multiple
-  Hubs, crop/zoom/resize, size60/82/100/auto and Bee debug, timeout/outside/Escape.
-- Six default-off screenshots are pixel-identical to immutable beta.8 (collapsed,
-  expanded, restored; 390x844 and 1440x900).
-- Approved mobile placement regression and complete docs/YAML validation pass.
-- All 45 policies in the beta.8 five-viewport size/module matrix pass. The old
-  process reported its hard-coded beta8 Bee aria-label failure; that assertion
-  now checks the installed version and passes in an independent five-viewport
-  diagnostic rerun. Final exact-SHA CI runs the complete corrected suite.
-- Local HACS payload/beta metadata and checksum-verified actionlint pass.
-- New beam suite is mandatory in build.yml. Release workflow/guards unchanged.
+- Reviewed/owner-accepted beta.9: `0f2101d9b1b4377168ae7fd5643bf01672a1683b`.
+- Audit: [PR #164](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/164),
+  [report](ARCHITECTURE_AUDIT_154.md); report and FIX decision published before runtime edits.
+- Focused beta.10: [PR #168](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/168),
+  source `a54cd007fff030d14d89872c4026b92cf0184405`.
+- Public prerelease: [v1.10.0-beta.10](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.10.0-beta.10).
+- Bundle: `honeycomb-menu-ng.js`, 331735 bytes, SHA-256
+  `b9a89296839e9bab77de41673547053264617985c2adeec325174367502e15b5`.
 
-Outstanding before publication: exact-final-SHA push/PR CI and official HACS,
-final reproducible bundle/checksum/source integrity, complete release evidence.
-Both #156 reference images were supplied directly in the task and reviewed: the
-annotation requires a cluster-wide facing fan, and the concept is intentionally
-much brighter than the requested implementation. The fan follows that measured
-silhouette with .34 source opacity fading to .025 at destination, 1.5px feather,
-no stroke/glow/continuous animation and no copied decorative labels/dashboard.
-The temporary environment-domain draft addition was removed; no network setting
-change is required now. Do NOT publish if any mandatory release gate fails.
+## Audit and fix
 
-Owner authorizes guarded beta.9 publication only after all mandatory gates pass.
-After publication, stop for owner testing on PAHA02-DEV. Synthetic QA does not
-establish beta.9 real-device acceptance. Existing releases/tags and PR #161 remain
-unchanged; there is no stable/master merge in this task.
+Audit covered the tracked repository, production graph/public YAML/registries,
+all runtime subsystems, lifecycle/performance, build/dependencies, release gates,
+tests and documentation. One confirmed release blocker: a detached XY Pad kept
+issuing repeat HA service commands and retained global listeners. Eleven
+nonblocking findings are deferred in #165–#167; no cleanup is required for stable.
+
+Only XY Pad/menu lifecycle runtime changed from beta.9: stop and silently cancel
+repeats on close/disposal/removal, Info, preview, background/blur, input cancel
+and config replacement; remove/rebind listeners; guard late callbacks. Normal
+mouse/touch service data and YAML remain compatible. No Beam, placement, parent
+size ceiling, Bee, renderer, module or dependency refactor is included.
+
+## Verified gates
+
+All runs completed successfully for the exact beta.10 source above:
+
+- [Push CI](https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41533813896): Build and workflow-lint.
+- [PR CI](https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41533858869): Build and workflow-lint.
+- [Official HACS](https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41533860259).
+- [Guarded beta publisher](https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41540124243): verification/reproduction and publication.
+
+Node core plus 464 tests passed, with 3 existing stable-only skips. Full Chromium
+module/presentation/Info/Climate/Charger/Sonos and responsive placement/size/Beam
+suites, new mobile/desktop XY cancellation/payload/20-cycle cleanup/reconnect
+suite, docs/YAML/links/examples, performance/package and actionlint gates passed.
+Two local builds were identical; publisher compared committed/rebuilt/CI/staged
+bytes. Independent public download checks verified all three asset digests,
+checksum, source tag and exact push/PR attempt provenance. Anonymous release/
+bundle downloads and HACS published-beta discovery succeeded.
+
+Preserved all 65 historical releases, 120 assets and 118 tags, including frozen
+drafts, against the pre-audit inventory. No old metadata/assets/tags were changed.
+Master remains `ba95dade58fa64c5183a312e0d1d00044feeb096`; latest stable remains
+v1.9.0. v1.10.0 stable is unpublished. No retention setting change or deletion,
+master merge, production HA access or unrelated development was performed.
+
+Raw local evidence is outside Git in `/workspace/build-output/audit154` and
+`/workspace/build-output/beta10`; CI preserves synthetic screenshot evidence.
+
+## Next action — owner real Home Assistant acceptance, then #163
+
+Stop here as required by the latest #154/#163 owner instructions. In HACS enable
+beta versions, redownload v1.10.0-beta.10 and refresh frontend/resource caches.
+YAML needs no changes. On PAHA02-DEV test repeat/on_release XY operation and
+close, Back, Info, timeout, background/return; verify accepted Beam/navigation,
+placement, size ceilings and modules. Tests use mocked services only and do not
+establish physical HA/HVAC/charger/browser acceptance.
+
+Keep #163 open. Do not merge PR #168 or publish stable until explicit owner
+real-HA beta.10 acceptance. After that, follow the unchanged exact-source stable
+promotion gates using the accepted immutable beta.10 evidence; never substitute
+beta.9 silently or re-merge the historical cumulative beta PRs.

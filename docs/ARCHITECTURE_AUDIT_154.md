@@ -372,3 +372,26 @@ or formal memory/security proofs. No production HA action was performed.
 
 No Car/v1.11 feature, HACS catalog submission, stable/master merge, destructive
 retention or architecture rewrite is part of the selected remedial path.
+
+## Remediation handoff — 2026-11-02, after guarded beta.10 publication
+
+B1 received only the targeted XY/menu lifecycle fix in separate [PR #168](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/168),
+source `a54cd007fff030d14d89872c4026b92cf0184405`, based on exact reviewed beta.9.
+[Public v1.10.0-beta.10](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.10.0-beta.10)
+was published by [guarded run 41540124243](https://github.com/NicolaiTandrup/honeycomb-menu-ng/actions/runs/41540124243)
+after exact-source push/PR/HACS success. New mobile/desktop browser regressions
+prove repeat cancellation, silent on_release interruption, normal payloads,
+Info/preview/background safety and listener cleanup/reconnect; the close test
+fails against immutable beta.9. No N finding was refactored into this candidate.
+
+Independent anonymous downloads and GitHub asset digests match the committed
+331735-byte bundle, SHA-256
+`b9a89296839e9bab77de41673547053264617985c2adeec325174367502e15b5`.
+All three assets, exact tag and CI-attempt provenance were verified. All 65 prior
+releases, 120 assets and 118 tags remain unchanged. Master/latest stable remain
+unchanged, and v1.10.0 stable is unpublished. No retention setting was changed.
+
+The report and initial FIX decision were published before runtime edits; this
+follow-up records Stage B's result on the same docs-only review branch. See
+[permanent handoff and exact CI links](DEVELOPMENT_STATUS.md). **Stop for owner
+real-Home-Assistant beta.10 acceptance on PAHA02-DEV before stable under #163.**
