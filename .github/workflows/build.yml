@@ -154,6 +154,8 @@ jobs:
         run: python test/browser/beta8_size.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/beta8-size"
       - name: Verify optional Beam of Origin live source, geometry, navigation and cleanup
         run: python test/browser/beta9_beam.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/beta9-beam"
+      - name: Verify XY Pad cancellation, normal actions and listener cleanup
+        run: python test/browser/beta10_xy.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/beta10-xy"
       - name: Validate documentation and complete YAML examples
         run: python test/docs/run.py --bundle honeycomb-menu-ng.js --button-card "$RUNNER_TEMP/button-card.js" --evidence-dir "$RUNNER_TEMP/cube-evidence/docs"
 

@@ -435,7 +435,7 @@ function openInfo(context, config, source = null)
     menu._clearIdleTimeout();
     menu._dragPointerActive=false;menu._dragPointerId=null;menu._dragHoverSlot=-1;
     menu.shadowRoot.querySelectorAll('#honeycombs,honeycomb-ng-xy-pad').forEach(node=>{node.inert=true;});
-    menu.shadowRoot.querySelectorAll('honeycomb-menu-ng-item,honeycomb-persistent-control').forEach(item=>item._cancelGesture());
+    menu.shadowRoot.querySelectorAll('honeycomb-menu-ng-item,honeycomb-persistent-control,honeycomb-ng-xy-pad').forEach(item=>item._cancelGesture());
     const topLayer=menu.hasAttribute('popover') && typeof menu.showPopover==='function' && menu.matches(':popover-open');
     if(topLayer){
         view.setAttribute('popover','manual');
@@ -1068,6 +1068,11 @@ class HoneycombMenu extends LitElement
         this.dispose();
     }
 
+    _cancelXYPad()
+    {
+        if(this.shadowRoot)this.shadowRoot.querySelectorAll('honeycomb-ng-xy-pad').forEach(pad=>pad._cancelGesture());
+    }
+
     dispose()
     {
         if( this._disposed )
@@ -1078,6 +1083,7 @@ class HoneycombMenu extends LitElement
         if(owner && owner._hubExpanded && this._originReference)owner._clearExpansion();
         this._disposed = true;
         this.closing = true;
+        this._cancelXYPad();
 
         this._clearIdleTimeout();
         this._stopStateRefresh();
@@ -1102,6 +1108,7 @@ class HoneycombMenu extends LitElement
             return;
 
         this.closing = true;
+        this._cancelXYPad();
 
         this._clearIdleTimeout();
         this._stopStateRefresh();
@@ -1756,6 +1763,9 @@ class HoneycombMenu extends LitElement
 
     _handleXYPad(e)
     {
+        const context=this._menuContext;
+        if(this.closing || !this.isConnected || !this.config.xy_pad ||
+            context && (context.info || context.owner && context.owner.preview === true))return;
         if( (this.config.xy_pad.on_release && e.type != 'honeycomb-ng-drag-end') ||
             (this.config.xy_pad.repeat && e.type != 'honeycomb-ng-drag-interval')
         ) return;

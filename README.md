@@ -26,7 +26,14 @@ by Nicolai Tandrup. [Original author support](https://www.buymeacoffee.com/SianL
 > is still pending. Continue using the HACS custom-repository installation below.
 > [Catalog submission review package](docs/HACS_CATALOG_SUBMISSION.md).
 
-## v1.10.0-beta.9: responsive room controls and optional Beam of Origin
+## v1.10.0-beta.10: XY Pad safety and cumulative room controls
+
+The [architecture audit](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/164)
+found that a repeating XY Pad could continue calling services after its menu
+closed. Beta.10 stops and cleans up interrupted gestures without sending a final
+release action. Normal XY values and YAML are unchanged. This candidate preserves
+the accepted beta.9 Beam of Origin, placement, sizing and module behavior.
+Real Home Assistant acceptance of beta.10 is required before v1.10.0 stable.
 
 Add `collapsible: true` and a primary item in slot 0 to place a compact,
 responsive room control on a floorplan. Tap performs its action; hold expands.
@@ -93,7 +100,7 @@ See [measured diagnostics and YAML](docs/SHARED_BEE.md).
 Sonos Join prefers trusted station artwork with room name and individual volume.
 Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
 precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
-Enable beta versions in HACS and select v1.10.0-beta.9 after publication.
+Enable beta versions in HACS and select v1.10.0-beta.10 after publication.
 Latest stable remains v1.9.0; physical-device acceptance is separate from QA.
 
 ## Climate beta testing — v1.10.0-beta.8
@@ -102,7 +109,7 @@ This cumulative beta adds generic Home Assistant Climate controls to the complet
 v1.9.0 stable feature set. It uses the same shared renderer and navigation.
 See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
 and [standalone Control](examples/climate-control.yaml). Real HVAC acceptance is pending.
-Enable beta versions in HACS and select v1.10.0-beta.9 once the release is public.
+Enable beta versions in HACS and select v1.10.0-beta.10 once the release is public.
 Stable remains v1.9.0; no master merge is part of this beta.
 
 ## What you can build

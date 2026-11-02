@@ -1,3 +1,28 @@
+# v1.10.0-beta.10 — XY Pad Lifecycle Safety
+
+Cumulative from owner-accepted public beta.9 source
+`0f2101d9b1b4377168ae7fd5643bf01672a1683b`.
+
+The repository-wide [#154 audit report](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/164)
+confirmed one release blocker: an active XY Pad could keep sending repeated HA
+service calls after close/removal and retain document listeners. This candidate
+fixes only that lifecycle defect and adds a mandatory browser regression suite.
+
+- Stop repeat timers at close, including animated close, disposal and removal.
+- Cancel interrupted gestures on Info, preview, reconfiguration, page background,
+  blur and touch/pointer cancellation; cancellation never dispatches `on_release`.
+- Remove document/window listeners on disconnect and rebind once on reconnect.
+- Reject late XY callbacks for closed/disconnected/suspended scenes.
+- Preserve normal mouse/touch service payloads and existing YAML. Preserve beta.9
+  Beam of Origin, approved size ceilings, placement, Bee and all modules.
+
+Optional audit cleanups remain deferred in #165–#167. No dependency upgrades,
+new features, broad refactors, stable publication or master merge are included.
+Install beta.10 with HACS beta versions enabled, refresh the frontend cache and
+validate on PAHA02-DEV. Owner real-Home-Assistant acceptance of this changed
+runtime is required before v1.10.0 stable under #163. Synthetic QA alone does not
+provide that acceptance. Historical releases/tags/assets remain untouched.
+
 # v1.10.0-beta.9 — Beam of Origin
 
 Cumulative with owner-accepted beta.8 (`3ff151adff815d933ddf786169a795ee704f5790`).
