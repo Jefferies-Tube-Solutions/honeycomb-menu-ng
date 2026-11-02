@@ -5,11 +5,12 @@ function settings(value,hubSize) {
     if(value===undefined || value===false)return null;
     const config=value===true?{}:value;
     if(!config || typeof config!=='object' || Array.isArray(config))throw Error('collapsible must be true, false or an options object.');
-    for(const key of Object.keys(config))if(!['expanded_center','primary_slot','idle_timeout','mobile','small_screen','expanded_size'].includes(key))throw Error('Unknown collapsible option: '+key);
+    for(const key of Object.keys(config))if(!['expanded_center','primary_slot','idle_timeout','mobile','small_screen','expanded_size','beam_of_origin'].includes(key))throw Error('Unknown collapsible option: '+key);
     if(config.mobile!==undefined && config.small_screen!==undefined && config.mobile!==config.small_screen)throw Error('Conflicting collapsible.mobile and collapsible.small_screen; remove mobile or use matching values.');
     const ceiling=sizeCeiling(hubSize);
     const result={expanded_center:'primary',idle_timeout:30000,expanded_size:ceiling,...config,small_screen:config.small_screen!==undefined?config.small_screen:config.mobile!==undefined?config.mobile:true};
     delete result.mobile;
+    result.beam_of_origin=require('./beam-of-origin').settings(config.beam_of_origin);
     if(!['primary','bee'].includes(result.expanded_center))throw Error('collapsible.expanded_center must be primary or bee.');
     if(result.expanded_center==='bee' && (!Number.isSafeInteger(result.primary_slot)||result.primary_slot<1||result.primary_slot>MAX_HUB_SLOT))throw Error('collapsible.primary_slot must be an available slot 1–216 for bee center.');
     if(!Number.isFinite(result.idle_timeout)||result.idle_timeout<1000)throw Error('collapsible.idle_timeout must be at least 1000 milliseconds.');

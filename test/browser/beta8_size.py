@@ -9,6 +9,7 @@ from http.server import ThreadingHTTPServer
 from playwright.sync_api import sync_playwright
 from run import Handler,CheckResult
 from beta5_geometry import Geometry
+from dev_build import DevBuild
 from charger import charger
 from PIL import Image,ImageChops
 MATRIX=[('omitted',None,None,82),('auto','auto',None,82),('auto82','auto',82,82),('auto100','auto',100,82),('fixed60',60,None,60),('fixed60_100',60,100,60),('fixed82',82,None,82),('fixed100',100,None,100),('fixed100_70',100,70,70)]
@@ -78,7 +79,7 @@ class Size(Geometry):
    if debug:
     self.activate(self.cell().locator('.interaction-surface'));self.page.wait_for_timeout(80);self.settle();cell=self.cell()
    else:cell=self.reveal()
-   self.assertIn('v1.10.0 beta 8',cell.locator('.bee-version').get_attribute('aria-label'))
+   self.assertIn(DevBuild.expected_label(self),cell.locator('.bee-version').get_attribute('aria-label'))
    if debug:self.assert_debug(cell)
    else:self.assertEqual(cell.locator('.bee-size').count(),0);self.assertIsNone(cell.evaluate('e=>e._beeSizeCleanup'))
    path=self.evidence/f'{self.viewport["width"]}-debug-{debug}.png';cell.screenshot(path=str(path));paths.append(path);self.capture('normal-debug-'+str(debug));self.reset()

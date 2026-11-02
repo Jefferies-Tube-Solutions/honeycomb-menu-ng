@@ -261,7 +261,9 @@ class CubeElement extends LitElement
 
     _syncPresentationObserver()
     {
-        const module = this.isConnected && moduleRegistry.resolvePresentation(this.config && this.config.mode);
+        // The inert origin uses this same presentation pipeline with owner-fed
+        // hass; it must not create a second module/device subscription.
+        const module = !this.visualOnly && this.isConnected && moduleRegistry.resolvePresentation(this.config && this.config.mode);
         const observe = module && module.presentation.observe;
         if (observe !== this._observerFactory) {
             if (this._moduleObserver) this._moduleObserver.dispose();
@@ -276,7 +278,7 @@ class CubeElement extends LitElement
     {
         if (!this.config) return;
         this._syncPresentationObserver();
-        const key=this.isConnected && this.config._sleep ? presentationUpdates.connectionKey(this.hass) : null;
+        const key=!this.visualOnly && this.isConnected && this.config._sleep ? presentationUpdates.connectionKey(this.hass) : null;
         if (key!==this._localPresentationKey) {
             if (this._localPresentationUnsubscribe) this._localPresentationUnsubscribe();
             this._localPresentationKey=key;
@@ -434,7 +436,7 @@ class CubeElement extends LitElement
         this._syncImageSizing();
         this._updatePresentation();
         const host = this.getRootNode().host;
-        if (!host || !host._menuContext) {
+        if (!this.visualOnly && (!host || !host._menuContext)) {
             if (!this._hasHassProvider) { this._hasHassProvider = true; provideHass(this); }
         }
     }

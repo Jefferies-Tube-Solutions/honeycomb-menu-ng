@@ -512,6 +512,7 @@ function honeycombDispose(context = manager)
 {
     dismissInfo(context,false);
     const menu = context.honeycomb;
+    if(context.owner && context.owner._originReference)context.owner._clearExpansion();
 
     context.stack = [];
     context.currentConfig = null;
@@ -713,6 +714,11 @@ class HoneycombMenu extends LitElement
                 pointer-events: none !important;
             }
             :host([popover])::backdrop {background:rgba(0,0,0,.55);pointer-events:auto !important;}
+            .origin-scene {position:fixed;inset:0;pointer-events:none;z-index:-1;}
+            .origin-scene[hidden] {display:none;}
+            .origin-beam {position:fixed;left:0;top:0;overflow:visible;pointer-events:none;}
+            .origin-reference {position:fixed;pointer-events:none;}
+            :host([popover]) .hub-shield:has(~ .origin-scene) {z-index:-2;}
             .hub-shield {position:fixed;inset:0;pointer-events:all;z-index:-1;}
             .shade {
                 position: fixed;
@@ -817,6 +823,23 @@ class HoneycombMenu extends LitElement
                 </honeycomb-ng-xy-pad>`:''}
 
             ${this.hasAttribute('popover') ? html`<div class="hub-shield" @click=${e=>this._menuContext.owner._handleExpansionOutside(e)}></div>`:''}
+            ${this._originReference ? html`
+                <div class="origin-scene" hidden inert aria-hidden="true">
+                    <svg class="origin-beam" aria-hidden="true" focusable="false">
+                        <defs>
+                            <linearGradient id=${this._originReference.id} gradientUnits="userSpaceOnUse">
+                                <stop offset="0" stop-color=${this._originReference.color} stop-opacity=".34"></stop>
+                                <stop offset=".55" stop-color=${this._originReference.color} stop-opacity=".13"></stop>
+                                <stop offset="1" stop-color=${this._originReference.color} stop-opacity=".025"></stop>
+                            </linearGradient>
+                            <filter id=${this._originReference.id+'-soft'} x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.5"></feGaussianBlur></filter>
+                        </defs>
+                        <polygon fill=${'url(#'+this._originReference.id+')'} filter=${'url(#'+this._originReference.id+'-soft)'}></polygon>
+                    </svg>
+                    <honeycomb-persistent-control class="origin-reference" inert aria-hidden="true"
+                        .visualOnly=${true} .config=${this._originReference.config} .hass=${this.hass}>
+                    </honeycomb-persistent-control>
+                </div>` : ''}
             <div id="honeycombs" class="honeycombs">
                 ${this.config.persistent_center ? html`
                     <honeycomb-persistent-control
@@ -879,6 +902,12 @@ class HoneycombMenu extends LitElement
                     `;
                 })}
             </div>`;
+    }
+
+    updated()
+    {
+        const owner=this._menuContext && this._menuContext.owner;
+        if(owner && this._originReference)owner._scheduleOriginGeometry();
     }
 
     set hass(value)
@@ -1045,6 +1074,8 @@ class HoneycombMenu extends LitElement
             return;
 
         dismissInfo(this._menuContext || manager,false);
+        const owner=this._menuContext && this._menuContext.owner;
+        if(owner && owner._hubExpanded && this._originReference)owner._clearExpansion();
         this._disposed = true;
         this.closing = true;
 
@@ -1064,6 +1095,8 @@ class HoneycombMenu extends LitElement
 
     close( _item = null )
     {
+        const owner=this._menuContext && this._menuContext.owner;
+        if(owner && owner._hubExpanded && this._originReference)owner._clearExpansion();
         dismissInfo(this._menuContext || manager,false);
         if( this.closing )
             return;

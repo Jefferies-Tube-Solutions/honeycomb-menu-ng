@@ -10,6 +10,8 @@ const { VisibilityIndex } = require('./core/visibility.js');
 const collapsibleHub=require('./core/collapsible-hub');
 const expandedLayout=require('./core/expanded-layout');
 const bee=require('./core/bee');
+const originBeam=require('./core/beam-of-origin');
+let nextOriginId=0;
 const navigationCore=require('./core/navigation-context');
 const { allocateHubSlots } = require('./core/hub-allocation.js');
 
@@ -371,6 +373,22 @@ class HoneycombPersistentHub extends CubeElement
     _expandHub({pointerId=null}={})
     {
         if(!this._collapseOptions || this._hubExpanded || this.preview)return;
+        if(this._collapseOptions.beam_of_origin) {
+            const menu=this._hubMenu,cell=menu.shadowRoot.querySelector('.center-item');
+            const hex=cell && cell.shadowRoot.querySelector('.hex-svg');
+            const rect=hex && hex.getBoundingClientRect(),anchor=this.getBoundingClientRect();
+            if(rect && rect.width && rect.height) {
+                const config=this._persistentMenuConfig();
+                this._originReference={config:merge({},config.persistent_center || config.center_button,{interactive:false}),
+                    id:'hub-origin-'+(++nextOriginId),color:this._collapseOptions.beam_of_origin.color,
+                    scale:rect.width/anchor.width,ratio:rect.height/rect.width,
+                    dx:(rect.left+rect.width/2-anchor.left-anchor.width/2)/rect.width,
+                    dy:(rect.top+rect.height/2-anchor.top-anchor.height/2)/rect.height};
+                menu._originReference=this._originReference;menu.requestUpdate();
+                this._originAnimationEnd=()=>this._scheduleOriginGeometry();
+                menu.addEventListener('animationend',this._originAnimationEnd);
+            }
+        }
         this._hubExpanded=true;
         this._expansionReadyAt=pointerId===null?0:Date.now()+500;
         this._expansionCapture=e=>{
@@ -397,9 +415,11 @@ class HoneycombPersistentHub extends CubeElement
     _fitExpansion(options={})
     {
         const context=this._menuContext,menu=context && context.honeycomb;
-        if(!this._hubExpanded || !menu || menu.closing || context.info)return;
+        if(!this._hubExpanded || !menu || menu.closing)return;
+        if(context.info){this._scheduleOriginGeometry();return;}
         // Only an explicit legacy opt-out retains the old compact phone mode.
         // Default enlargement and desktop fitting never depend on a breakpoint.
+        this._scheduleOriginGeometry();
         const compact=this._collapseOptions.small_screen===false && window.innerWidth<=600;
         if(compact)this._hideExpansionPopover(menu);
         else if(!menu.hasAttribute('popover')) {
@@ -436,6 +456,72 @@ class HoneycombPersistentHub extends CubeElement
         }
     }
 
+    _scheduleOriginGeometry()
+    {
+        if(!this._originReference || this._originFrame!=null)return;
+        this._originFrame=requestAnimationFrame(()=>{
+            this._originFrame=null;
+            this._measureOriginGeometry();
+        });
+    }
+
+    _measureOriginGeometry()
+    {
+        const menu=this._hubMenu,reference=this._originReference;
+        if(!this._hubExpanded || !menu || !reference)return;
+        const scene=menu.shadowRoot.querySelector('.origin-scene');
+        if(!scene)return;
+        const anchor=this.getBoundingClientRect(),width=anchor.width*reference.scale,height=width*reference.ratio;
+        const x=anchor.left+anchor.width/2+reference.dx*width,y=anchor.top+anchor.height/2+reference.dy*height;
+        const source={left:x-width/2,top:y-height/2,width,height};
+        const viewport=window.visualViewport || {offsetLeft:0,offsetTop:0,width:innerWidth,height:innerHeight};
+        const image=this._floorplanImageRect;
+        let visible=this.isConnected && !this.preview && menu.matches(':popover-open') && this._imageFrameVisible!==false &&
+            source.left>=viewport.offsetLeft && source.top>=viewport.offsetTop &&
+            source.left+width<=viewport.offsetLeft+viewport.width && source.top+height<=viewport.offsetTop+viewport.height &&
+            (!image || x>=image.left && x<=image.right && y>=image.top && y<=image.bottom);
+        // An axis-aligned bounding rectangle cannot represent rotated/skewed hexes.
+        for(let n=this;n && visible;n=n.parentElement || n.getRootNode().host){
+            const css=getComputedStyle(n);
+            if(css.display==='none' || n!==this && css.visibility==='hidden')visible=false;
+            if(css.transform!=='none'){
+                try{const m=new DOMMatrixReadOnly(css.transform);if(!m.is2D || Math.abs(m.b)>.0001 || Math.abs(m.c)>.0001 || m.a<=0 || m.d<=0)visible=false;}catch(_){visible=false;}
+            }
+        }
+        const targets=[...menu.shadowRoot.querySelectorAll('#honeycombs > honeycomb-menu-ng-item,#honeycombs > honeycomb-persistent-control')]
+            .map(cell=>cell.shadowRoot.querySelector('.hex-svg'))
+            .filter(Boolean).map(hex=>hex.getBoundingClientRect()).filter(r=>r.width && r.height).map(originBeam.hex);
+        const geometry=visible && originBeam.connection(source,targets);
+        scene.hidden=!geometry;
+        if(!geometry){this._originGeometry=null;return;}
+        const origin=scene.querySelector('.origin-reference');
+        const sceneBox=scene.getBoundingClientRect(),scaleX=sceneBox.width/scene.offsetWidth || 1,scaleY=sceneBox.height/scene.offsetHeight || 1;
+        const local=p=>({x:(p.x-sceneBox.left)/scaleX,y:(p.y-sceneBox.top)/scaleY});
+        const localSource=local({x:source.left,y:source.top}),localWidth=width/scaleX;
+        origin.size=localWidth;origin.style.cssText=`position:fixed;left:${localSource.x}px;top:${localSource.y}px;width:${localWidth}px;--honeycomb-persistent-size:${localWidth}px;pointer-events:none;`;
+        const svg=scene.querySelector('svg.origin-beam'),polygon=svg.querySelector('polygon'),gradient=svg.querySelector('linearGradient');
+        // Fixed-position children and SVG user units share the viewport coordinate
+        // system, including visualViewport offsets and document scrolling.
+        svg.setAttribute('width',document.documentElement.clientWidth);svg.setAttribute('height',document.documentElement.clientHeight);
+        polygon.setAttribute('points',geometry.points.map(local).map(p=>`${p.x},${p.y}`).join(' '));
+        for(const [key,value] of Object.entries({x1:local(geometry.source).x,y1:local(geometry.source).y,x2:local(geometry.target).x,y2:local(geometry.target).y}))gradient.setAttribute(key,value);
+        this._originGeometry={sourceRect:source,targets,...geometry};
+    }
+
+    _clearOriginReference()
+    {
+        if(this._originFrame!=null)cancelAnimationFrame(this._originFrame);
+        this._originFrame=null;this._originReference=null;this._originGeometry=null;
+        const menu=this._hubMenu;
+        if(menu){
+            menu.removeEventListener('animationend',this._originAnimationEnd);
+            this._originAnimationEnd=null;
+            // Remove synchronously, before returning to the single active cube.
+            const scene=menu.shadowRoot.querySelector('.origin-scene');if(scene)scene.hidden=true;
+            menu._originReference=null;menu.requestUpdate();
+        }
+    }
+
     _handleExpansionOutside(event)
     {
         const menu=this._menuContext && this._menuContext.honeycomb,target=event.composedPath()[0];
@@ -454,6 +540,7 @@ class HoneycombPersistentHub extends CubeElement
 
     _clearExpansion()
     {
+        this._clearOriginReference();
         if(this._expansionChromeResize)this._expansionChromeResize.disconnect();
         if(this._expansionChromeMutation)this._expansionChromeMutation.disconnect();
         window.removeEventListener('resize',this._expansionResize);

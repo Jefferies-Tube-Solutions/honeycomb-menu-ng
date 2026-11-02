@@ -1,3 +1,17 @@
+# v1.10.0-beta.9 — Beam of Origin
+
+Cumulative with owner-accepted beta.8 (`3ff151adff815d933ddf786169a795ee704f5790`).
+Optional `collapsible.beam_of_origin: true` retains a live, inert room cube at
+its floorplan anchor and connects it to the expanded controls with a soft,
+transparent cyan SVG fan. Optional `color` changes its hue. Measured physical
+hex boundaries follow navigation and responsive layout; overlap suppresses the
+reference. Collapse and teardown remove temporary resources. No independent HA
+subscription or second active control is created. Default OFF preserves beta.8.
+
+Configured parent size ceilings, placement, shared Bee and module navigation
+remain intact. Owner testing on PAHA02-DEV is required before any stable promotion.
+No master merge, production HA change or architecture review is part of this beta.
+
 # Honeycomb NG v1.10.0-beta.8 — Configured Hub Size Ceiling and Bee Diagnostics
 
 Cumulative from immutable beta.7 `87c192a0a5f16bd880cf93692d5275d1d6130ed2`.

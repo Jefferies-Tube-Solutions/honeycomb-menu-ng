@@ -47,3 +47,30 @@ test('optional size_debug validates booleans and shared pixel label never guesse
  for(const value of [null,0,1,'true',{},[]])assert.throws(()=>validateCubeConfig({size_debug:value}),/size_debug/);
  for(const [width,label]of [[82,'82 px'],[79.4,'79.4 px'],[79.44,'79.4 px'],[0,'N/A'],[NaN,'N/A'],[null,'N/A']])assert.equal(pixelLabel(width),label);
 });
+
+test('Beam of Origin is strictly optional, minimal and independent of size policy',()=>{
+ assert.equal(settings(true).beam_of_origin,null);
+ assert.equal(settings({beam_of_origin:false}).beam_of_origin,null);
+ assert.deepEqual(settings({beam_of_origin:true},60).beam_of_origin,{color:'#8bdcff'});
+ assert.deepEqual(settings({beam_of_origin:{color:'#ffbb55'}},100).beam_of_origin,{color:'#ffbb55'});
+ for(const value of [null,0,'yes',[],{opacity:.5},{color:42},{color:'url(#paint)'},{color:'#invalid'}])
+  assert.throws(()=>settings({beam_of_origin:value}),/beam_of_origin/);
+ assert.equal(settings({beam_of_origin:true,expanded_size:100},60).expanded_size,60);
+});
+test('Beam uses physical hex perimeter caps in every direction and suppresses overlap',()=>{
+ const {hex,connection}=require('../src/core/beam-of-origin');
+ const source={left:200,top:200,width:60,height:60*1.1547};
+ const onEdge=(p,poly)=>poly.some((a,i)=>{
+  const b=poly[(i+1)%poly.length],cross=(p.x-a.x)*(b.y-a.y)-(p.y-a.y)*(b.x-a.x);
+  return Math.abs(cross)<1e-6 && p.x>=Math.min(a.x,b.x)-1e-6 && p.x<=Math.max(a.x,b.x)+1e-6 && p.y>=Math.min(a.y,b.y)-1e-6 && p.y<=Math.max(a.y,b.y)+1e-6;
+ });
+ for(const [dx,dy] of [[300,0],[-180,0],[0,300],[0,-180],[300,300],[-180,-180],[300,-180],[-180,300]]){
+  const target=hex({...source,left:source.left+dx,top:source.top+dy,width:82,height:82*1.1547}),beam=connection(source,[target]);
+  assert.ok(beam);assert.ok(onEdge(beam.source,hex(source)));assert.ok(onEdge(beam.target,target));
+  beam.points.slice(0,2).forEach(p=>assert.ok(onEdge(p,hex(source))));
+  beam.points.slice(2).forEach(p=>assert.ok(onEdge(p,target)));
+ }
+ assert.equal(connection(source,[hex(source)]),null);
+ assert.equal(connection(source,[]),null);
+ assert.equal(connection(source,[hex({...source,left:source.left+3})]),null);
+});

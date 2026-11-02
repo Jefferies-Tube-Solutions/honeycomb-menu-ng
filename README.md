@@ -26,7 +26,7 @@ by Nicolai Tandrup. [Original author support](https://www.buymeacoffee.com/SianL
 > is still pending. Continue using the HACS custom-repository installation below.
 > [Catalog submission review package](docs/HACS_CATALOG_SUBMISSION.md).
 
-## v1.10.0-beta.8: responsive room controls
+## v1.10.0-beta.9: responsive room controls and optional Beam of Origin
 
 Add `collapsible: true` and a primary item in slot 0 to place a compact,
 responsive room control on a floorplan. Tap performs its action; hold expands.
@@ -51,6 +51,27 @@ items:
     slot: 2
 ```
 
+Optional Beam of Origin keeps the original room cube visible as a live,
+noninteractive reference while the expanded Hub moves away. Enable it with:
+
+```yaml
+collapsible:
+  beam_of_origin: true
+```
+
+Optional custom color:
+
+```yaml
+collapsible:
+  beam_of_origin:
+    color: "#8bdcff"
+```
+
+The soft cyan beam fades toward the active expanded controls and follows nested
+navigation. `collapsible: true` keeps the accepted beta.8 behavior with no beam.
+The source reference cannot toggle or open anything; closing restores the single
+interactive room cube. Near/overlapping or hidden sources suppress the beam.
+
 See [complete picture-elements examples and optional settings](docs/COLLAPSIBLE_HUB.md).
 Auto/omitted Hub size sets an 82px nominal maximum for expanded and nested cubes;
 a responsive collapsed floorplan cube may be smaller. Numeric `size: N` sets the
@@ -72,7 +93,7 @@ See [measured diagnostics and YAML](docs/SHARED_BEE.md).
 Sonos Join prefers trusted station artwork with room name and individual volume.
 Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
 precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
-Enable beta versions in HACS and select v1.10.0-beta.8 after publication.
+Enable beta versions in HACS and select v1.10.0-beta.9 after publication.
 Latest stable remains v1.9.0; physical-device acceptance is separate from QA.
 
 ## Climate beta testing — v1.10.0-beta.8
@@ -81,7 +102,7 @@ This cumulative beta adds generic Home Assistant Climate controls to the complet
 v1.9.0 stable feature set. It uses the same shared renderer and navigation.
 See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
 and [standalone Control](examples/climate-control.yaml). Real HVAC acceptance is pending.
-Enable beta versions in HACS and select v1.10.0-beta.8 once the release is public.
+Enable beta versions in HACS and select v1.10.0-beta.9 once the release is public.
 Stable remains v1.9.0; no master merge is part of this beta.
 
 ## What you can build

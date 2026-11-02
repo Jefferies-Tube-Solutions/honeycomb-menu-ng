@@ -22,6 +22,43 @@ entities. The card supplies the floorplan image. A [complete picture-elements
 example](../examples/collapsible-picture-elements.yaml) is ready to paste.
 Existing Hubs without `collapsible` keep their existing defaults and behavior.
 
+## Optional Beam of Origin (beta.9)
+
+The ordinary `collapsible: true` example above keeps its beta.8 behavior, with
+no beam. To keep a live room reference when the expanded Hub moves away, opt in:
+
+```yaml
+collapsible:
+  beam_of_origin: true
+```
+
+Optional custom color (the default is `#8bdcff`):
+
+```yaml
+collapsible:
+  beam_of_origin:
+    color: "#8bdcff"
+```
+
+The original room cube remains at its floorplan position and collapsed size,
+using the shared cube renderer and the same HA state updates for its icon, name,
+brightness, borders and gradients. It is a **visual reference, not a second
+clickable control**. Only the expanded Honeycomb accepts actions.
+
+A soft, transparent SVG fan fades from that source toward the nearest facing
+hex boundary of the current expanded controls. It shares their top-layer popover,
+above the backdrop and behind the cubes; Info Cube keeps higher priority. The
+beam follows measured navigation and responsive geometry without changing the
+approved placement, parent size ceiling or Bee behavior. No extra sizing,
+positioning, opacity or animation settings are needed.
+
+Near/overlapping source and destination suppress both the beam and duplicate
+source face. Offscreen/hidden or unsupported source geometry is suppressed safely.
+Back, outside click, Escape, idle expiry, reconfiguration and removal clean up
+the temporary scene and restore the single interactive floorplan cube. Each Hub
+has its own gradient and geometry. No real-device behavior is implied by the
+synthetic browser tests; owner testing on PAHA02-DEV remains required.
+
 ## Automatic behavior
 
 Collapsed size follows the floorplan responsively, with a normal maximum of
