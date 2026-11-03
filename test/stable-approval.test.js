@@ -43,8 +43,9 @@ test('only known version banner and additive promotion tests may differ from bet
 
 test('version metadata promotion changes only the pinned build-info literals',()=>{
     const {promoteMetadata}=require('../scripts/stable-approval');
-    const from='1.9.0-beta.9',to='1.9.0';
-    const module='const o="1.9.0-beta.9".trim()?"1.9.0-beta.9":"Version unavailable";e.exports={version:o,commit:null}';
-    assert.equal(promoteMetadata('before;'+module+';after',from,to),'before;'+module.replaceAll(from,to)+';after');
-    for(const bad of ['',module+module,module.replace('commit:null','commit:"changed"'),module.replace('?"1.9.0-beta.9"','?"unexpected"')])assert.throws(()=>promoteMetadata(bad,from,to));
+    for(const [from,to] of [['1.9.0-beta.9','1.9.0'],['1.10.0-beta.10','1.10.0']]) {
+        const module=`const o="${from}".trim()?"${from}":"Version unavailable";e.exports={version:o,commit:null}`;
+        assert.equal(promoteMetadata('before;'+module+';after',from,to),'before;'+module.replaceAll(from,to)+';after');
+        for(const bad of ['',module+module,module.replace('commit:null','commit:"changed"'),module.replace(`?"${from}"`,'?"unexpected"')])assert.throws(()=>promoteMetadata(bad,from,to));
+    }
 });

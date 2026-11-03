@@ -19,21 +19,20 @@ NG originated as a fork of [Sian Croser's honeycomb-menu](https://github.com/Sia
 and retains original code and attribution under [GPLv3](LICENSE). NG is maintained
 by Nicolai Tandrup. [Original author support](https://www.buymeacoffee.com/SianLee).
 
-> **Latest stable: [v1.9.0](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.9.0).**
-> Promotes the complete owner-tested beta.9 runtime, including Charger and Info. NG includes
-> the shared renderer, native Sonos Favorites, responsive sizing and hexagonal
-> power-sensitive pulse. Official HACS validation has passed; catalog inclusion
-> is still pending. Continue using the HACS custom-repository installation below.
-> [Catalog submission review package](docs/HACS_CATALOG_SUBMISSION.md).
+> **Stable track: [v1.10.0](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.10.0).**
+> Promotes the complete real-Home-Assistant owner-accepted beta.10 runtime, including
+> Climate, Collapsible Hubs, Beam of Origin and XY Pad lifecycle safety, alongside
+> Light, Sonos, Charger and Info. Official HACS validation is a release gate;
+> catalog inclusion remains separate. Use the custom-repository installation below.
+> [Stable promotion evidence and checks](docs/V1_10_STABLE_RELEASE.md).
 
-## v1.10.0-beta.10: XY Pad safety and cumulative room controls
+## v1.10.0: responsive room controls, Beam of Origin and XY Pad safety
 
-The [architecture audit](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/164)
-found that a repeating XY Pad could continue calling services after its menu
-closed. Beta.10 stops and cleans up interrupted gestures without sending a final
-release action. Normal XY values and YAML are unchanged. This candidate preserves
-the accepted beta.9 Beam of Origin, placement, sizing and module behavior.
-Real Home Assistant acceptance of beta.10 is required before v1.10.0 stable.
+The [architecture audit](docs/ARCHITECTURE_AUDIT_154.md) identified a repeating XY
+Pad that could keep calling services after closing. Owner-accepted beta.10 fixes
+that lifecycle defect; this stable promotion preserves its runtime. Interrupted
+gestures stop without a final release action. Normal XY values and YAML remain
+compatible. No new configuration is required when upgrading from beta.10.
 
 Add `collapsible: true` and a primary item in slot 0 to place a compact,
 responsive room control on a floorplan. Tap performs its action; hold expands.
@@ -100,17 +99,18 @@ See [measured diagnostics and YAML](docs/SHARED_BEE.md).
 Sonos Join prefers trusted station artwork with room name and individual volume.
 Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
 precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
-Enable beta versions in HACS and select v1.10.0-beta.10 after publication.
-Latest stable remains v1.9.0; physical-device acceptance is separate from QA.
+In HACS select v1.10.0 after publication and refresh frontend/resource caches.
+Beta versions are not required for stable. Owner beta.10 real-HA acceptance is
+recorded in #163; synthetic QA does not establish every hardware/browser case.
 
-## Climate beta testing — v1.10.0-beta.8
+## Climate controls — v1.10.0 stable
 
-This cumulative beta adds generic Home Assistant Climate controls to the complete
+This release adds generic Home Assistant Climate controls to the complete
 v1.9.0 stable feature set. It uses the same shared renderer and navigation.
 See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
 and [standalone Control](examples/climate-control.yaml). Real HVAC acceptance is pending.
-Enable beta versions in HACS and select v1.10.0-beta.10 once the release is public.
-Stable remains v1.9.0; no master merge is part of this beta.
+Use v1.10.0 stable after publication. Device-specific HVAC behavior still requires
+installation-time validation.
 
 ## What you can build
 
@@ -120,7 +120,7 @@ Stable remains v1.9.0; no master merge is part of this beta.
 - Live Hub item visibility, reserved/preferred/free slots and stable placement.
 - Nested menus, drag-select and classic popup compatibility, templates and XY Pad.
 
-Climate is available in the **v1.10.0-beta.8 candidate**, cumulative with v1.9.0 stable.
+Climate is included in **v1.10.0 stable**, cumulative with v1.9.0 stable.
 See the [Climate guide](docs/CLIMATE_MODULE.md) and [Hub example](examples/climate-hub.yaml).
 Car is not implemented. Charging automation remains external.
 Honeycomb calls configured HA actions; device automation belongs in Home Assistant.
@@ -163,7 +163,7 @@ release does not make newer beta-only options available.
 
 ## Charger beta: complete dashboards
 
-**v1.9.0 prerelease only.** A generic Charger/Easee module shares the same
+**Included in v1.10.0 stable.** A generic Charger/Easee module shares the same
 82px renderer, gradients, sizing and power-sensitive hexagonal pulse. A Charging
 Hub sums fresh verified power and physically connected cars; named chargers open
 fixed detail menus. Permission and permanent-lock controls require deliberate taps
@@ -230,7 +230,7 @@ Private local testing: [fixed development resource and build instructions](docs/
 
 ### Light Hub names while OFF
 
-In the unpublished v1.9.0-beta.6 candidate and its private development build, an OFF Light Hub launcher shows its
+In v1.10.0 stable, an OFF Light Hub launcher shows its
 existing item `name` above `OFF`. Without a custom name it uses the HA
 `friendly_name`, then the readable entity ID. A short name such as `A` is valid;
 long names use the existing ellipsis. ON brightness/colors and submenu centers
@@ -556,9 +556,8 @@ means a harmless 82px fallback. See [complete copy/paste YAML, coordinate-frame
 support and touch-size limits](docs/FLOORPLAN_SIZING.md).
 
 The [synthetic charging-pulse demo](examples/energy-wave.yaml) uses the shared
-renderer without a charger or service call. Charger, Climate and Car modules
-remain future releases. [HACS listing readiness](docs/HACS_SUBMISSION.md) is
-separate from installing this beta as a custom repository.
+renderer without a charger or service call. Charger and Climate are included in v1.10.0 stable; Car remains unimplemented. [HACS listing readiness](docs/HACS_SUBMISSION.md) is
+separate from installing this stable release as a custom repository.
 
 ### v1.8.0-beta.6: corrected auto reference and power pulse speed
 

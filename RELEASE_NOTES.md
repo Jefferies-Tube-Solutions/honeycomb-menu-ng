@@ -1,3 +1,38 @@
+# v1.10.0 — Stable
+
+Promotes the exact owner-real-Home-Assistant-accepted v1.10.0-beta.10 source
+`a54cd007fff030d14d89872c4026b92cf0184405`, without runtime or dependency changes.
+The approved public beta bundle is 331735 bytes, SHA-256
+`b9a89296839e9bab77de41673547053264617985c2adeec325174367502e15b5`.
+Only the banner and two canonical build-info version literals change in the JS.
+
+- Generic Climate controls and capability-aware exact-target adjustments.
+- Responsive Collapsible Hubs, selected-cube promotion/Back, mobile free canvas
+  and configured parent size ceilings throughout nested navigation.
+- Optional Beam of Origin: live inert source cube and subtle measured cyan fan;
+  default OFF. Optional size_debug retains measured Bee diagnostics.
+- Improved Sonos Join artwork, room status/individual volume, shared Bee and all
+  existing Light, Sonos, Charger and Info functionality.
+- XY Pad safety: repeat actions stop at close/disposal/removal and cancellation;
+  silent interrupted on_release gestures, listener cleanup and late-event guards.
+- Existing beta.10 YAML remains compatible; no additional settings are required.
+
+Owner beta.10 acceptance and stable authorization are recorded in issue #163.
+Audit #154 is complete; its confirmed blocker was fixed in beta.10. Nonblocking
+#165–#167 remain deferred. Full exact-source push/PR/master CI, official HACS,
+source approval, reproducible packaging and guarded verify-only then publish are
+mandatory. No retention setting changes, historical release modifications,
+production HA actions, new features or broad refactors enter this promotion.
+
+HACS: select/redownload v1.10.0 stable, turn off beta versions if desired and
+refresh frontend/resource caches on all clients. Keep the existing NG module
+resource. See [stable verification](docs/V1_10_STABLE_RELEASE.md),
+[Collapsible Hubs](docs/COLLAPSIBLE_HUB.md), [Climate](docs/CLIMATE_MODULE.md)
+and [XY Pad](docs/CLASSIC_MENU.md). Owner real-HA testing does not establish every
+physical thermostat/charger/browser model; automated coverage uses synthetic HA.
+
+---
+
 # v1.10.0-beta.10 — XY Pad Lifecycle Safety
 
 Cumulative from owner-accepted public beta.9 source
