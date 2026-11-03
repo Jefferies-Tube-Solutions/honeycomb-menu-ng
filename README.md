@@ -19,31 +19,98 @@ NG originated as a fork of [Sian Croser's honeycomb-menu](https://github.com/Sia
 and retains original code and attribution under [GPLv3](LICENSE). NG is maintained
 by Nicolai Tandrup. [Original author support](https://www.buymeacoffee.com/SianLee).
 
-> **Latest stable: [v1.9.0](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.9.0).**
-> Promotes the complete owner-tested beta.9 runtime, including Charger and Info. NG includes
-> the shared renderer, native Sonos Favorites, responsive sizing and hexagonal
-> power-sensitive pulse. Official HACS validation has passed; catalog inclusion
-> is still pending. Continue using the HACS custom-repository installation below.
-> [Catalog submission review package](docs/HACS_CATALOG_SUBMISSION.md).
+> **Stable track: [v1.10.0](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.10.0).**
+> Promotes the complete real-Home-Assistant owner-accepted beta.10 runtime, including
+> Climate, Collapsible Hubs, Beam of Origin and XY Pad lifecycle safety, alongside
+> Light, Sonos, Charger and Info. Official HACS validation is a release gate;
+> catalog inclusion remains separate. Use the custom-repository installation below.
+> [Stable promotion evidence and checks](docs/V1_10_STABLE_RELEASE.md).
 
-## v1.9.0 stable promotion
+## v1.10.0: responsive room controls, Beam of Origin and XY Pad safety
 
-Stable candidate promotes published beta.9: Info supports `source`
-independently on center fill, inner and outer border, preserving rendered gradients
-and alpha as an opening snapshot. Mix inherited layers with explicit colors/gradients.
-[Source-paint contract](docs/INFO_CUBE.md). Mandatory release gates still apply.
+The [architecture audit](docs/ARCHITECTURE_AUDIT_154.md) identified a repeating XY
+Pad that could keep calling services after closing. Owner-accepted beta.10 fixes
+that lifecycle defect; this stable promotion preserves its runtime. Interrupted
+gestures stop without a final release action. Normal XY values and YAML remain
+compatible. No new configuration is required when upgrading from beta.10.
 
-## v1.9.0 beta track
+Add `collapsible: true` and a primary item in slot 0 to place a compact,
+responsive room control on a floorplan. Tap performs its action; hold expands.
+On phones, tablets and PCs, the Hub opens at a comfortable size. It prefers
+space beside the floorplan, and fits safely in the viewport when there is no room.
+On constrained screens, it places actual visible controls in fitting free canvas,
+preferably below the image, at the already chosen expanded size. Desktop placement
+plans for slots 0–18 and accepts at most 15% initial downscaling in free space,
+and otherwise stays near the original floorplan anchor. Only configured cubes
+render. Tap its center to return. No extra sizing or positioning options are needed.
 
-Latest published beta: [v1.9.0-beta.8](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.9.0-beta.8).
-Published **beta.8** refines the generic, read-only Info Cube:
-a centered hex constrained by the six natural inner notches, independent fill and
-borders, and an optional source-colored connector. Surrounding cubes stay visible,
-stationary and inactive. Wrapped/stacked/positioned text and live HA bindings
-paginate at fixed readable sizes; more content never enlarges the hexagon.
-Tap returns to the exact caller; 30 seconds closes the entire menu.
-[Info Cube guide and examples](docs/INFO_CUBE.md) · [beta.8 review checklist](docs/V1_9_BETA8_REVIEW.md).
-The owner authorized stable v1.9.0 promotion after mandatory exact-source checks.
+```yaml
+type: custom:honeycomb-persistent-hub
+style: {left: 50%, top: 50%}
+collapsible: true
+items:
+  - type: light
+    entity: light.room_a
+    slot: 0
+  - type: light
+    entity: light.room_b
+    slot: 2
+```
+
+Optional Beam of Origin keeps the original room cube visible as a live,
+noninteractive reference while the expanded Hub moves away. Enable it with:
+
+```yaml
+collapsible:
+  beam_of_origin: true
+```
+
+Optional custom color:
+
+```yaml
+collapsible:
+  beam_of_origin:
+    color: "#8bdcff"
+```
+
+The soft cyan beam fades toward the active expanded controls and follows nested
+navigation. `collapsible: true` keeps the accepted beta.8 behavior with no beam.
+The source reference cannot toggle or open anything; closing restores the single
+interactive room cube. Near/overlapping or hidden sources suppress the beam.
+
+See [complete picture-elements examples and optional settings](docs/COLLAPSIBLE_HUB.md).
+Auto/omitted Hub size sets an 82px nominal maximum for expanded and nested cubes;
+a responsive collapsed floorplan cube may be smaller. Numeric `size: N` sets the
+maximum to N, including values above 82. Optional `collapsible.expanded_size` can
+lower that target but cannot raise the parent limit. Viewport fitting may shrink
+further. The same ceiling applies throughout navigation and exact Back restoration.
+Selected module cubes stay in place when their submenus fit; constrained views
+fall back to the expanded root center. Back restores the parent layout exactly.
+Explicit numeric sizes are unchanged. Legacy
+`collapsible.mobile` remains an alias for `small_screen`; conflicting values fail
+clearly. Hubs without `collapsible` keep their existing defaults.
+
+Developer diagnostic (optional): add top-level `size_debug: true` to show the
+actual rendered CSS-pixel cube width during the Bee's temporary version reveal.
+Default is false: ordinary version-only display and resting Bee remain unchanged.
+Normal Bee tap inspects; expanded-root Bee tap stays Back, hold/Shift+Enter inspects.
+See [measured diagnostics and YAML](docs/SHARED_BEE.md).
+
+Sonos Join prefers trusted station artwork with room name and individual volume.
+Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
+precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
+In HACS select v1.10.0 after publication and refresh frontend/resource caches.
+Beta versions are not required for stable. Owner beta.10 real-HA acceptance is
+recorded in #163; synthetic QA does not establish every hardware/browser case.
+
+## Climate controls — v1.10.0 stable
+
+This release adds generic Home Assistant Climate controls to the complete
+v1.9.0 stable feature set. It uses the same shared renderer and navigation.
+See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
+and [standalone Control](examples/climate-control.yaml). Real HVAC acceptance is pending.
+Use v1.10.0 stable after publication. Device-specific HVAC behavior still requires
+installation-time validation.
 
 ## What you can build
 
@@ -53,8 +120,9 @@ The owner authorized stable v1.9.0 promotion after mandatory exact-source checks
 - Live Hub item visibility, reserved/preferred/free slots and stable placement.
 - Nested menus, drag-select and classic popup compatibility, templates and XY Pad.
 
-Car and Climate modules are not implemented. Charging automation remains external.
-The generic Charger module below is **v1.9.0 beta track only**, not part of v1.8.1 stable.
+Climate is included in **v1.10.0 stable**, cumulative with v1.9.0 stable.
+See the [Climate guide](docs/CLIMATE_MODULE.md) and [Hub example](examples/climate-hub.yaml).
+Car is not implemented. Charging automation remains external.
 Honeycomb calls configured HA actions; device automation belongs in Home Assistant.
 
 Representative stable Light controls (synthetic HA fixtures; the v1.8.1 runtime
@@ -95,7 +163,7 @@ release does not make newer beta-only options available.
 
 ## Charger beta: complete dashboards
 
-**v1.9.0 prerelease only.** A generic Charger/Easee module shares the same
+**Included in v1.10.0 stable.** A generic Charger/Easee module shares the same
 82px renderer, gradients, sizing and power-sensitive hexagonal pulse. A Charging
 Hub sums fresh verified power and physically connected cars; named chargers open
 fixed detail menus. Permission and permanent-lock controls require deliberate taps
@@ -162,7 +230,7 @@ Private local testing: [fixed development resource and build instructions](docs/
 
 ### Light Hub names while OFF
 
-In the unpublished v1.9.0-beta.6 candidate and its private development build, an OFF Light Hub launcher shows its
+In v1.10.0 stable, an OFF Light Hub launcher shows its
 existing item `name` above `OFF`. Without a custom name it uses the HA
 `friendly_name`, then the readable entity ID. A short name such as `A` is valid;
 long names use the existing ellipsis. ON brightness/colors and submenu centers
@@ -192,12 +260,14 @@ command; a deliberate swatch tap applies it. Unknown/unavailable is never OFF.
 
 ### Bee version feedback and development updates
 
-Tap the golden bee to see a short label such as **v1.9.0 beta 6 inside the same
-hexagon** during the existing animation. It then returns to normal; reduced motion
-suppresses flight while retaining feedback. Full dev revision stays in diagnostics,
-not visual labels. [Permanent development resource, one-command installation and
-cache troubleshooting](docs/DEVELOPMENT_BUILDS.md). This is an unpublished candidate,
-not an announcement that beta.6 is available through HACS.
+Tap the standard Honeycomb Bee to reveal the actual installed version inside its
+hexagon for three seconds. Hold works too. At the expanded Collapsible root,
+short tap is Back/Collapse; hold or Shift+Enter reveals the same version without
+collapsing. Enter/Space remains Back. Alt+V provides keyboard version inspection
+on Bee icons that retain another contextual action. Reduced motion suppresses
+flight while retaining readable version feedback. All use one canonical mascot
+asset and shared rendering/version code. [Shared Bee guide](docs/SHARED_BEE.md).
+[Development installation and cache troubleshooting](docs/DEVELOPMENT_BUILDS.md).
 
 ### Canonical visual baseline: Light module
 
@@ -421,7 +491,8 @@ and [the complete card](examples/v1.7/sonos.yaml). `members` and a custom
 
 Sonos inner slots are **1 Radio,
 2 Play/Pause, 3 Solo/Join, 4 Sleep, 5 Volume Down, 6 Volume Up**. Join shows live
-room membership or an explicit setup/availability state. Radio's outer submenu
+station artwork, room name and individual volume, with membership/playback
+available in accessible labels and an explicit setup/availability state. Radio's outer submenu
 retains its ordering, artwork and playback, with new stable favorite accent rings.
 A reliably identified favorite can provide native launcher artwork and playing
 color; pause/stop remains neutral. See [matching limits and styling precedence](docs/SONOS_MODULE.md#v171-beta-station-accents-and-launcher-artwork).
@@ -473,7 +544,7 @@ source remain. Tags, branches and source history are never cleanup targets.
 Candidate reference: [v1.8 runtime namespace and mixed-install routing](docs/NG_RUNTIME.md).
 Stable v1.7.1 remains published and unchanged until separate owner approval.
 
-The v1.8.0 candidate includes [40% active depth and decorative logo gradients](docs/CUBE_PRESENTATION.md), [image-aligned `size: auto`](docs/FLOORPLAN_SIZING.md), and an opt-in [six-sided energy pulse](docs/ENERGY_WAVE.md). Inactive physical cubes remain solid. Numeric sizes and the omitted fixed-82 default stay unchanged.
+The v1.8.0 candidate includes [40% active depth and decorative logo gradients](docs/CUBE_PRESENTATION.md), [image-aligned `size: auto`](docs/FLOORPLAN_SIZING.md), and an opt-in [six-sided energy pulse](docs/ENERGY_WAVE.md). Inactive physical cubes remain solid. Numeric sizes and non-collapsible omitted fixed-82 defaults stay unchanged.
 
 ### Floorplan sizing in v1.8.0-beta.6
 
@@ -485,16 +556,17 @@ means a harmless 82px fallback. See [complete copy/paste YAML, coordinate-frame
 support and touch-size limits](docs/FLOORPLAN_SIZING.md).
 
 The [synthetic charging-pulse demo](examples/energy-wave.yaml) uses the shared
-renderer without a charger or service call. Charger, Climate and Car modules
-remain future releases. [HACS listing readiness](docs/HACS_SUBMISSION.md) is
-separate from installing this beta as a custom repository.
+renderer without a charger or service call. Charger and Climate are included in v1.10.0 stable; Car remains unimplemented. [HACS listing readiness](docs/HACS_SUBMISSION.md) is
+separate from installing this stable release as a custom repository.
 
 ### v1.8.0-beta.6: corrected auto reference and power pulse speed
 
 `size: auto` uses a stable **display/design reference width**, default1536 CSS
 pixels. Use `auto_reference_width: 1500` for82px at a1500px displayed floorplan,
 41px at750px. High-resolution source images no longer make cubes start tiny.
-This corrects beta.5; numeric60/82 and omitted fixed82 remain. Read the
+Current beta.4 caps normal auto sizing at 82px. Explicit numeric sizes remain
+fixed; ordinary omitted size remains 82px, while Collapsible Hubs default to auto.
+Read the
 [complete floorplan YAML and migration](docs/FLOORPLAN_SIZING.md).
 
 The [power-speed demo](examples/energy-wave-power.yaml) keeps true hexagonal

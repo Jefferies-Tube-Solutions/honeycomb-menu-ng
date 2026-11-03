@@ -38,6 +38,32 @@ class XYPad extends LitElement
         };
     }
 
+    constructor()
+    {
+        super();
+        this._endDrag = this._handleOnDragEnd.bind(this);
+        this._cancelDrag = this._cancelGesture.bind(this);
+        this._visibilityChanged = () => { if(document.hidden)this._cancelGesture(); };
+    }
+
+    connectedCallback()
+    {
+        super.connectedCallback();
+        if(this.hasUpdated)this._bindListeners();
+    }
+
+    disconnectedCallback()
+    {
+        this._cancelGesture();
+        this._unbindListeners();
+        super.disconnectedCallback();
+    }
+
+    updated(changed)
+    {
+        if(changed.has('config') && changed.get('config') !== undefined)this._cancelGesture();
+    }
+
     static get styles()
     {
         return css`
@@ -78,7 +104,7 @@ class XYPad extends LitElement
 
     get joystick()
     {
-        return this.shadowRoot.querySelector('#joystick');
+        return this.shadowRoot && this.shadowRoot.querySelector('#joystick');
     }
 
     firstUpdated()
@@ -105,20 +131,53 @@ class XYPad extends LitElement
 
     _bindListeners()
     {
+        if(this._listenersBound || !this.isConnected)return;
+        this._listenersBound=true;
         this.addEventListener('touchstart', this._handleOnDragStart, false);
         this.addEventListener('touchmove', this._handleOnDrag, false);
-        document.addEventListener('touchend', this._handleOnDragEnd.bind(this), false);
+        document.addEventListener('touchend', this._endDrag, false);
 
         this.addEventListener('mousedown', this._handleOnDragStart, false);
         this.addEventListener('mousemove', this._handleOnDrag, false);
-        document.addEventListener('mouseup', this._handleOnDragEnd.bind(this), false);
+        document.addEventListener('mouseup', this._endDrag, false);
+        document.addEventListener('touchcancel', this._cancelDrag, true);
+        document.addEventListener('pointercancel', this._cancelDrag, true);
+        document.addEventListener('visibilitychange', this._visibilityChanged);
+        window.addEventListener('blur', this._cancelDrag);
     }
+
+    _unbindListeners()
+    {
+        if(!this._listenersBound)return;
+        this._listenersBound=false;
+        this.removeEventListener('touchstart', this._handleOnDragStart, false);
+        this.removeEventListener('touchmove', this._handleOnDrag, false);
+        this.removeEventListener('mousedown', this._handleOnDragStart, false);
+        this.removeEventListener('mousemove', this._handleOnDrag, false);
+        document.removeEventListener('touchend', this._endDrag, false);
+        document.removeEventListener('mouseup', this._endDrag, false);
+        document.removeEventListener('touchcancel', this._cancelDrag, true);
+        document.removeEventListener('pointercancel', this._cancelDrag, true);
+        document.removeEventListener('visibilitychange', this._visibilityChanged);
+        window.removeEventListener('blur', this._cancelDrag);
+    }
+
+    _canInteract()
+    {
+        const menu=this.getRootNode().host,context=menu && menu._menuContext;
+        return this.isConnected && !this.inert && !(menu && menu.closing) &&
+            !(context && (context.info || context.owner && context.owner.preview === true));
+    }
+
+    // Cancellation never emits drag-end: an interrupted on_release gesture
+    // must not dispatch a service after its scene has closed or suspended.
+    _cancelGesture() { this._reset(); }
 
     _reset()
     {
         this.active = false;
         this.style.zIndex = 0;
-        this.joystick.style.transform = 'translate3d(0, 0, 0)';
+        if(this.joystick)this.joystick.style.transform = 'translate3d(0, 0, 0)';
         this._current = {x: 0, y: 0};
         if( this._interval )
         {
@@ -129,6 +188,8 @@ class XYPad extends LitElement
 
     _handleOnDragStart(e)
     {
+        if(this.active || !this._canInteract() || !this.joystick)return;
+        this._cancelGesture();
         this.active = true;
         this.style.zIndex = 100;
 
@@ -136,6 +197,7 @@ class XYPad extends LitElement
 
         if( this.config.repeat )
             this._interval = setInterval(e => {
+                if(!this.active || !this._canInteract()){this._cancelGesture();return;}
                 this.dispatchEvent( this.__constructEvent('honeycomb-ng-drag-interval') );
             }, this.config.repeat);
     }
@@ -154,6 +216,7 @@ class XYPad extends LitElement
 
     _handleOnDrag(e)
     {
+        if(!this._canInteract()){this._cancelGesture();return;}
         if( ! this.active )
             return;
 
@@ -171,8 +234,10 @@ class XYPad extends LitElement
 
     _handleOnDragEnd(e)
     {
-        this.dispatchEvent( this.__constructEvent('honeycomb-ng-drag-end') );
-        this._reset();
+        if(!this.active)return;
+        if(!this._canInteract()){this._cancelGesture();return;}
+        try { this.dispatchEvent( this.__constructEvent('honeycomb-ng-drag-end') ); }
+        finally { this._reset(); }
     }
 
     __constructEvent( _name )

@@ -43,6 +43,7 @@ function buildCubeConfig(item, hass, index = 0, slot = 0)
 function validateCubeConfig(config, {hubItems = false, placement = false} = {})
 {
     if (!config || typeof config !== 'object') throw new Error('A Honeycomb configuration is required.');
+    if(config.size_debug!==undefined && typeof config.size_debug!=='boolean')throw new Error('size_debug must be a boolean.');
     rejectRemovedSonosOptions(config);
     if (config.action === 'honeycomb-info') require('./info-cube').validate(config.info);
     if (!placement && (config.visibility !== undefined || config.slot_mode === 'priority'))

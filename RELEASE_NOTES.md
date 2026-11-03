@@ -1,3 +1,255 @@
+# v1.10.0 — Stable
+
+Promotes the exact owner-real-Home-Assistant-accepted v1.10.0-beta.10 source
+`a54cd007fff030d14d89872c4026b92cf0184405`, without runtime or dependency changes.
+The approved public beta bundle is 331735 bytes, SHA-256
+`b9a89296839e9bab77de41673547053264617985c2adeec325174367502e15b5`.
+Only the banner and two canonical build-info version literals change in the JS.
+
+- Generic Climate controls and capability-aware exact-target adjustments.
+- Responsive Collapsible Hubs, selected-cube promotion/Back, mobile free canvas
+  and configured parent size ceilings throughout nested navigation.
+- Optional Beam of Origin: live inert source cube and subtle measured cyan fan;
+  default OFF. Optional size_debug retains measured Bee diagnostics.
+- Improved Sonos Join artwork, room status/individual volume, shared Bee and all
+  existing Light, Sonos, Charger and Info functionality.
+- XY Pad safety: repeat actions stop at close/disposal/removal and cancellation;
+  silent interrupted on_release gestures, listener cleanup and late-event guards.
+- Existing beta.10 YAML remains compatible; no additional settings are required.
+
+Owner beta.10 acceptance and stable authorization are recorded in issue #163.
+Audit #154 is complete; its confirmed blocker was fixed in beta.10. Nonblocking
+#165–#167 remain deferred. Full exact-source push/PR/master CI, official HACS,
+source approval, reproducible packaging and guarded verify-only then publish are
+mandatory. No retention setting changes, historical release modifications,
+production HA actions, new features or broad refactors enter this promotion.
+
+HACS: select/redownload v1.10.0 stable, turn off beta versions if desired and
+refresh frontend/resource caches on all clients. Keep the existing NG module
+resource. See [stable verification](docs/V1_10_STABLE_RELEASE.md),
+[Collapsible Hubs](docs/COLLAPSIBLE_HUB.md), [Climate](docs/CLIMATE_MODULE.md)
+and [XY Pad](docs/CLASSIC_MENU.md). Owner real-HA testing does not establish every
+physical thermostat/charger/browser model; automated coverage uses synthetic HA.
+
+---
+
+# v1.10.0-beta.10 — XY Pad Lifecycle Safety
+
+Cumulative from owner-accepted public beta.9 source
+`0f2101d9b1b4377168ae7fd5643bf01672a1683b`.
+
+The repository-wide [#154 audit report](https://github.com/NicolaiTandrup/honeycomb-menu-ng/pull/164)
+confirmed one release blocker: an active XY Pad could keep sending repeated HA
+service calls after close/removal and retain document listeners. This candidate
+fixes only that lifecycle defect and adds a mandatory browser regression suite.
+
+- Stop repeat timers at close, including animated close, disposal and removal.
+- Cancel interrupted gestures on Info, preview, reconfiguration, page background,
+  blur and touch/pointer cancellation; cancellation never dispatches `on_release`.
+- Remove document/window listeners on disconnect and rebind once on reconnect.
+- Reject late XY callbacks for closed/disconnected/suspended scenes.
+- Preserve normal mouse/touch service payloads and existing YAML. Preserve beta.9
+  Beam of Origin, approved size ceilings, placement, Bee and all modules.
+
+Optional audit cleanups remain deferred in #165–#167. No dependency upgrades,
+new features, broad refactors, stable publication or master merge are included.
+Install beta.10 with HACS beta versions enabled, refresh the frontend cache and
+validate on PAHA02-DEV. Owner real-Home-Assistant acceptance of this changed
+runtime is required before v1.10.0 stable under #163. Synthetic QA alone does not
+provide that acceptance. Historical releases/tags/assets remain untouched.
+
+# v1.10.0-beta.9 — Beam of Origin
+
+Cumulative with owner-accepted beta.8 (`3ff151adff815d933ddf786169a795ee704f5790`).
+Optional `collapsible.beam_of_origin: true` retains a live, inert room cube at
+its floorplan anchor and connects it to the expanded controls with a soft,
+transparent cyan SVG fan. Optional `color` changes its hue. Measured physical
+hex boundaries follow navigation and responsive layout; overlap suppresses the
+reference. Collapse and teardown remove temporary resources. No independent HA
+subscription or second active control is created. Default OFF preserves beta.8.
+
+Configured parent size ceilings, placement, shared Bee and module navigation
+remain intact. Owner testing on PAHA02-DEV is required before any stable promotion.
+No master merge, production HA change or architecture review is part of this beta.
+
+# Honeycomb NG v1.10.0-beta.8 — Configured Hub Size Ceiling and Bee Diagnostics
+
+Cumulative from immutable beta.7 `87c192a0a5f16bd880cf93692d5275d1d6130ed2`.
+
+- Original Hub configuration supplies one ceiling: auto/omitted max 82 CSS px,
+  explicit numeric size N max N, optional expanded_size only lowers the target.
+  Responsive root fitting, every nested module, recursive menu and exact Back
+  obey the same limit. No CSS-only post-fit correction; hover cannot exceed it.
+- Optional top-level size_debug:true adds measured rendered CSS-pixel width to the
+  shared Bee's existing temporary version reveal. Default false remains version
+  only. Actual SVG geometry is measured on reveal/live resize/style events, without
+  polling. All observers/frames clean up; normal and expanded Bee gestures remain.
+- Keep beta.7 placement solver, mobile free lower canvas, desktop origin fallback,
+  0–18 planning, thresholds/hysteresis, renderer/artwork/module behavior unchanged.
+- Minimal YAML still needs only collapsible:true. Oversized expanded_size safely
+  clamps; deliberately numeric sizes above 82 remain supported. See README and
+  Collapsible Hub/shared Bee guides for policy table and optional debug examples.
+
+Mandatory synthetic Node/Chromium/module/geometry/HACS/docs/integrity gates and
+fresh exact-head CI are required before the authorized guarded beta.8 publication.
+No previous release changes, main/master merge, stable or production HA actions.
+Owner physical Home Assistant/Android/PC acceptance remains separate. Beam of Origin
+#156 is deferred to beta.9; #154 remains separate. Stop for owner testing after release.
+
+# Honeycomb NG v1.10.0-beta.7 — Mobile Placement Fix
+
+Publishes the completed PR #158 mobile correction from exact source
+`7dcf7f252aac1930d65ae71cab8477bf4cedf269`, cumulative with immutable beta.6
+`6db9e046da496c5d6d437d8d0da08346136ec11f`. Placement code is unchanged from PR #158.
+
+- Constrained-screen expansion checks the actual visible Hub footprint at the
+  already selected size. Prefer fitting free canvas below the floorplan, then
+  other external regions by usable space and cube-0 centering. No new breakpoint.
+- Preserve desktop beta.6 planning/thresholds/origin fallback, collapsed sizing,
+  safe bounds, selected-cube submenu promotion, exact Back, timeout and all modules.
+- Shared Bee displays `v1.10.0 beta 7` using the existing version formatter.
+- No YAML changes. In HACS enable beta versions, select/redownload v1.10.0-beta.7,
+  then refresh the frontend/resource cache. Root bundle/checksums/provenance are
+  published through the existing guarded beta-release workflow.
+
+No master/main merge, stable or production HA changes. Beta.6 remains immutable.
+Chromium tests are synthetic; owner physical Android/desktop and real Home Assistant
+acceptance remain pending. Beam of Origin #156 is deferred to beta.8; #154 remains
+separate after layout acceptance. Stop for owner testing after release verification.
+
+# Honeycomb NG v1.10.0-beta.6 — comfortable floorplan placement
+
+Cumulative from published beta.5 source `83cbdd486a924f88f2ad399886dff4fb31d913db`.
+Issue #148 only; no main/master merge, stable or production Home Assistant changes.
+
+- Plan image-free placement with the shared physical slots 0–18 envelope, unioned
+  with all actual visible controls. No phantom cubes or extra YAML.
+- Prefer full expanded size in any region above/below/left/right of the displayed
+  image. Accept new free-space placement at >=85% size; retain a previous valid
+  region down to 84% to avoid resize oscillation. With no prior choice, the neutral
+  84–85% band falls back deterministically to the original floorplan anchor.
+- Reject cramped strips and use the largest viewport-safe size near original cube
+  0, reserving center/inner ring and every actual visible control. Clamp only as
+  necessary. Normal collapsed auto max82 and expanded_size remain independent.
+- Preserve actual-footprint submenu promotion, exact parent Back, collapse/timeout,
+  safe areas, image clipping, shared Bee, Radio/Sonos/Climate and other modules.
+
+Automated synthetic Chromium geometry/screenshots cover both owner scenarios,
+100/85/84% boundaries, extended slots, resize and nested Back. Real Home Assistant,
+physical Android/PC and owner floorplans still require owner beta.6 acceptance.
+Beam of Origin #156 and architecture review #154 are deferred. Stop for owner testing.
+
+# Honeycomb NG v1.10.0-beta.5 — responsive expansion, promotion and shared Bee
+
+Cumulative from exact published beta.4. No stable promotion or master merge.
+
+- Minimal Collapsible Hubs expand comfortably on desktop, tablet and phone.
+  The complete visible footprint prefers usable image-free viewport regions;
+  safe viewport fallback prevents clipping and excessive shrinking into strips.
+- Shared promotion preserves the selected cube's physical position when the child
+  fits, then tries expanded root center and safe fitting. Larger children resize
+  independently; Back restores parent sizes/anchors. Gesture-origin backdrop
+  handling prevents a follow-up click from collapsing a just-fitted submenu.
+- One Bee preset/asset/version system: standard tap/hold reveals version; expanded
+  root tap is Back, hold/Shift+Enter reveals version for three seconds. Explicit
+  styles and functional generic Bee-icon actions remain supported.
+- Approved Radio/Climate appearance and services, Light, Charger, Info Cube,
+  allocation, keyboard focus and non-collapsible behavior are protected.
+- Numeric collapsed sizing and legacy mobile/small_screen overrides remain;
+  only explicit false retains the compact-phone opt-out. Default expansion has
+  no device-width eligibility rule.
+
+Chromium uses synthetic HA; physical Android/PC acceptance remains separate.
+Modern Popover API and existing very-large-Hub limits remain. Issue #154's broad
+post-beta.5 review is deferred until owner acceptance. No production HA changes.
+
+# Honeycomb NG v1.10.0-beta.4 — minimal room controls
+
+Cumulative from exact published beta.3. Hubs without collapsible keep their
+existing defaults; explicit numeric sizes retain their meaning.
+
+- `collapsible: true` defaults to responsive floorplan sizing, small-screen
+  enlargement and 30-second inactivity collapse. Root center is Back; no separate
+  Back rectangle. Both primary and bee center policies remain supported.
+- Normal `size: auto` cubes cap at 82px. Overlay sizing is independent. New
+  `small_screen` setting retains legacy `mobile`; contradictory values fail.
+- Join uses trusted Favorites/native Browse station artwork, compact room name
+  and individual volume. Playback/full content remain accessible; joined source
+  styling, hidden icons and grouping behavior are preserved.
+- Climate upper slots request ±1.0°, lower slots ±0.1°, in HA's native temperature
+  unit. Unrepresentable deltas and limits disable the action instead of rounding.
+- Keyboard focus follows the hex; mouse/touch clear focus paint. No accessibility
+  or keyboard navigation removal.
+
+Chromium phone/tablet/desktop tests use synthetic HA states, not physical Android
+acceptance. Modern Popover API, ordinary anchored-menu and very-large-Hub limits
+remain. No master merge, stable publication or production Home Assistant changes.
+
+# Honeycomb NG v1.10.0-beta.3 — Real-HA stabilization
+
+Focused fixes over exact published beta.2 `8bbc45af72936630c39f87c4697a0148cc38a047`.
+No master merge, stable promotion or production Home Assistant changes.
+
+- Climate roles reuse the approved shared `SUBMENU_FILL` token, including alpha;
+  default inner width stays zero, outer border and independent center remain.
+- Sonos Join keeps room state/own volume on one readable line, station/title on
+  another, and a visible joined checkmark. HA room attributes supply transport
+  and individual volume; opening-source data supplies only artwork/visual paint.
+  Missing/unavailable metadata is not replaced with the opening room's content.
+- Collapsible auto-sized Hubs use the shared image-sizing result independently
+  of CSS layout width and temporary overlay geometry. Resize during expansion
+  preserves the mobile touch size; Back/timeout restores current floorplan size
+  and original position. Both center policies remain supported.
+
+Node/browser tests cover the owner-supplied 1200-reference configuration, layout
+width overrides, portrait/landscape, Back/timeout, multiple Hubs/editing, shared
+Climate pixel reference and P4 at individual 4% alongside a different source.
+The supplied complete picture-elements YAML is tested with the exact public demo
+image and sanitized entity IDs. Sonos fixtures are synthetic and HA-shaped; the
+owner supplied a template rather than its rendered attribute values. Actual
+Android DOM/runtime data was not available at implementation time. Automated passes do not
+establish owner real-device acceptance. Existing very-large-Hub/ordinary anchored
+menu limits and modern Popover API requirement remain.
+
+# Honeycomb NG v1.10.0-beta.2 — Climate, Sonos Join and collapsible Hub
+
+Cumulative over published v1.10.0-beta.1; development PR remains unmerged.
+Latest stable remains v1.9.0. No master/stable/production HA changes.
+
+- Climate function cells use neutral dark gray, no default inner border, and
+  normal outer borders. Independent center paint and thermostat services remain.
+- Sonos Join lists actual room playback and available content. Joined rooms use
+  the opening Sonos source's artwork and resolved visual settings, show their own
+  volume percentage, and retain accessible membership information. Grouping stays
+  authoritative from HA; no optimistic group changes.
+- Optional collapsible Hub: primary-only collapsed view; tap for primary action,
+  hold to expand; primary/bee center policies; validated slot conflicts; Back,
+  Escape and configurable activity timeout; enlarged phone top-layer overlay.
+  See [configuration and limits](docs/COLLAPSIBLE_HUB.md).
+
+Validation includes Node contracts, Chromium touch/hold and phone resize/rotation,
+Climate controls, Sonos grouping/artwork, existing Light/Charger/Info/navigation,
+documentation, HACS packaging and guarded reproducible release checks.
+Real HA/hardware acceptance and Firefox/WebKit are not claimed. Very large Hub
+populations can require smaller touch targets to fit a phone. Modern Popover API
+support is required for the phone top-layer presentation.
+
+# Honeycomb NG v1.10.0-beta.1 — Climate testing
+
+Cumulative with v1.9.0 stable; preserves Info Cube, Light Color/White and zoom, Sonos native Favorites/Join/Sleep, Charger/Easee, namespace isolation, layout, visibility and navigation.
+
+Adds generic HA Climate to Hub and standalone Control using the existing shared 82px renderer. Displays current/target temperatures and heating/cooling status; respects native units, increments, min/max and explicit Low/High range selection. Menus offer only advertised HVAC, preset, fan and swing capabilities. Native climate services are used only on explicit interaction.
+
+A different-entity nested Climate view retains its own entity and returns to its parent. Defrost uses explicit mapping, native exact preset, or unambiguous verified metadata; no brand/name guessing. Pending, failed and unconfirmed states are distinct; no automatic command retries.
+
+Setup: see docs/CLIMATE_MODULE.md and examples/climate-*.yaml. No HA helpers or backend integration required. Registry access is optional; denial disables automatic separate-switch discovery safely.
+
+Validation results and immutable source/checksum will be recorded in the PR and release publication evidence after the mandatory cumulative suite completes. Real thermostat/HVAC hardware acceptance is pending; synthetic Chromium testing does not establish physical operation. No Firefox/WebKit validation claimed. Humidity, auxiliary heat and vendor-only controls are outside this first beta.
+
+This is an unmerged prerelease for HACS testing, not v1.10.0 stable. Car, Charger redesign, production HA changes and retention cleanup are excluded. Prior releases/tags/assets and stable/master are preserved.
+
+---
+
 # v1.9.0 — Stable
 
 Promotes the complete owner-approved cumulative v1.9.0-beta.9 runtime. No module,

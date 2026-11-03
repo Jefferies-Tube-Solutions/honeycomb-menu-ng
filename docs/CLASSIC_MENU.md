@@ -374,6 +374,13 @@ honeycomb_menu:
         brightness_step_pct: 'HCJS: return variables.y_percentage / 10;'
 ```
 
+In v1.10.0-beta.10, closing or removing the menu, opening Info, changing the
+pad configuration, losing browser focus, backgrounding the page or cancelling
+touch/pointer input stops the current gesture and any repeat timer immediately.
+Cancellation does not send an `on_release` service call; a normal mouse/touch
+release still does. Returning to the menu requires a new gesture. No YAML change
+is needed.
+
 ### XY Pad options
 
 | Option | Values | Default | Description |

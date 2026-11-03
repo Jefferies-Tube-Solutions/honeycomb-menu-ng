@@ -2,13 +2,12 @@
 
 Every stable version requires a HACS-installable beta and explicit owner approval
 after real Home Assistant testing. Green synthetic CI alone is insufficient.
-The proposed v1.8.0 candidate pins public beta.7 at
-`58e26543f13020912e6188a75863ecf06a2a2df4`, SHA256
-`6d7f78acdb3c40e939cf64523b5813ff9a4d55cfb3e1dd30f147e9b9986b1f8c`
-(218407 bytes). Owner real-HA acceptance is reported in the preparation request;
-it is **not authorization to merge or publish**. The
-[candidate checklist](V1_8_RELEASE_CANDIDATE.md) must be reviewed first.
-The owner is the sole user, already migrated, and has selected the v1.8.0 track.
+The current v1.10.0 promotion pins owner-accepted public beta.10 at
+`a54cd007fff030d14d89872c4026b92cf0184405`, SHA-256
+`b9a89296839e9bab77de41673547053264617985c2adeec325174367502e15b5`
+(331735 bytes). Issue #163 records explicit authorization for normal merge and
+guarded stable publication after validation. See the [v1.10.0 checklist](V1_10_STABLE_RELEASE.md).
+Historical release documents retain their original approval scope.
 
 ## Reviewed candidate provenance
 
@@ -24,7 +23,8 @@ assets, HACS config and brand generator; unchanged dependency package/lock conte
 Only package/root-lock version and the additive promotion-test command may change.
 Webpack may add only the deterministic version-banner plugin. The rebuilt stable
 bundle must equal the exact approved beta's executable bytes, with only the known
-`/*! Honeycomb Menu NG vVERSION */` comment prefix added/updated. The beta's Git tag,
+`/*! Honeycomb Menu NG vVERSION */` comment prefix added/updated and, for
+`version-metadata-v2`, exactly two canonical build-info version literals changed. The beta's Git tag,
 public prerelease record and uploaded bundle size/SHA256 digest must match the
 manifest. Unknown, missing or conflicting provenance stops publication.
 
