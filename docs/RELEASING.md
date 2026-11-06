@@ -23,7 +23,7 @@ assets, HACS config and brand generator; unchanged dependency package/lock conte
 Only package/root-lock version and the additive promotion-test command may change.
 Webpack may add only the deterministic version-banner plugin. The rebuilt stable
 bundle must equal the exact approved beta's executable bytes, with only the known
-`/*! Honeycomb Menu NG vVERSION */` comment prefix added/updated and, for
+`/*! Jefferies Navigation vVERSION */` comment prefix added/updated and, for
 `version-metadata-v2`, exactly two canonical build-info version literals changed. The beta's Git tag,
 public prerelease record and uploaded bundle size/SHA256 digest must match the
 manifest. Unknown, missing or conflicting provenance stops publication.
@@ -87,7 +87,7 @@ those assets. The beta.5 private draft and every previous release remain intact.
 
 Independently verify the public release has `draft=false`, `prerelease=false`, is
 GitHub latest stable, and resolves to the exact green master SHA. Download all
-three assets: `honeycomb-menu-ng.js`, `SHA256SUMS.txt`, `release-provenance.json`.
+three assets: `jefferies-navigation.js`, `SHA256SUMS.txt`, `release-provenance.json`.
 Compare bytes/checksum with the committed bundle and provenance, including approved
 beta identity and master CI attempt. Confirm HACS filename/content-in-root and
 all previous releases/assets/tags/branches; only the authorized master merge and

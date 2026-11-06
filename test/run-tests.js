@@ -2,7 +2,7 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { HONEYCOMB_BEE_PNG } = require('../src/brand/bee.generated.js');
+const { JTS_N_COMPASS_PNG } = require('../src/brand/compass.generated.js');
 
 const navigation = require('../src/core/navigation-context.js');
 const layout = require('../src/core/layout.js');
@@ -362,18 +362,18 @@ function testLightNestedMenusStayInOwningContext()
 
             const colorAction = colorConfig.buttons[0].tap_action;
 
-            assert.strictEqual(colorAction.action, 'honeycomb-open-nested');
-            assert.strictEqual(colorAction.honeycomb_menu, undefined);
+            assert.strictEqual(colorAction.action, 'jts-n-open-nested');
+            assert.strictEqual(colorAction.jts_n_menu, undefined);
             assert.strictEqual(
-                colorAction.honeycomb_nested_menu.nested_expand,
+                colorAction.jts_n_nested_menu.nested_expand,
                 true
             );
             assert.strictEqual(
-                colorAction.honeycomb_nested_menu.inherit_inner,
+                colorAction.jts_n_nested_menu.inherit_inner,
                 true
             );
             assert.strictEqual(
-                colorAction.honeycomb_nested_menu.buttons.length,
+                colorAction.jts_n_nested_menu.buttons.length,
                 12
             );
 
@@ -390,10 +390,10 @@ function testLightNestedMenusStayInOwningContext()
 
             const whiteAction = whiteConfig.buttons[0].tap_action;
 
-            assert.strictEqual(whiteAction.action, 'honeycomb-open-nested');
-            assert.strictEqual(whiteAction.honeycomb_menu, undefined);
+            assert.strictEqual(whiteAction.action, 'jts-n-open-nested');
+            assert.strictEqual(whiteAction.jts_n_menu, undefined);
             assert.strictEqual(
-                whiteAction.honeycomb_nested_menu.buttons.length,
+                whiteAction.jts_n_nested_menu.buttons.length,
                 12
             );
         }
@@ -548,10 +548,10 @@ function testModuleMenusAreDeclarative()
     assert.strictEqual(sonosMenu.buttons.length, 6);
     assert.strictEqual(
         sonosMenu.buttons[0].tap_action.action,
-        'honeycomb-open-nested'
+        'jts-n-open-nested'
     );
     assert.strictEqual(
-        sonosMenu.buttons[0].tap_action.honeycomb_nested_menu.buttons[0].slot,
+        sonosMenu.buttons[0].tap_action.jts_n_nested_menu.buttons[0].slot,
         7
     );
 
@@ -566,7 +566,7 @@ function testModuleMenusAreDeclarative()
     const firstFavorite =
         sonosMenu.buttons[0]
             .tap_action
-            .honeycomb_nested_menu
+            .jts_n_nested_menu
             .buttons[0];
 
     assert.strictEqual(firstFavorite.show_icon, true);
@@ -595,18 +595,13 @@ function collectJsFiles(root)
     return result;
 }
 
-function testSharedBeeBranding()
+function testSharedCompassBranding()
 {
-    assert.ok(HONEYCOMB_BEE_PNG.startsWith('data:image/png;base64,'));
+    assert.ok(JTS_N_COMPASS_PNG.startsWith('data:image/png;base64,'));
 
     const assetRoot = path.resolve(__dirname, '../assets');
-    const master = fs.readFileSync(path.join(assetRoot, 'honeycomb-bee.png'));
-    const icon = fs.readFileSync(path.join(assetRoot, 'honeycomb-menu-ng-icon.png'));
-    const logo = fs.readFileSync(path.join(assetRoot, 'honeycomb-menu-ng-logo.png'));
-
-    // Approved 256x256 Cute Flying Bee Mascot binary. Checking the exact
-    // content hash prevents another base64/binary upload corruption from
-    // passing simply because all three assets are broken in the same way.
+    const master = fs.readFileSync(path.join(assetRoot, 'navigation-compass.png'));
+    // Pin the approved runtime derivative and its embedded bytes.
     const masterSha256 = crypto
         .createHash('sha256')
         .update(master)
@@ -614,16 +609,13 @@ function testSharedBeeBranding()
 
     assert.strictEqual(
         masterSha256,
-        '2b40c8e1feeaecaab2cb9ba3e592815d3535cb783bbd6f1bdf0d43779234f15e'
+        '2b180433561d85e339e3a6efeebeb9b2d63e228fb5e52bd90431599d690a73a1'
     );
-    assert.strictEqual(master.readUInt32BE(16), 256);
-    assert.strictEqual(master.readUInt32BE(20), 256);
-
-    assert.strictEqual(Buffer.compare(master, icon), 0);
-    assert.strictEqual(Buffer.compare(master, logo), 0);
+    assert.strictEqual(master.readUInt32BE(16), 192);
+    assert.strictEqual(master.readUInt32BE(20), 192);
 
     const embedded = Buffer.from(
-        HONEYCOMB_BEE_PNG.substring('data:image/png;base64,'.length),
+        JTS_N_COMPASS_PNG.substring('data:image/png;base64,'.length),
         'base64'
     );
     assert.strictEqual(Buffer.compare(master, embedded), 0);
@@ -633,10 +625,9 @@ function testSharedBeeBranding()
         'utf8'
     );
 
-    assert.ok(persistentControlSource.includes('bee.asset'));
-    assert.strictEqual(require('../src/core/bee').asset,HONEYCOMB_BEE_PNG);
-    assert.strictEqual(persistentControlSource.includes('<svg class="bee-icon'), false);
-    assert.strictEqual(persistentControlSource.includes('bee-wing-left'), false);
+    assert.ok(persistentControlSource.includes('compass.asset'));
+    assert.strictEqual(require('../src/core/compass').asset,JTS_N_COMPASS_PNG);
+    assert.strictEqual(persistentControlSource.includes('<svg class="compass-icon'), false);
 }
 function testArchitectureBoundaries()
 {
@@ -663,7 +654,7 @@ function testArchitectureBoundaries()
     }
 
     const hubSource = fs.readFileSync(
-        path.resolve(__dirname, '../src/honeycomb-persistent-hub.js'),
+        path.resolve(__dirname, '../src/jts-n-hub.js'),
         'utf8'
     );
 
@@ -680,25 +671,25 @@ function testArchitectureBoundaries()
     // v1.4.2 Light navigation is a locked contract: Color/White must never
     // regress to the global fire-dom-event path.
     assert.strictEqual(lightControlsSource.includes('fire-dom-event'), false);
-    assert.ok(lightControlsSource.includes('honeycomb-open-nested'));
+    assert.ok(lightControlsSource.includes('jts-n-open-nested'));
 
     const persistentControlSource = fs.readFileSync(
         path.resolve(__dirname, '../src/cube-element.js'),
         'utf8'
     );
     const rendererSource = fs.readFileSync(
-        path.resolve(__dirname, '../src/honeycomb-menu.js'),
+        path.resolve(__dirname, '../src/navigation-menu.js'),
         'utf8'
     );
 
     // Persistent-Hub lifecycle contracts.
-    assert.ok(hubSource.includes('honeycombNG.disposeContext'));
+    assert.ok(hubSource.includes('jefferiesNavigation.disposeContext'));
     assert.ok(hubSource.includes('toCenterDescriptor(center.module, center.launcher)'));
     assert.ok(hubSource.includes("center.kind === 'persistent'"));
     assert.strictEqual(hubSource.includes('center._persistent_launcher === true'), false);
     assert.ok(hubSource.includes("next.restore_on_close = next.auto_open === false"));
     assert.ok(persistentControlSource.includes('restore_on_close !== false'));
-    assert.ok(rendererSource.includes('window.honeycombNG.disposeContext'));
+    assert.ok(rendererSource.includes('window.jefferiesNavigation.disposeContext'));
     assert.ok(rendererSource.includes('while( context.stack.length > 0 )'));
 
     assert.strictEqual(rendererSource.includes('_handleMediaVolumeAction('), false);
@@ -718,10 +709,10 @@ function run()
     testLightPresetHelperDomains();
     testSonosSlotZeroUsesPersistentContract();
     testModuleMenusAreDeclarative();
-    testSharedBeeBranding();
+    testSharedCompassBranding();
     testArchitectureBoundaries();
 
-    console.log('Honeycomb NG core tests: OK');
+    console.log('Jefferies Navigation core tests: OK');
 }
 
 run();

@@ -1,4 +1,4 @@
-# Honeycomb Menu NG development instructions
+# Jefferies Navigation development instructions
 
 ## Start by reconstructing state
 

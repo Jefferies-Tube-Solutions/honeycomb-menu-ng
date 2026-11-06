@@ -1,38 +1,30 @@
 <p align="right">
-  <a href="https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/latest">
-    <img alt="Latest stable version" src="https://img.shields.io/github/v/release/NicolaiTandrup/honeycomb-menu-ng?label=stable&amp;color=2ea44f">
+  <a href="https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases/latest">
+    <img alt="Latest stable version" src="https://img.shields.io/github/v/release/Jefferies-Tube-Solutions/honeycomb-menu-ng?label=stable&amp;color=2ea44f">
   </a>
 </p>
 
 <p align="center">
-  <img src="assets/honeycomb-menu-ng-logo.png" width="220" alt="Honeycomb Menu NG">
+  <img src="assets/navigation-compass.png" width="220" alt="Jefferies Navigation">
 </p>
 
-# Honeycomb Menu NG for Home Assistant
+# Jefferies Navigation for Home Assistant
 
 Compact hexagonal controls for dashboards, floorplans and wall tablets. A persistent
 **Hub** groups devices; a standalone **Control** exposes one device. Tap for the
 primary action and hold for Light, Media or Sonos controls. Both use the same
 full-cell renderer, with **82 CSS px cube width** by default.
 
-NG originated as a fork of [Sian Croser's honeycomb-menu](https://github.com/Sian-Lee-SA/honeycomb-menu)
-and retains original code and attribution under [GPLv3](LICENSE). NG is maintained
-by Nicolai Tandrup. [Original author support](https://www.buymeacoffee.com/SianLee).
+Jefferies Navigation (JTS-N) continues Honeycomb Menu NG, a fork of
+[Sian Croser's honeycomb-menu](https://github.com/Sian-Lee-SA/honeycomb-menu).
+The project retains its original code and attribution under [GPLv3](LICENSE).
+Nicolai Tandrup maintains the project.
 
-> **Stable track: [v1.10.0](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases/tag/v1.10.0).**
-> Promotes the complete real-Home-Assistant owner-accepted beta.10 runtime, including
-> Climate, Collapsible Hubs, Beam of Origin and XY Pad lifecycle safety, alongside
-> Light, Sonos, Charger and Info. Official HACS validation is a release gate;
-> catalog inclusion remains separate. Use the custom-repository installation below.
-> [Stable promotion evidence and checks](docs/V1_10_STABLE_RELEASE.md).
+> **v2.0.0-beta.1** introduces the Navigation Compass and its own dashboard
+> identifiers. See [Upgrading from Honeycomb Menu NG](docs/V2_MIGRATION.md) for
+> the resource and YAML changes. The previous stable release is [v1.10.0](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases/tag/v1.10.0).
 
-## v1.10.0: responsive room controls, Beam of Origin and XY Pad safety
-
-The [architecture audit](docs/ARCHITECTURE_AUDIT_154.md) identified a repeating XY
-Pad that could keep calling services after closing. Owner-accepted beta.10 fixes
-that lifecycle defect; this stable promotion preserves its runtime. Interrupted
-gestures stop without a final release action. Normal XY values and YAML remain
-compatible. No new configuration is required when upgrading from beta.10.
+## Responsive room controls
 
 Add `collapsible: true` and a primary item in slot 0 to place a compact,
 responsive room control on a floorplan. Tap performs its action; hold expands.
@@ -45,7 +37,7 @@ and otherwise stays near the original floorplan anchor. Only configured cubes
 render. Tap its center to return. No extra sizing or positioning options are needed.
 
 ```yaml
-type: custom:honeycomb-persistent-hub
+type: custom:jts-n-hub
 style: {left: 50%, top: 50%}
 collapsible: true
 items:
@@ -74,7 +66,7 @@ collapsible:
 ```
 
 The soft cyan beam fades toward the active expanded controls and follows nested
-navigation. `collapsible: true` keeps the accepted beta.8 behavior with no beam.
+navigation. `collapsible: true` leaves the beam off.
 The source reference cannot toggle or open anything; closing restores the single
 interactive room cube. Near/overlapping or hidden sources suppress the beam.
 
@@ -91,26 +83,14 @@ Explicit numeric sizes are unchanged. Legacy
 clearly. Hubs without `collapsible` keep their existing defaults.
 
 Developer diagnostic (optional): add top-level `size_debug: true` to show the
-actual rendered CSS-pixel cube width during the Bee's temporary version reveal.
-Default is false: ordinary version-only display and resting Bee remain unchanged.
-Normal Bee tap inspects; expanded-root Bee tap stays Back, hold/Shift+Enter inspects.
-See [measured diagnostics and YAML](docs/SHARED_BEE.md).
+actual rendered CSS-pixel cube width during the Compass's temporary version reveal.
+When omitted, inspection shows the version alone.
+Normal Compass tap inspects; expanded-root Compass tap stays Back, hold/Shift+Enter inspects.
+See [measured diagnostics and YAML](docs/NAVIGATION_COMPASS.md).
 
 Sonos Join prefers trusted station artwork with room name and individual volume.
 Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
 precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
-In HACS select v1.10.0 after publication and refresh frontend/resource caches.
-Beta versions are not required for stable. Owner beta.10 real-HA acceptance is
-recorded in #163; synthetic QA does not establish every hardware/browser case.
-
-## Climate controls — v1.10.0 stable
-
-This release adds generic Home Assistant Climate controls to the complete
-v1.9.0 stable feature set. It uses the same shared renderer and navigation.
-See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
-and [standalone Control](examples/climate-control.yaml). Real HVAC acceptance is pending.
-Use v1.10.0 stable after publication. Device-specific HVAC behavior still requires
-installation-time validation.
 
 ## What you can build
 
@@ -118,12 +98,10 @@ installation-time validation.
 - Light brightness, Color/White palettes and reusable numeric presets.
 - Media/Sonos play/pause, group-aware volume, favorites artwork and optional Join.
 - Live Hub item visibility, reserved/preferred/free slots and stable placement.
-- Nested menus, drag-select and classic popup compatibility, templates and XY Pad.
+- Nested menus, drag-select and classic popups, templates and XY Pad.
 
-Climate is included in **v1.10.0 stable**, cumulative with v1.9.0 stable.
 See the [Climate guide](docs/CLIMATE_MODULE.md) and [Hub example](examples/climate-hub.yaml).
-Car is not implemented. Charging automation remains external.
-Honeycomb calls configured HA actions; device automation belongs in Home Assistant.
+Jefferies Navigation calls configured HA actions; device automation belongs in Home Assistant.
 
 Representative stable Light controls (synthetic HA fixtures; the v1.8.1 runtime
 is unchanged from these verified v1.8.0 captures):
@@ -140,20 +118,20 @@ You need current Home Assistant, [custom:button-card](https://github.com/custom-
 and the entities you want to control. Install button-card and its JavaScript module
 resource first. Sonos features use HA's official Sonos integration.
 
-**HACS:** add `https://github.com/NicolaiTandrup/honeycomb-menu-ng` under Custom
+**HACS:** add `https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng` under Custom
 repositories, category **Dashboard**, then install. Select the intended version;
 a beta requires showing prereleases. The normal module resource is
-`/hacsfiles/honeycomb-menu-ng/honeycomb-menu-ng.js`. Check Dashboard resources for
+`/hacsfiles/honeycomb-menu-ng/jefferies-navigation.js`. Check Dashboard resources for
 one entry, type **JavaScript module**; avoid loading HACS and manual copies together.
 
 **Manual:** download the bundle from the intended
-[GitHub release](https://github.com/NicolaiTandrup/honeycomb-menu-ng/releases), place it
-at `/config/www/honeycomb-menu-ng/honeycomb-menu-ng.js`, then register this resource
+[GitHub release](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases), place it
+at `/config/www/jefferies-navigation.js`, then register this resource
 (in the Dashboard resources UI, or under `lovelace:` in YAML-managed configuration):
 
 ```yaml
 resources:
-  - url: /local/honeycomb-menu-ng/honeycomb-menu-ng.js
+  - url: /local/jefferies-navigation.js
     type: module
 ```
 
@@ -161,9 +139,9 @@ After updating, reload the browser/app and hard-refresh if cached JavaScript per
 Check the installed release and resource URL before changing YAML. Installing a stable
 release does not make newer beta-only options available.
 
-## Charger beta: complete dashboards
+## Charger dashboards
 
-**Included in v1.10.0 stable.** A generic Charger/Easee module shares the same
+The Charger/Easee module shares the same
 82px renderer, gradients, sizing and power-sensitive hexagonal pulse. A Charging
 Hub sums fresh verified power and physically connected cars; named chargers open
 fixed detail menus. Permission and permanent-lock controls require deliberate taps
@@ -180,10 +158,7 @@ charging power stays visible beside the icon. Sonos launcher, promoted center an
 area that avoids the sloping hex edges, preserves aspect ratio and reserves labels. Dashboard editor previews own their overlays and cannot send actions.
 
 All example IDs and screenshots are synthetic replacement points. Replace them
-with your actual integration entities. HACS prereleases must be enabled and the
-beta selected explicitly; v1.8.1 remains latest stable. No real hardware/Node-RED
-changes were performed by synthetic validation. Car identification, schedules,
-load balancing and optimization remain external; the Car module is future work.
+with your actual integration entities. Car identification, schedules, load balancing and optimization run in external automation.
 
 ## Start in 60 seconds
 
@@ -191,7 +166,7 @@ Add a Manual card and paste this complete [Hub example](examples/v1.7/hub.yaml).
 Replace the synthetic IDs with entities from HA Developer Tools → States.
 
 ```yaml
-type: custom:honeycomb-persistent-hub
+type: custom:jts-n-hub
 name: Hub A
 size: 82
 logo: auto
@@ -215,12 +190,12 @@ These are **physical slots**, viewed face-on. The figure is checked against the
 current coordinate tables, not inferred from button order.
 
 <!-- layout-diagram:start -->
-![Honeycomb physical slots: center 0; inner 1 left, 2 upper-left, 3 upper-right, 4 right, 5 lower-right, 6 lower-left; outer 7–18 as verified in the AI slot map](docs/assets/layout-slots.svg)
+![Jefferies Navigation physical slots: center 0; inner 1 left, 2 upper-left, 3 upper-right, 4 right, 5 lower-right, 6 lower-left; outer 7–18 as verified in the AI slot map](docs/assets/layout-slots.svg)
 <!-- layout-diagram:end -->
 
 | Area | Physical slots | Meaning |
 |---|---|---|
-| Center | `0` | Hub item or bee; selected module's locked center |
+| Center | `0` | Hub item or compass; selected module's locked center |
 | Inner ring | `1–6` | Six immediate neighbors |
 | Outer / second ring | `7–18` | Twelve neighbors outside the inner ring |
 | Further Hub rings | `19–36`, `37–60`, `61–90`, `91–126`, `127–168`, `169–216` | Expand on demand |
@@ -230,16 +205,16 @@ Private local testing: [fixed development resource and build instructions](docs/
 
 ### Light Hub names while OFF
 
-In v1.10.0 stable, an OFF Light Hub launcher shows its
+An OFF Light Hub launcher shows its
 existing item `name` above `OFF`. Without a custom name it uses the HA
 `friendly_name`, then the readable entity ID. A short name such as `A` is valid;
 long names use the existing ellipsis. ON brightness/colors and submenu centers
 keep their existing presentation. Unknown/unavailable lights say `Unavailable`,
 never `OFF`. Existing explicit secondary-label overrides still take precedence.
 
-### Light capability reference (beta.6 candidate)
+### Light capability reference
 
-Honeycomb reads HA `supported_color_modes`, never brands or names. Mode selection
+Jefferies Navigation reads HA `supported_color_modes`, never brands or names. Mode selection
 on cube **3** is UI-only; slot 0 retains its normal name/value/Back presentation.
 
 | Advertised capability | Controls | Palette launcher |
@@ -258,15 +233,15 @@ requires real min/max bounds. Opening, switching, holding and Back send no light
 command; a deliberate swatch tap applies it. Unknown/unavailable is never OFF.
 [Full Light rules and short-name examples](docs/AI_SETUP.md#light-capability-and-off-name-rules-beta6-candidate).
 
-### Bee version feedback and development updates
+### Compass version feedback and development updates
 
-Tap the standard Honeycomb Bee to reveal the actual installed version inside its
+Tap the standard Jefferies Navigation Compass to reveal the actual installed version inside its
 hexagon for three seconds. Hold works too. At the expanded Collapsible root,
 short tap is Back/Collapse; hold or Shift+Enter reveals the same version without
 collapsing. Enter/Space remains Back. Alt+V provides keyboard version inspection
-on Bee icons that retain another contextual action. Reduced motion suppresses
-flight while retaining readable version feedback. All use one canonical mascot
-asset and shared rendering/version code. [Shared Bee guide](docs/SHARED_BEE.md).
+on Compass icons that retain another contextual action. Reduced motion suppresses
+animation while retaining readable version feedback. All use one canonical compass
+asset and shared rendering/version code. [Shared Compass guide](docs/NAVIGATION_COMPASS.md).
 [Development installation and cache troubleshooting](docs/DEVELOPMENT_BUILDS.md).
 
 ### Canonical visual baseline: Light module
@@ -332,10 +307,10 @@ including currently hidden items.
 | 7 | `0,1,2,3,4,5,6` | logo suppressed; same slots |
 <!-- auto-slots:end -->
 
-`logo: auto` shows the bee for **2–6 configured items**, leaving one item at
+`logo: auto` shows the compass for **2–6 configured items**, leaving one item at
 center and suppressing branding for 7+. `logo: true` also shows it for one item.
 An explicit center-slot request takes precedence over branding. `logo: false`
-removes the bee and makes slot 0 available to ordinary items; it does not force
+removes the compass and makes slot 0 available to ordinary items; it does not force
 every automatic layout to fill the center. Beyond seven, automatic items use
 `0,1,2,…`.
 
@@ -357,7 +332,7 @@ This complete [dynamic example](examples/v1.7/dynamic-hub.yaml) keeps a Light at
 center, prefers slot 2 for Person A when home, and uses free slots for other items:
 
 ```yaml
-type: custom:honeycomb-persistent-hub
+type: custom:jts-n-hub
 name: Dynamic Hub A
 size: 82
 logo: false
@@ -425,7 +400,7 @@ provide behavior. There is no separate Control visual engine.
 For a single device, use this [Control example with presets](examples/v1.7/control-light.yaml):
 
 ```yaml
-type: custom:honeycomb-persistent-control
+type: custom:jts-n-control
 module: light
 entity: light.zone_a
 name: Light A
@@ -477,7 +452,7 @@ its actual ID with `favorites_sensor` (default `sensor.sonos_favorites`).
 **Breaking change in v1.8.0-beta.4:** supported read-only HA Browse Media is now
 Sonos's default and only favorite-artwork/metadata provider. Remove
 `favorites_cache_sensor` from dashboard YAML and remove the custom favorites-cache
-template definition/refresh automation previously used only for Honeycomb. Keep
+template definition/refresh automation previously used only for Jefferies Navigation. Keep
 unrelated templates and the **native** favorites entity. No legacy sensor lookup,
 autodetection, fallback or compatibility shim remains, even if the entity exists.
 Browse errors safely show icon/text. No special artwork option or backend install.
@@ -556,7 +531,7 @@ means a harmless 82px fallback. See [complete copy/paste YAML, coordinate-frame
 support and touch-size limits](docs/FLOORPLAN_SIZING.md).
 
 The [synthetic charging-pulse demo](examples/energy-wave.yaml) uses the shared
-renderer without a charger or service call. Charger and Climate are included in v1.10.0 stable; Car remains unimplemented. [HACS listing readiness](docs/HACS_SUBMISSION.md) is
+renderer without a charger or service call. Charger and Climate use this same renderer. [HACS listing readiness](docs/HACS_SUBMISSION.md) is
 separate from installing this stable release as a custom repository.
 
 ### v1.8.0-beta.6: corrected auto reference and power pulse speed
