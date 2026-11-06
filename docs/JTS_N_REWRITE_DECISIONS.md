@@ -23,3 +23,9 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - Use SemVer `v2.0.0-beta.1` for the requested v2.0 beta-1, as required by the guarded publisher.
 - Register resources and create the separate dashboard through Home Assistant's supported interface. Do not edit live `.storage` files directly. File access to the dev host and an existing authenticated browser view were verified. Browser input later became unavailable, so dashboard creation is still pending.
 - Development installs use `/local/jts-n-dev/jefferies-navigation.js` and an immutable, content-hashed runtime. The legacy dashboard resource is kept separate.
+
+### Verification checkpoint
+
+- The rebrand uses the existing shared renderer, action dispatch and control modules. The Compass replaces the Bee as the visible brand control and retains version inspection and collapse/back semantics.
+- The initial v2 build passed local HACS, license, checksum and eight legacy coexistence checks. A Windows run passed 457 Node tests; seven local shell/platform checks require the Linux CI run. Historical browser fixture mismatches are being repaired separately from the runtime.
+- The deployment check compares the running diagnostics with the installed manifest and exact commit. Device writes are exercised using mocks, with a read-only dashboard for real Home Assistant smoke testing.
