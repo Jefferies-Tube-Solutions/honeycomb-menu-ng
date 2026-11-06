@@ -35,3 +35,10 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - [Draft PR #170](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/pull/170) records the v2 feature branch. Candidate commit `e1747ddf0fa6645565c64d2815d53732a66517ec` has the same Git tree as the local candidate.
 - The production bundle SHA-256 is `c368a81f5a154e6accf1494d4fb3f7bd0cb7c5b73879d990ef4ed46dcd8f3a0a`. Historical test-fixture fixes do not change the bundle.
 - The repository remains under the old slug while the dashboard product and release asset use Jefferies Navigation. The draft PR starts CI while keeping the stable branch intact.
+
+### Development deployment and release hold
+
+- Installed exact candidate `e1747ddf0fa6645565c64d2815d53732a66517ec` on the development Home Assistant under its separate static resource folder. The server serves version `2.0.0-beta.1-dev+e1747ddf0fa6`. Runtime SHA-256 is `0691711888d7ed70104661a49b7c5536435062f61d974490a00a32aac6499126`.
+- Downloaded the loader and runtime from the development host and verified both manifest hashes. Ran those exact bytes in a synthetic browser fixture at 1280×820 and 390×844. Both passed custom element registration, Compass version inspection and Info Cube open/return, with no browser errors or device service calls.
+- Do not treat the fixture as a real Home Assistant dashboard acceptance. The authenticated browser view was readable, but browser input was denied. Dashboard resource registration and the dedicated Lovelace test page remain pending. Keep the existing HC dashboard as a comparison and do not edit Home Assistant internal storage directly.
+- To resume in the authenticated development UI, register the JavaScript module `/local/jts-n-dev/jefferies-navigation.js`, create the separate read-only test dashboard, reload, and verify the compass, installed version, Info return and collapse/back behavior. The production beta workflow remains on hold until the acceptance and exact-head CI gates pass.
