@@ -18,7 +18,8 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 
 ### Namespace and packaging
 
-- The dashboard elements are `custom:jts-n-hub`, `custom:jts-n-control` and `custom:jts-n-info-cube`. Product-owned popup configuration uses `jts_n_menu`; shared domain terms such as Light, Sonos and Climate remain recognizable.
+- The dashboard card types are `custom:jts-n-hub` and `custom:jts-n-control`. The Info Cube is the `jts-n-info-cube` overlay, opened with the `jts-n-info` action. Product-owned popup configuration uses `jts_n_menu`; shared domain terms such as Light, Sonos and Climate remain recognizable.
 - Use `jefferies-navigation.js` as the distribution bundle and `window.jefferiesNavigation` for build diagnostics. Keep the GitHub repository and its release history under the current slug for this beta. Changing the repository itself is a separate catalog and distribution decision.
 - Use SemVer `v2.0.0-beta.1` for the requested v2.0 beta-1, as required by the guarded publisher.
 - Register resources and create the separate dashboard through Home Assistant's supported interface. Do not edit live `.storage` files directly. File access to the dev host and an existing authenticated browser view were verified. Browser input later became unavailable, so dashboard creation is still pending.
+- Development installs use `/local/jts-n-dev/jefferies-navigation.js` and an immutable, content-hashed runtime. The legacy dashboard resource is kept separate.
