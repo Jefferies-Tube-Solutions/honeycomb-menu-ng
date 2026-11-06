@@ -1,0 +1,49 @@
+title: JTS-N DEV
+views:
+  - title: Navigation acceptance
+    path: test
+    icon: mdi:compass-outline
+    cards:
+      - type: custom:jts-n-hub
+        name: Navigation console
+        size: 82
+        logo: true
+        items:
+          - type: generic
+            name: Mission briefing
+            icon: mdi:information-outline
+            slot: 1
+            tap_action:
+              action: jts-n-info
+              info:
+                title: Navigation check
+                text: Read-only Info Cube. Close it to return to the same console.
+          - type: generic
+            name: Standby
+            icon: mdi:star-outline
+            slot: 2
+            tap_action:
+              action: none
+      - type: custom:jts-n-hub
+        name: Expandable console
+        size: 82
+        collapsible:
+          expanded_center: compass
+          primary_slot: 1
+        items:
+          - type: generic
+            name: Status
+            icon: mdi:information-outline
+            slot: 0
+            tap_action:
+              action: jts-n-info
+              info:
+                title: Status
+                text: JTS-N development acceptance.
+          - type: generic
+            name: Standby
+            icon: mdi:star-outline
+            slot: 2
+            tap_action:
+              action: none
+
