@@ -29,3 +29,9 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - The rebrand uses the existing shared renderer, action dispatch and control modules. The Compass replaces the Bee as the visible brand control and retains version inspection and collapse/back semantics.
 - The initial v2 build passed local HACS, license, checksum and eight legacy coexistence checks. A Windows run passed 457 Node tests; seven local shell/platform checks require the Linux CI run. Historical browser fixture mismatches are being repaired separately from the runtime.
 - The deployment check compares the running diagnostics with the installed manifest and exact commit. Device writes are exercised using mocks, with a read-only dashboard for real Home Assistant smoke testing.
+
+### Candidate handoff
+
+- [Draft PR #170](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/pull/170) records the v2 feature branch. Candidate commit `e1747ddf0fa6645565c64d2815d53732a66517ec` has the same Git tree as the local candidate.
+- The production bundle SHA-256 is `c368a81f5a154e6accf1494d4fb3f7bd0cb7c5b73879d990ef4ed46dcd8f3a0a`. Historical test-fixture fixes do not change the bundle.
+- The repository remains under the old slug while the dashboard product and release asset use Jefferies Navigation. The draft PR starts CI while keeping the stable branch intact.
