@@ -79,3 +79,9 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - Installed exact candidate `593965172b7a1b6f93afa1af1e3dc298623199b3` and converted the existing dashboard to both new tags. Home Assistant saved both names and displayed the Hub, standalone Control and round Compass after reload. Compass activation displayed `v2.0.0 beta 1`.
 - All 49 Markdown/YAML files touched by the card rename matched the prior text after the two substitutions. A separate audit restored earlier shortened runtime, Info, support and stable verification details and linked the complete immutable v1 release history. Exact-candidate docs checks passed for 77 YAML blocks, 222 links/anchors and 22 browser cases.
 - The branding gate now requires the two correct public card types in the README as well as the already pinned product identity and artwork. [Exact-candidate CI](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/actions/runs/42346378966).
+
+### README lockup
+
+- The owner selected a single full Jefferies Navigation product lockup for this README. Use its white lettering on the dark GitHub theme and Deep Space lettering on the light theme. This is a scoped override of the generic publisher-plus-product README layout.
+- Pin both approved v1 images and the theme selectors in the product's branding gate. Keep the circular in-card compass as a separate asset. Retain the version badge and the rest of the README.
+- The change supersedes the candidate that was previously in CI. The public beta remains on hold until the updated candidate passes its own checks.
