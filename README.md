@@ -107,14 +107,15 @@ See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-
 and [standalone Control example](examples/climate-control.yaml).
 Jefferies Navigation calls configured HA actions; device automation belongs in Home Assistant.
 
-Representative stable Light controls (synthetic HA fixtures; the v1.8.1 runtime
-is unchanged from these verified v1.8.0 captures):
+The **Light menu** (left) shows brightness and presets. The **White palette**
+(right) shows the twelve Kelvin swatches for a tunable-white light.
 
-<img src="docs/assets/screenshots/stable-light.png" width="260" alt="Synthetic Light menu with brightness and preset controls">
-<img src="docs/assets/screenshots/stable-kelvin.png" width="260" alt="Synthetic Light White palette with twelve filled Kelvin swatches">
+<img src="docs/assets/screenshots/navigation-light-menu.png" width="222" alt="Light menu with brightness and preset controls">
+<img src="docs/assets/screenshots/navigation-kelvin-palette.png" width="354" alt="Light White palette with all twelve Kelvin swatches">
 
-[Capture provenance](docs/assets/screenshots/stable-provenance.json). Charger is not
-part of v1.8.1 stable.
+[Navigation capture provenance](docs/assets/screenshots/navigation-light-provenance.json)
+· [Historical v1.8.1 capture provenance](docs/assets/screenshots/stable-provenance.json).
+The historical v1.8.1 stable release did not include Charger.
 
 ### Responsive room controls
 
