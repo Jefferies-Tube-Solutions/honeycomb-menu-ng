@@ -62,6 +62,10 @@ function validateBrand(brand) {
             'README example must use custom:' + type);
     }
     assert.match(brand.readme, /\[.*\]\(docs\/AI_SETUP\.md\)/, 'README must link the AI setup guide');
+    assert.match(brand.readme, /\]\(docs\/CAPTAINS_LOG\.md\)/, 'README must link the Captain’s Log');
+    assert.doesNotMatch(brand.readme,
+        /^#{2,6} (?:Floorplan sizing in v1\.8\.0-beta\.6|v1\.8\.0-beta\.[67]:|Anchored child menus \(v1\.9\.0-beta\.4\))/m,
+        'Historical release headings belong in the Captain’s Log');
 }
 
 module.exports = {readBrand, validateBrand};
