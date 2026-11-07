@@ -606,6 +606,10 @@ function testSharedCompassBranding()
     assert.throws(() => validateBrand({...brand, hacs:{...brand.hacs,name:'Other product'}}), /Unexpected HACS name/);
     assert.throws(() => validateBrand({...brand, artwork:{...brand.artwork,'assets/navigation-compass.png':'wrong'}}), /Unapproved artwork bytes/);
     assert.throws(() => validateBrand({...brand, readme:brand.readme.replace('#gh-light-mode-only','')}), /README branding element/);
+    for (const type of ['navigation-hub', 'navigation-control']) {
+        const readme = brand.readme.replaceAll('custom:' + type, type);
+        assert.throws(() => validateBrand({...brand, readme}), /README example must use custom:/);
+    }
     assert.strictEqual(master.readUInt32BE(16), 192);
     assert.strictEqual(master.readUInt32BE(20), 192);
     assert.strictEqual(master[25], 6, 'Runtime compass uses RGBA transparency');

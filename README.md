@@ -23,7 +23,7 @@ full-cell renderer, with **82 CSS px cube width** by default.
 Jefferies Navigation (JTS-N) continues Honeycomb Menu NG, a fork of
 [Sian Croser's honeycomb-menu](https://github.com/Sian-Lee-SA/honeycomb-menu).
 The project retains its original code and attribution under [GPLv3](LICENSE).
-Nicolai Tandrup maintains the project.
+Nicolai Tandrup maintains the project. [Support the original author](https://www.buymeacoffee.com/SianLee).
 
 > **v2.0.0-beta.1** introduces the Navigation Compass and its own dashboard
 > identifiers. See [Upgrading from Honeycomb Menu NG](docs/V2_MIGRATION.md) for
@@ -107,7 +107,8 @@ precision is disabled. Keyboard focus follows the hex, with no pointer rectangle
 - Live Hub item visibility, reserved/preferred/free slots and stable placement.
 - Nested menus, drag-select and classic popups, templates and XY Pad.
 
-See the [Climate guide](docs/CLIMATE_MODULE.md) and [Hub example](examples/climate-hub.yaml).
+See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
+and [standalone Control example](examples/climate-control.yaml).
 Jefferies Navigation calls configured HA actions; device automation belongs in Home Assistant.
 
 Representative stable Light controls (synthetic HA fixtures; the v1.8.1 runtime
@@ -505,7 +506,8 @@ script and candidate list. A hidden hard item intentionally leaves a hole.
 - [Versioned AI setup guide and six tested YAML examples](docs/AI_SETUP.md)
 - [Light](docs/LIGHT_MODULE.md) · [Sonos](docs/SONOS_MODULE.md) · [Classic popups](docs/CLASSIC_MENU.md)
 - [Phase 1 / Issue #78](docs/V1_7_PHASE1.md) · [Phase 2 conditions and allocation](docs/V1_7_PHASE2.md)
-- [Architecture and invariants](ARCHITECTURE.md) · [Release notes](RELEASE_NOTES.md)
+- [Architecture and invariants](ARCHITECTURE.md) · [v2 release notice](RELEASE_NOTES.md)
+- [Complete Honeycomb Menu NG v1 release history](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/blob/25291186b07bfee81b8877fe731e00a417d56c12/RELEASE_NOTES.md) · [v1.10.0 stable verification](docs/V1_10_STABLE_RELEASE.md)
 - [Documentation audit and validation commands](docs/DOCUMENTATION.md)
 
 For local development: `npm ci`, `npm test`, then

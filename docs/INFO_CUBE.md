@@ -16,7 +16,10 @@ Geometry, wrapping, pagination, navigation and fixed30-second lifetime are uncha
 
 # Info Cube
 
-Info is a read-only overlay. It uses synthetic entities and mock plans in these examples.
+Info is a read-only overlay. Install the dashboard resource and configure the
+action below. The overlay reads existing Home Assistant state and requires no
+helper, backend integration or device service. The examples use synthetic
+entities and mock plans.
 
 ## Open and return
 

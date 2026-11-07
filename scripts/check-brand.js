@@ -54,6 +54,10 @@ function validateBrand(brand) {
         assert.ok(index > offset, 'README branding element missing or out of order: ' + section);
         offset = index;
     }
+    for (const type of ['navigation-hub', 'navigation-control']) {
+        assert.match(brand.readme, new RegExp('^type: custom:' + type + '$', 'm'),
+            'README example must use custom:' + type);
+    }
     assert.match(brand.readme, /\[.*\]\(docs\/AI_SETUP\.md\)/, 'README must link the AI setup guide');
 }
 
