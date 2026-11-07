@@ -4,7 +4,7 @@ views:
     path: test
     icon: mdi:compass-outline
     cards:
-      - type: custom:jts-n-hub
+      - type: custom:navigation-hub
         name: Navigation console
         size: 82
         logo: true
@@ -24,7 +24,7 @@ views:
             slot: 2
             tap_action:
               action: none
-      - type: custom:jts-n-hub
+      - type: custom:navigation-hub
         name: Expandable console
         size: 82
         collapsible:
