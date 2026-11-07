@@ -1600,10 +1600,10 @@ class Cubes(unittest.TestCase):
     def test_issue90_readme_diagram_responsive_light_dark(self):
         for theme,background in [('light','#ffffff'),('dark','#0d1117')]:
             self.page.evaluate('''([theme,background])=>{document.title='Jefferies Navigation layout model preview';document.body.innerHTML='<main><h1>Layout model</h1><img alt="Jefferies Navigation physical slots 0–18: center, inner and outer rings" src="/layout.svg"></main>';document.body.style.cssText='margin:0;background:'+background+';color:'+(theme==='dark'?'white':'#14202b');const main=document.querySelector('main');main.style.cssText='padding:16px;max-width:1012px;margin:auto';document.querySelector('img').style.cssText='max-width:100%;height:auto;display:block'}''',[theme,background])
-            self.page.wait_for_function('document.querySelector("img").complete && document.querySelector("img").naturalWidth===520')
+            self.page.wait_for_function('document.querySelector("img").complete && document.querySelector("img").naturalWidth===700')
             image=self.page.locator('img');bounds=image.bounding_box()
             self.assertLessEqual(bounds['width'],self.viewport['width']-32)
-            self.assertGreaterEqual(25*bounds['width']/520,14,'Slot numbers remain readable on mobile')
+            self.assertGreaterEqual(30*bounds['width']/700,14,'Slot numbers remain readable on mobile')
             self.assertEqual(self.page.title(),'Jefferies Navigation layout model preview')
             self.capture('issue90-layout-'+theme)
 

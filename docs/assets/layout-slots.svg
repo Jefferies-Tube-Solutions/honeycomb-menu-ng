@@ -3,7 +3,7 @@
 <desc id="description">Center 0. Inner ring: 1 left, 2 upper left, 3 upper right, 4 right, 5 lower right, 6 lower left. Outer rows: 9 10 11; 8 and 12; 7 and 13; 18 and 14; 17 16 15.</desc>
 <style>
   text{font-family:Arial,Helvetica,sans-serif;fill:#f2f5f9}
-  .slots text{font-size:25px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+  .slots text{font-size:30px;font-weight:700;text-anchor:middle;dominant-baseline:central}
   .slots polygon{fill:#151e2a;stroke:#aab9c8;stroke-width:2}
   .center polygon{stroke:#f7bd4e}.inner polygon{stroke:#62d8ff}
 </style>
