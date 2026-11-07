@@ -94,98 +94,6 @@ menu. Missing attributes during unavailability do not establish on/off-only capa
 
 ## Operational Protocol
 
-### What you can build
-
-
-- Persistent Hubs and individual Controls with consistent icons, labels and rings.
-- Light brightness, Color/White palettes and reusable numeric presets.
-- Media/Sonos play/pause, group-aware volume, favorites artwork and optional Join.
-- Live Hub item visibility, reserved/preferred/free slots and stable placement.
-- Nested menus, drag-select and classic popups, templates and XY Pad.
-
-See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
-and [standalone Control example](examples/climate-control.yaml).
-Jefferies Navigation calls configured HA actions; device automation belongs in Home Assistant.
-
-The **Light menu** (left) shows brightness and presets. The **White palette**
-(right) shows the twelve Kelvin swatches for a tunable-white light.
-
-<img src="docs/assets/screenshots/navigation-light-menu.png" width="222" alt="Light menu with brightness and preset controls">
-<img src="docs/assets/screenshots/navigation-kelvin-palette.png" width="354" alt="Light White palette with all twelve Kelvin swatches">
-
-[Navigation capture provenance](docs/assets/screenshots/navigation-light-provenance.json)
-· [Historical v1.8.1 capture provenance](docs/assets/screenshots/stable-provenance.json).
-The historical v1.8.1 stable release did not include Charger.
-
-### Responsive room controls
-
-
-Add `collapsible: true` and a primary item in slot 0 to place a compact,
-responsive room control on a floorplan. Tap performs its action; hold expands.
-On phones, tablets and PCs, the Hub opens at a comfortable size. It prefers
-space beside the floorplan, and fits safely in the viewport when there is no room.
-On constrained screens, it places actual visible controls in fitting free canvas,
-preferably below the image, at the already chosen expanded size. Desktop placement
-plans for slots 0–18 and accepts at most 15% initial downscaling in free space,
-and otherwise stays near the original floorplan anchor. Only configured cubes
-render. Tap its center to return. No extra sizing or positioning options are needed.
-
-```yaml
-type: custom:navigation-hub
-style: {left: 50%, top: 50%}
-collapsible: true
-items:
-  - type: light
-    entity: light.room_a
-    slot: 0
-  - type: light
-    entity: light.room_b
-    slot: 2
-```
-
-Optional Beam of Origin keeps the original room cube visible as a live,
-noninteractive reference while the expanded Hub moves away. Enable it with:
-
-```yaml
-collapsible:
-  beam_of_origin: true
-```
-
-Optional custom color:
-
-```yaml
-collapsible:
-  beam_of_origin:
-    color: "#8bdcff"
-```
-
-The soft cyan beam fades toward the active expanded controls and follows nested
-navigation. `collapsible: true` leaves the beam off.
-The source reference cannot toggle or open anything; closing restores the single
-interactive room cube. Near/overlapping or hidden sources suppress the beam.
-
-See [complete picture-elements examples and optional settings](docs/COLLAPSIBLE_HUB.md).
-Auto/omitted Hub size sets an 82px nominal maximum for expanded and nested cubes;
-a responsive collapsed floorplan cube may be smaller. Numeric `size: N` sets the
-maximum to N, including values above 82. Optional `collapsible.expanded_size` can
-lower that target but cannot raise the parent limit. Viewport fitting may shrink
-further. The same ceiling applies throughout navigation and exact Back restoration.
-Selected module cubes stay in place when their submenus fit; constrained views
-fall back to the expanded root center. Back restores the parent layout exactly.
-Explicit numeric sizes are unchanged. Legacy
-`collapsible.mobile` remains an alias for `small_screen`; conflicting values fail
-clearly. Hubs without `collapsible` keep their existing defaults.
-
-Developer diagnostic (optional): add top-level `size_debug: true` to show the
-actual rendered CSS-pixel cube width during the Compass's temporary version reveal.
-When omitted, inspection shows the version alone.
-Normal Compass tap inspects; expanded-root Compass tap stays Back, hold/Shift+Enter inspects.
-See [measured diagnostics and YAML](docs/NAVIGATION_COMPASS.md).
-
-Sonos Join prefers trusted station artwork with room name and individual volume.
-Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
-precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
-
 ### Layout model
 
 
@@ -205,47 +113,6 @@ current coordinate tables, not inferred from button order.
 
 Private local testing: [fixed development resource and build instructions](docs/DEVELOPMENT_BUILDS.md).
 [Unpublished beta.6 scope, measured limitations and future-module boundaries](docs/BETA6_REVIEW.md).
-
-#### Light Hub names while OFF
-
-An OFF Light Hub launcher shows its
-existing item `name` above `OFF`. Without a custom name it uses the HA
-`friendly_name`, then the readable entity ID. A short name such as `A` is valid;
-long names use the existing ellipsis. ON brightness/colors and submenu centers
-keep their existing presentation. Unknown/unavailable lights say `Unavailable`,
-never `OFF`. Existing explicit secondary-label overrides still take precedence.
-
-#### Light capability reference
-
-Jefferies Navigation reads HA `supported_color_modes`, never brands or names. Mode selection
-on cube **3** is UI-only; slot 0 retains its normal name/value/Back presentation.
-
-| Advertised capability | Controls | Palette launcher |
-|---|---|---|
-| `onoff` only | Toggle; no detail menu | None |
-| `brightness` or fixed `white` | Brightness/presets | No Color/Kelvin commands |
-| `color_temp` only | Brightness and White/Kelvin | White only; no Color hold |
-| `hs`, `xy`, `rgb`, `rgbw` or `rgbww` only | Brightness and Color | Color only |
-| Color plus `color_temp` | Brightness, Color and White/Kelvin | Tap current/viewed palette; hold opposite |
-| Missing/inconsistent capabilities | Only verified controls | No invented capabilities |
-
-For dual-mode lights, HA `color_mode` chooses the initial palette. Off/null uses
-reliable same-entity session memory, otherwise a deterministic supported fallback.
-A manual palette selection stays selected while browsing/zooming. White/Kelvin
-requires real min/max bounds. Opening, switching, holding and Back send no light
-command; a deliberate swatch tap applies it. Unknown/unavailable is never OFF.
-[Full Light rules and short-name examples](docs/AI_SETUP.md#light-capability-and-off-name-rules-beta6-candidate).
-
-#### Compass version feedback and development updates
-
-Tap the standard Jefferies Navigation Compass to reveal the actual installed version inside its
-hexagon for three seconds. Hold works too. At the expanded Collapsible root,
-short tap is Back/Collapse; hold or Shift+Enter reveals the same version without
-collapsing. Enter/Space remains Back. Alt+V provides keyboard version inspection
-on Compass icons that retain another contextual action. Reduced motion suppresses
-animation while retaining readable version feedback. All use one canonical compass
-asset and shared rendering/version code. [Shared Compass guide](docs/NAVIGATION_COMPASS.md).
-[Development installation and cache troubleshooting](docs/DEVELOPMENT_BUILDS.md).
 
 #### Canonical visual baseline: Light module
 
@@ -387,6 +254,118 @@ can be explicitly matched. Legacy `show` is an additional AND gate.
 These keys belong to **Hub items**, not standalone Control or submenu buttons.
 [Exact conditions, truth tables and collision rules](docs/V1_7_PHASE2.md).
 
+### What you can build
+
+
+- Persistent Hubs and individual Controls with consistent icons, labels and rings.
+- Light brightness, Color/White palettes and reusable numeric presets.
+- Media/Sonos play/pause, group-aware volume, favorites artwork and optional Join.
+- Live Hub item visibility, reserved/preferred/free slots and stable placement.
+- Nested menus, drag-select and classic popups, templates and XY Pad.
+
+See the [Climate guide](docs/CLIMATE_MODULE.md), [Hub example](examples/climate-hub.yaml)
+and [standalone Control example](examples/climate-control.yaml).
+Jefferies Navigation calls configured HA actions; device automation belongs in Home Assistant.
+
+See the [Light menu and White palette](#light-menu-and-white-palette) for a worked example.
+
+### Responsive room controls
+
+
+Add `collapsible: true` and a primary item in slot 0 to place a compact,
+responsive room control on a floorplan. Tap performs its action; hold expands.
+On phones, tablets and PCs, the Hub opens at a comfortable size. It prefers
+space beside the floorplan, and fits safely in the viewport when there is no room.
+On constrained screens, it places actual visible controls in fitting free canvas,
+preferably below the image, at the already chosen expanded size. Desktop placement
+plans for slots 0–18 and accepts at most 15% initial downscaling in free space,
+and otherwise stays near the original floorplan anchor. Only configured cubes
+render. Tap its center to return. No extra sizing or positioning options are needed.
+
+```yaml
+type: custom:navigation-hub
+style: {left: 50%, top: 50%}
+collapsible: true
+items:
+  - type: light
+    entity: light.room_a
+    slot: 0
+  - type: light
+    entity: light.room_b
+    slot: 2
+```
+
+Optional Beam of Origin keeps the original room cube visible as a live,
+noninteractive reference while the expanded Hub moves away. Enable it with:
+
+```yaml
+collapsible:
+  beam_of_origin: true
+```
+
+Optional custom color:
+
+```yaml
+collapsible:
+  beam_of_origin:
+    color: "#8bdcff"
+```
+
+The soft cyan beam fades toward the active expanded controls and follows nested
+navigation. `collapsible: true` leaves the beam off.
+The source reference cannot toggle or open anything; closing restores the single
+interactive room cube. Near/overlapping or hidden sources suppress the beam.
+
+See [complete picture-elements examples and optional settings](docs/COLLAPSIBLE_HUB.md).
+Auto/omitted Hub size sets an 82px nominal maximum for expanded and nested cubes;
+a responsive collapsed floorplan cube may be smaller. Numeric `size: N` sets the
+maximum to N, including values above 82. Optional `collapsible.expanded_size` can
+lower that target but cannot raise the parent limit. Viewport fitting may shrink
+further. The same ceiling applies throughout navigation and exact Back restoration.
+Selected module cubes stay in place when their submenus fit; constrained views
+fall back to the expanded root center. Back restores the parent layout exactly.
+Explicit numeric sizes are unchanged. Legacy
+`collapsible.mobile` remains an alias for `small_screen`; conflicting values fail
+clearly. Hubs without `collapsible` keep their existing defaults.
+
+Developer diagnostic (optional): add top-level `size_debug: true` to show the
+actual rendered CSS-pixel cube width during the Compass's temporary version reveal.
+When omitted, inspection shows the version alone.
+Normal Compass tap inspects; expanded-root Compass tap stays Back, hold/Shift+Enter inspects.
+See [measured diagnostics and YAML](docs/NAVIGATION_COMPASS.md).
+
+Sonos Join prefers trusted station artwork with room name and individual volume.
+Climate adjustments are ±1.0 and ±0.1 in HA's temperature unit; unsupported
+precision is disabled. Keyboard focus follows the hex, with no pointer rectangle.
+
+### Actions, appearance and navigation
+
+
+- Tap, hold and optional double tap use HA action objects (`toggle`, `more-info`,
+  `perform-action`, `navigate`, `url`, `fire-dom-event`, `none`). Configured action
+  overrides replace the module's action. Default hold enters its menu.
+- Drag-select and nested back navigation are preserved. Selecting a base item may
+  establish a module center; after entry its physical slot 0 stays fixed until base.
+- Missing/unavailable devices retain their icon and show gray **Unavailable**;
+  recovery updates presentation. Visibility can separately hide them.
+- `colors.center`, `colors.inner_border`, `colors.outer_border` control fill and
+  ring colors; `border.inner_width` / `outer_width` control ring widths. Use shared
+  ring keys rather than rectangular CSS borders. Modules provide live active color.
+- `styles`, labels and templates support advanced customization. See the
+  [AI key reference](docs/AI_SETUP.md#configuration-contract) and
+  [classic popup/template/XY Pad reference](docs/CLASSIC_MENU.md).
+
+#### Compass version feedback and development updates
+
+Tap the standard Jefferies Navigation Compass to reveal the actual installed version inside its
+hexagon for three seconds. Hold works too. At the expanded Collapsible root,
+short tap is Back/Collapse; hold or Shift+Enter reveals the same version without
+collapsing. Enter/Space remains Back. Alt+V provides keyboard version inspection
+on Compass icons that retain another contextual action. Reduced motion suppresses
+animation while retaining readable version feedback. All use one canonical compass
+asset and shared rendering/version code. [Shared Compass guide](docs/NAVIGATION_COMPASS.md).
+[Development installation and cache troubleshooting](docs/DEVELOPMENT_BUILDS.md).
+
 ### Choose a module or Control
 
 
@@ -423,6 +402,48 @@ presets:
 older standalone examples using inset sizing or `menu_size`; `size: 82` now means
 cell width. Control has no Hub `items` list or item-level dynamic allocation.
 [Detailed migration and supported keys](docs/AI_SETUP.md#migration-and-limits).
+
+#### Light menu and White palette
+
+The **Light menu** (left) shows brightness and presets. The **White palette**
+(right) shows the twelve Kelvin swatches for a tunable-white light.
+
+<img src="docs/assets/screenshots/navigation-light-menu.png" width="222" alt="Light menu with brightness and preset controls">
+<img src="docs/assets/screenshots/navigation-kelvin-palette.png" width="354" alt="Light White palette with all twelve Kelvin swatches">
+
+[Navigation capture provenance](docs/assets/screenshots/navigation-light-provenance.json)
+· [Historical v1.8.1 capture provenance](docs/assets/screenshots/stable-provenance.json).
+The historical v1.8.1 stable release did not include Charger.
+
+#### Light Hub names while OFF
+
+An OFF Light Hub launcher shows its
+existing item `name` above `OFF`. Without a custom name it uses the HA
+`friendly_name`, then the readable entity ID. A short name such as `A` is valid;
+long names use the existing ellipsis. ON brightness/colors and submenu centers
+keep their existing presentation. Unknown/unavailable lights say `Unavailable`,
+never `OFF`. Existing explicit secondary-label overrides still take precedence.
+
+#### Light capability reference
+
+Jefferies Navigation reads HA `supported_color_modes`, never brands or names. Mode selection
+on cube **3** is UI-only; slot 0 retains its normal name/value/Back presentation.
+
+| Advertised capability | Controls | Palette launcher |
+|---|---|---|
+| `onoff` only | Toggle; no detail menu | None |
+| `brightness` or fixed `white` | Brightness/presets | No Color/Kelvin commands |
+| `color_temp` only | Brightness and White/Kelvin | White only; no Color hold |
+| `hs`, `xy`, `rgb`, `rgbw` or `rgbww` only | Brightness and Color | Color only |
+| Color plus `color_temp` | Brightness, Color and White/Kelvin | Tap current/viewed palette; hold opposite |
+| Missing/inconsistent capabilities | Only verified controls | No invented capabilities |
+
+For dual-mode lights, HA `color_mode` chooses the initial palette. Off/null uses
+reliable same-entity session memory, otherwise a deterministic supported fallback.
+A manual palette selection stays selected while browsing/zooming. White/Kelvin
+requires real min/max bounds. Opening, switching, holding and Back send no light
+command; a deliberate swatch tap applies it. Unknown/unavailable is never OFF.
+[Full Light rules and short-name examples](docs/AI_SETUP.md#light-capability-and-off-name-rules-beta6-candidate).
 
 #### Light presets
 
@@ -497,23 +518,6 @@ area that avoids the sloping hex edges, preserves aspect ratio and reserves labe
 
 All example IDs and screenshots are synthetic replacement points. Replace them
 with your actual integration entities. Car identification, schedules, load balancing and optimization run in external automation.
-
-### Actions, appearance and navigation
-
-
-- Tap, hold and optional double tap use HA action objects (`toggle`, `more-info`,
-  `perform-action`, `navigate`, `url`, `fire-dom-event`, `none`). Configured action
-  overrides replace the module's action. Default hold enters its menu.
-- Drag-select and nested back navigation are preserved. Selecting a base item may
-  establish a module center; after entry its physical slot 0 stays fixed until base.
-- Missing/unavailable devices retain their icon and show gray **Unavailable**;
-  recovery updates presentation. Visibility can separately hide them.
-- `colors.center`, `colors.inner_border`, `colors.outer_border` control fill and
-  ring colors; `border.inner_width` / `outer_width` control ring widths. Use shared
-  ring keys rather than rectangular CSS borders. Modules provide live active color.
-- `styles`, labels and templates support advanced customization. See the
-  [AI key reference](docs/AI_SETUP.md#configuration-contract) and
-  [classic popup/template/XY Pad reference](docs/CLASSIC_MENU.md).
 
 ## Verification
 
