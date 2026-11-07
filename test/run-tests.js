@@ -605,7 +605,10 @@ function testSharedCompassBranding()
     validateBrand(brand);
     assert.throws(() => validateBrand({...brand, hacs:{...brand.hacs,name:'Other product'}}), /Unexpected HACS name/);
     assert.throws(() => validateBrand({...brand, artwork:{...brand.artwork,'assets/navigation-compass.png':'wrong'}}), /Unapproved artwork bytes/);
-    assert.throws(() => validateBrand({...brand, readme:brand.readme.replace('#gh-light-mode-only','')}), /README branding element/);
+    assert.throws(() => validateBrand({...brand, readme:brand.readme.replace('#gh-light-mode-only','')}), /README header/);
+    const withExtraLogo = brand.readme.replace('# Jefferies Navigation for Home Assistant',
+        '![Extra logo](assets/navigation-compass.png)\n\n# Jefferies Navigation for Home Assistant');
+    assert.throws(() => validateBrand({...brand, readme:withExtraLogo}), /README header/);
     for (const type of ['navigation-hub', 'navigation-control']) {
         const readme = brand.readme.replaceAll('custom:' + type, type);
         assert.throws(() => validateBrand({...brand, readme}), /README example must use custom:/);

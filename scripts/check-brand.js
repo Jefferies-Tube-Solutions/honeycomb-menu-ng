@@ -6,10 +6,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const repository = 'Jefferies-Tube-Solutions/jefferies-navigation';
+const whiteLockup = 'assets/brand/navigation-lockup-white.png';
+const deepSpaceLockup = 'assets/brand/navigation-lockup-deep-space.png';
 const artwork = Object.freeze({
-    'assets/brand/jts-white-transparent.png': '0916cac2d9ffacc77369f2e36784c47a08ebb3861bc2edeea85debec0af81f4c',
-    'assets/brand/jts-deep-space-transparent.png': 'e7a62fefd63df7f3a1e5c36ea4284765cd25059a3496454eac1d5ea28ffcd527',
-    'assets/brand/jefferies-navigation-icon.png': '2e41949ceac68fb6315b2f1cae44ca24c194c6fa8bac66ea21b35c24644495f9',
+    [whiteLockup]: 'd6ecf4c931250da855f4b051df9003a5c0fe6a975631494d6d67ec1fc9857f08',
+    [deepSpaceLockup]: 'f19e85d9886b44e57a634b7d5eae9cec96f9e856bc078eef799f28086747e451',
     'assets/navigation-compass.png': '793f2f612bf899de6847b497719d51a9ac7ef38c7f8b6bbe7517e717c7257040'
 });
 
@@ -40,20 +41,22 @@ function validateBrand(brand) {
         assert.equal(brand.artwork[file], hash, 'Unapproved artwork bytes for ' + file);
     }
 
-    const sections = [
+    const heading = '\n# Jefferies Navigation for Home Assistant';
+    const titleIndex = brand.readme.indexOf(heading);
+    assert.ok(titleIndex > 0, 'README product heading missing');
+    const header = brand.readme.slice(0, titleIndex).replace(/\r\n/g, '\n').trimEnd();
+    assert.equal(header, [
         '<p align="right">',
-        'img.shields.io/github/v/release/' + repository,
-        'assets/brand/jts-white-transparent.png#gh-dark-mode-only',
-        'assets/brand/jts-deep-space-transparent.png#gh-light-mode-only',
-        'assets/brand/jefferies-navigation-icon.png',
-        '# Jefferies Navigation for Home Assistant'
-    ];
-    let offset = -1;
-    for (const section of sections) {
-        const index = brand.readme.indexOf(section);
-        assert.ok(index > offset, 'README branding element missing or out of order: ' + section);
-        offset = index;
-    }
+        `  <a href="https://github.com/${repository}/releases/latest">`,
+        `    <img alt="Latest stable version" src="https://img.shields.io/github/v/release/${repository}?label=stable&amp;color=2ea44f">`,
+        '  </a>',
+        '</p>',
+        '',
+        '<p align="center">',
+        `  <img src="${whiteLockup}#gh-dark-mode-only" alt="Jefferies Navigation full logo with white text" width="760">`,
+        `  <img src="${deepSpaceLockup}#gh-light-mode-only" alt="Jefferies Navigation full logo with Deep Space text" width="760">`,
+        '</p>'
+    ].join('\n'), 'README header must use only the approved theme-specific Navigation lockups below the status badge');
     for (const type of ['navigation-hub', 'navigation-control']) {
         assert.match(brand.readme, new RegExp('^type: custom:' + type + '$', 'm'),
             'README example must use custom:' + type);
