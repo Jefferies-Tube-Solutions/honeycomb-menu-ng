@@ -53,3 +53,9 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - Reuse the existing Honeycomb NG Test dashboard at its current URL. This supersedes the separate-dashboard decision. Preserve the layout, entities, actions and other cards. Keep a local backup before saving the converted dashboard. The live dashboard config and identifiers stay out of GitHub.
 - Use the round compass dial from approved Draft 02 for the in-card graphic. Keep the approved full hexagonal brand artwork for standalone branding. The card renderer already supplies the hexagonal frame.
 - The previous development installation copied and verified static assets. It did not register the resource or migrate the live dashboard. Those steps remain separate acceptance gates.
+
+### Repository identity and future releases
+
+- The desired repository slug is `Jefferies-Tube-Solutions/jefferies-navigation`. This supersedes the earlier choice to retain the old slug for beta. Keep the same repository history and existing release records.
+- v2 is a clean cutover. Do not add HC aliases, resource shims, compatibility adapters or fallback bundle filenames. Historical documentation, license notices and existing release records keep their original identity.
+- Future candidates must pass an automated branding check through the existing CI and release test entry points. Document the approved artwork source and separate the circular in-card image from the full hexagonal product logo. Record asset hashes and confirm naming/packaging rules.
