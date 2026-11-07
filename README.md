@@ -23,7 +23,7 @@ Jefferies Navigation (JTS-N) continues Honeycomb Menu NG, a fork of
 The project retains its original code and attribution under [GPLv3](LICENSE).
 Nicolai Tandrup maintains the project. [Support the original author](https://www.buymeacoffee.com/SianLee).
 
-> **v2.0.0-beta.1** introduces the Navigation Compass and its own dashboard
+> **v2.0.0** introduces the Navigation Compass and its own dashboard
 > identifiers. See [Upgrading from Honeycomb Menu NG](docs/V2_MIGRATION.md) for
 > the resource and YAML changes. The previous stable release is [v1.10.0](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases/tag/v1.10.0).
 

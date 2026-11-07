@@ -12,6 +12,13 @@ implementation changes between releases.
 - [All tags](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/tags)
 - [Complete original Honeycomb Menu NG v1 notes](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/blob/25291186b07bfee81b8877fe731e00a417d56c12/RELEASE_NOTES.md)
 
+## Jefferies Navigation v2.0.0 — Stable
+
+The stable build promotes the v2.0.0-beta.1 runtime with the stable version
+banner and version label. Source, artwork, dashboard YAML and dependencies
+carry forward from the beta. See [the stable approval record](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/issues/171)
+and [the public release notice](../RELEASE_NOTES.md).
+
 ## Jefferies Navigation v2.0.0-beta.1
 
 - Jefferies Navigation (JTS-N) succeeds Honeycomb Menu NG for Home Assistant.
