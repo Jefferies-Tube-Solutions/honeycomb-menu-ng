@@ -7,7 +7,9 @@ and issue #163. Previous release history remains available at the original tags.
 
 Feature branch: `feature/jefferies-navigation-v2`. The public names, resource
 and YAML changes are listed in [V2_MIGRATION.md](V2_MIGRATION.md). The compass
-is derived from the approved JTS brand icon. The shared renderer, positioning
+is a round dial rendered from the approved Draft 02 scene. The shared cell draws
+the outer hexagon. The [branding gate](BRANDING.md) pins the runtime dial, public
+publisher artwork and product identity. The shared renderer, positioning
 engine, action registry, module boundaries and XY Pad teardown stay in place.
 
 Run `npm ci`, `npm test`, `NODE_OPTIONS=--openssl-legacy-provider npm run build`,

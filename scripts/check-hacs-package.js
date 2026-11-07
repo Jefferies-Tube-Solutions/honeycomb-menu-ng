@@ -5,7 +5,7 @@ const artifact=localArtifact();
 const pkg=JSON.parse(fs.readFileSync('package.json'));
 const license=fs.readFileSync('LICENSE','utf8'),notice=fs.readFileSync('NOTICE','utf8');
 assert.equal(pkg.license,'GPL-3.0-or-later');
-assert.equal(pkg.repository.url,'git+https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng.git');
+assert.equal(pkg.repository.url,'git+https://github.com/Jefferies-Tube-Solutions/jefferies-navigation.git');
 for(const text of ['GNU GENERAL PUBLIC LICENSE','Version 3, 29 June 2007','END OF TERMS AND CONDITIONS','How to Apply These Terms to Your New Programs'])assert.ok(license.includes(text));
 for(const text of ['Copyright (C) 2020 Sian Croser','either version 3 of the License','THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS'])assert.ok(notice.includes(text));
 const hacs=JSON.parse(fs.readFileSync('hacs.json'));

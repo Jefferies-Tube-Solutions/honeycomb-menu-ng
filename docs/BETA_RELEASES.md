@@ -69,10 +69,12 @@ for inspection; rerunning cannot silently reuse it. Resolve failures with the
 owner and a new beta version rather than moving tags or replacing assets.
 The workflow never modifies retention variables or invokes release cleanup.
 
-For CLI dispatch, write the exact inputs as JSON to a file and use:
+For CLI dispatch, write the exact inputs as JSON to a file. Set
+`GITHUB_REPOSITORY` to the actual GitHub owner and repository name at dispatch
+time. This can differ from the target JTS slug before the rename.
 
 ```sh
-gh workflow run release.yml --repo Jefferies-Tube-Solutions/honeycomb-menu-ng \
+gh workflow run release.yml --repo "$GITHUB_REPOSITORY" \
   --ref YOUR_BRANCH --json < approved-beta-inputs.json
 ```
 

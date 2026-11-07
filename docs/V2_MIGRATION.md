@@ -22,8 +22,10 @@ keys. Update the resource and YAML together. The examples in this branch use v2.
 | `window.honeycombNG` | `window.jefferiesNavigation` |
 
 For HACS, select the v2 prerelease and check that the JavaScript module resource
-is `/hacsfiles/honeycomb-menu-ng/jefferies-navigation.js`. For a manual install,
+is `/hacsfiles/jefferies-navigation/jefferies-navigation.js`. For a manual install,
 copy the bundle into `/config/www` and use `/local/jefferies-navigation.js`.
+The new HACS path applies once the repository is named `jefferies-navigation`.
+While the rename is pending, use the manual module path for v2 validation.
 Reload the dashboard after changing resources. On a development Home Assistant
 instance, use the [isolated development loader](DEVELOPMENT_BUILDS.md).
 

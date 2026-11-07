@@ -1,11 +1,16 @@
 <p align="right">
-  <a href="https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases/latest">
-    <img alt="Latest stable version" src="https://img.shields.io/github/v/release/Jefferies-Tube-Solutions/honeycomb-menu-ng?label=stable&amp;color=2ea44f">
+  <a href="https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/releases/latest">
+    <img alt="Latest stable version" src="https://img.shields.io/github/v/release/Jefferies-Tube-Solutions/jefferies-navigation?label=stable&amp;color=2ea44f">
   </a>
 </p>
 
 <p align="center">
-  <img src="assets/navigation-compass.png" width="220" alt="Jefferies Navigation">
+  <img src="assets/brand/jts-white-transparent.png#gh-dark-mode-only" alt="Jefferies Tube Solutions publisher logo for dark theme" width="760">
+  <img src="assets/brand/jts-deep-space-transparent.png#gh-light-mode-only" alt="Jefferies Tube Solutions publisher logo for light theme" width="760">
+</p>
+
+<p align="center">
+  <img src="assets/brand/jefferies-navigation-icon.png" width="220" alt="Jefferies Navigation product insignia">
 </p>
 
 # Jefferies Navigation for Home Assistant
@@ -23,6 +28,8 @@ Nicolai Tandrup maintains the project.
 > **v2.0.0-beta.1** introduces the Navigation Compass and its own dashboard
 > identifiers. See [Upgrading from Honeycomb Menu NG](docs/V2_MIGRATION.md) for
 > the resource and YAML changes. The previous stable release is [v1.10.0](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases/tag/v1.10.0).
+
+[JTS artwork and product identity](docs/BRANDING.md)
 
 ## Responsive room controls
 
@@ -118,14 +125,14 @@ You need current Home Assistant, [custom:button-card](https://github.com/custom-
 and the entities you want to control. Install button-card and its JavaScript module
 resource first. Sonos features use HA's official Sonos integration.
 
-**HACS:** add `https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng` under Custom
+**HACS:** add `https://github.com/Jefferies-Tube-Solutions/jefferies-navigation` under Custom
 repositories, category **Dashboard**, then install. Select the intended version;
 a beta requires showing prereleases. The normal module resource is
-`/hacsfiles/honeycomb-menu-ng/jefferies-navigation.js`. Check Dashboard resources for
+`/hacsfiles/jefferies-navigation/jefferies-navigation.js`. Check Dashboard resources for
 one entry, type **JavaScript module**; avoid loading HACS and manual copies together.
 
 **Manual:** download the bundle from the intended
-[GitHub release](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/releases), place it
+[GitHub release](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/releases), place it
 at `/config/www/jefferies-navigation.js`, then register this resource
 (in the Dashboard resources UI, or under `lovelace:` in YAML-managed configuration):
 

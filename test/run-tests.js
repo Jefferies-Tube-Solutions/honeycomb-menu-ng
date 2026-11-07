@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
+const {readBrand, validateBrand} = require('../scripts/check-brand');
 const { JTS_N_COMPASS_PNG } = require('../src/brand/compass.generated.js');
 
 const navigation = require('../src/core/navigation-context.js');
@@ -601,18 +601,14 @@ function testSharedCompassBranding()
 
     const assetRoot = path.resolve(__dirname, '../assets');
     const master = fs.readFileSync(path.join(assetRoot, 'navigation-compass.png'));
-    // Pin the approved runtime derivative and its embedded bytes.
-    const masterSha256 = crypto
-        .createHash('sha256')
-        .update(master)
-        .digest('hex');
-
-    assert.strictEqual(
-        masterSha256,
-        '2b180433561d85e339e3a6efeebeb9b2d63e228fb5e52bd90431599d690a73a1'
-    );
+    const brand = readBrand();
+    validateBrand(brand);
+    assert.throws(() => validateBrand({...brand, hacs:{...brand.hacs,name:'Other product'}}), /Unexpected HACS name/);
+    assert.throws(() => validateBrand({...brand, artwork:{...brand.artwork,'assets/navigation-compass.png':'wrong'}}), /Unapproved artwork bytes/);
+    assert.throws(() => validateBrand({...brand, readme:brand.readme.replace('#gh-light-mode-only','')}), /README branding element/);
     assert.strictEqual(master.readUInt32BE(16), 192);
     assert.strictEqual(master.readUInt32BE(20), 192);
+    assert.strictEqual(master[25], 6, 'Runtime compass uses RGBA transparency');
 
     const embedded = Buffer.from(
         JTS_N_COMPASS_PNG.substring('data:image/png;base64,'.length),

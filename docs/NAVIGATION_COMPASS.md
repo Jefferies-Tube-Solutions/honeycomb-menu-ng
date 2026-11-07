@@ -70,6 +70,6 @@ normal build. `scripts/generate-compass-asset.js` generates the embedded derivat
 `src/cube-element.js` remains the single renderer and gesture/animation owner.
 The existing `src/core/version-label.js` remains the only version formatter.
 
-
-The embedded 192×192 PNG is a Lanczos-resampled derivative of the approved
-[Navigation icon](https://github.com/Jefferies-Tube-Solutions/jts-brand-system/blob/7826deae0ed3d681a902c9e85af7959408fe00d4/assets/products/jefferies-navigation/v1/JTS_Jefferies_Navigation_Icon.png).
+The embedded 192×192 PNG renders the round dial from the approved Draft 02
+Blender scene with a transparent background. The Home Assistant cell supplies
+the outer hexagonal frame. See [artwork provenance](BRANDING.md).
