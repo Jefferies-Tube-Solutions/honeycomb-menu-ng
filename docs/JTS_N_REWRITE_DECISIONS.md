@@ -93,3 +93,10 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 
 - Use the same top-level flow as JTS Tariff Engine: Mission Directive, System Registry, Commissioning, Operational Protocol, Verification, Fault Isolation and Recovery, Manuals, Operations Log and Approved artwork. Navigation retains its separately approved full product lockup and Captain’s Log link.
 - Existing technical prose, YAML, links and examples were retained. The Navigation branding check now enforces section order. Candidate: `63a41d5c255a7ab59116bc6ff1c47017d664d6a6`.
+
+### Stable release authorization
+
+- The owner reported testing v2 on the development Home Assistant instance and authorized stable publication. [Approval issue #171](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/issues/171).
+- The earlier CI exposed the stale mobile diagram-width assertion. The corrected diagram and browser test pass locally on both desktop and mobile. Exact beta candidate: `8814ee7481a95bf523b155889d1d4981b93dd445`; its production bundle is unchanged from the owner-tested runtime. [Beta CI](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/actions/runs/42357030031).
+- Stable candidate `00a8fb66bd2f3aa907105fa1883afd31aaa17b9c` is staged as [draft PR #172](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/pull/172). The stable bundle differs only in the guarded version metadata. The visible release note remains the single approved sentence.
+- Next gate: exact beta CI, guarded beta prepare/publish and independent public tag/asset verification. Then exact stable checks, normal merge, exact master CI, and guarded stable prepare/publish. No release has been asserted from a workflow request alone.
