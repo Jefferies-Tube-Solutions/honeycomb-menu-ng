@@ -20,5 +20,14 @@
       "height": 411,
       "test_capture": "docs-kelvin-control.png"
     }
+  },
+  "readme_illustration": {
+    "path": "navigation-light-controls.png",
+    "sha256": "7199d29374f386175396af371618c2b7306041843e857413a84dc88760c1ad8d",
+    "sources": [
+      "navigation-light-menu.png",
+      "navigation-kelvin-palette.png"
+    ],
+    "layout": "Two unchanged screenshot panels with Deep Space #071521 framing and captions"
   }
 }

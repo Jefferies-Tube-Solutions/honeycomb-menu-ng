@@ -10,7 +10,7 @@ const readme=fs.readFileSync('README.md','utf8');
 const visual=readme.split('<!-- layout-diagram:start -->')[1].split('<!-- layout-diagram:end -->')[0];
 assert.ok(visual.includes('](docs/assets/layout-slots.svg)') && !visual.includes('```'));
 const svg=fs.readFileSync('docs/assets/layout-slots.svg','utf8');
-assert.match(svg,/viewBox="0 0 520 490"/);assert.match(svg,/aria-labelledby="title description"/);
+assert.match(svg,/viewBox="0 0 700 640"/);assert.match(svg,/aria-labelledby="title description"/);
 const svgCells=[...svg.matchAll(/data-slot="(\d+)" data-x="([\d.]+)" data-y="([\d.]+)"/g)];
 assert.deepEqual(svgCells.map(match=>Number(match[1])),Array.from({length:19},(_,i)=>i));
 for(const [,slot,x,y] of svgCells){

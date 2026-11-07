@@ -408,8 +408,7 @@ cell width. Control has no Hub `items` list or item-level dynamic allocation.
 The **Light menu** (left) shows brightness and presets. The **White palette**
 (right) shows the twelve Kelvin swatches for a tunable-white light.
 
-<img src="docs/assets/screenshots/navigation-light-menu.png" width="222" alt="Light menu with brightness and preset controls">
-<img src="docs/assets/screenshots/navigation-kelvin-palette.png" width="354" alt="Light White palette with all twelve Kelvin swatches">
+![Jefferies Navigation Light menu and all twelve White palette swatches on Deep Space](docs/assets/screenshots/navigation-light-controls.png)
 
 [Navigation capture provenance](docs/assets/screenshots/navigation-light-provenance.json)
 · [Historical v1.8.1 capture provenance](docs/assets/screenshots/stable-provenance.json).
