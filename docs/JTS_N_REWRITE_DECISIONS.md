@@ -70,3 +70,8 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 
 - Installed the final `d7ecfa61b4be4752379b1f2b761d730d3a055ae3` development build on the same server and verified the served commit and file hashes. The exact hosted bytes passed the synthetic desktop and mobile Compass/Info checks. The live browser check was completed on the preceding build, which differs only in the release publisher and its test. The subsequent live reload was blocked when Edge automation again lost input access.
 - [Final exact-head CI](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/actions/runs/42344710023). The prerelease remains unpublished. When the matching push and PR checks are green, resume the guarded manual workflow with the single-sentence note in `RELEASE_NOTES.md`.
+
+### Public dashboard card names
+
+- Use `custom:navigation-hub` and `custom:navigation-control` for v2. These replace the interim `custom:jts-n-hub` and `custom:jts-n-control` names in the candidate and on the existing test dashboard.
+- Keep this a clean cutover. Install a matching build, then save both new card names in Home Assistant before validating and publishing. The previous candidate is superseded even if its CI passes.
