@@ -609,6 +609,8 @@ function testSharedCompassBranding()
     const withExtraLogo = brand.readme.replace('# Jefferies Navigation for Home Assistant',
         '![Extra logo](assets/navigation-compass.png)\n\n# Jefferies Navigation for Home Assistant');
     assert.throws(() => validateBrand({...brand, readme:withExtraLogo}), /README header/);
+    const wrongSection = brand.readme.replace('## Commissioning', '## Installation');
+    assert.throws(() => validateBrand({...brand, readme:wrongSection}), /JTS product section order/);
     const missingLog = brand.readme.replace('docs/CAPTAINS_LOG.md', 'docs/NG_RUNTIME.md');
     assert.throws(() => validateBrand({...brand, readme:missingLog}), /README must link the Captain/);
     const copiedHistory = brand.readme + '\n### v1.8.0-beta.7: historical release notes\n';

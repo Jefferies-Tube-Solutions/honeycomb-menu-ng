@@ -57,6 +57,12 @@ function validateBrand(brand) {
         `  <img src="${deepSpaceLockup}#gh-light-mode-only" alt="Jefferies Navigation full logo with Deep Space text" width="760">`,
         '</p>'
     ].join('\n'), 'README header must use only the approved theme-specific Navigation lockups below the status badge');
+    const sections = [
+        'Mission Directive', 'System Registry', 'Commissioning', 'Operational Protocol',
+        'Verification', 'Fault Isolation and Recovery', 'Manuals', 'Operations Log', 'Approved artwork'
+    ];
+    const actualSections = [...brand.readme.matchAll(/^## (.+)$/gm)].map(match => match[1].trim());
+    assert.deepEqual(actualSections, sections, 'README must follow the JTS product section order');
     for (const type of ['navigation-hub', 'navigation-control']) {
         assert.match(brand.readme, new RegExp('^type: custom:' + type + '$', 'm'),
             'README example must use custom:' + type);
