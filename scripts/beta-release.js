@@ -150,7 +150,7 @@ async function publish(io, expected, output, env, artifact) {
     branchHead(io, expected);
     io.api('git/refs','POST',{ref:`refs/tags/${expected.tag}`,sha:expected.commit});
     verifyTag(io, expected);
-    const notes = `${env.APPROVED_NOTES.trim()}\n\nTested branch: \`${expected.branch}\`; commit: \`${expected.commit}\`.\nBundle SHA-256: \`${expected.sha256}\` (${expected.bytes} bytes).\n\nThis is a beta. An unmerged branch does not require promotion to master. Owner real Home Assistant testing and explicit approval are required before merge or stable publication.\n`;
+    const notes = env.APPROVED_NOTES.trim() + "\n";
     const notesFile = path.join(output,'release-notes.md');fs.writeFileSync(notesFile,notes);
     io.gh(['release','create',expected.tag,'--verify-tag','--target',expected.commit,'--draft','--prerelease','--latest=false',
         '--title',JSON.parse(fs.readFileSync('release.json')).title,'--notes-file',notesFile,...ASSETS.map(name=>path.join(output,name))]);

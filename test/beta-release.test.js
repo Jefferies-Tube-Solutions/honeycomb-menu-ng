@@ -97,7 +97,11 @@ for(const branch of ['feature/synthetic','fix/synthetic','restart/v1.5.1','maint
         assert.ok(!f.calls.some(c=>String(c[1]).includes('branches/master')));
     });
 test('open PR requires its exact green CI, and download verification precedes public publication',async t=>{
-    const f=fixture(t);await publish(f.io,f.expected,f.output,f.env,ARTIFACT);
+    const f=fixture(t);
+    const notice='Jefferies Navigation 2.0 introduces breaking changes and requires reconfiguration in Home Assistant.';
+    await publish(f.io,f.expected,f.output,{...f.env,APPROVED_NOTES:'  '+notice+'\n'},ARTIFACT);
+    const create=f.calls.find(call=>call[0]==='gh'&&call[2]==='create');
+    assert.equal(fs.readFileSync(create[create.indexOf('--notes-file')+1],'utf8'),notice+'\n');
     assert.equal(f.expected.ci.pullRequests[0].number,91);
     assert.ok(f.calls.findIndex(c=>c[0]==='PATCH')>f.calls.findIndex(c=>c[0]==='gh'&&c[2]==='download'));
     assert.ok(f.calls.some(c=>c[0]==='list'&&c[1].includes('event=pull_request')));
