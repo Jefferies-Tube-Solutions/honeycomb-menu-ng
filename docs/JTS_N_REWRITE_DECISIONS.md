@@ -47,3 +47,9 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 
 - The [pull request build](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/actions/runs/42300758884) and [push build](https://github.com/Jefferies-Tube-Solutions/honeycomb-menu-ng/actions/runs/42300731558) both finished green for `e1747ddf0fa6645565c64d2815d53732a66517ec`. Both passed the build and workflow-lint jobs, including Ubuntu tests, browser regressions, documentation and reproducibility.
 - The beta has not been tagged or released. The remaining gate is acceptance in the authenticated Home Assistant dashboard on the development instance. After acceptance, use `release.yml` on `feature/jefferies-navigation-v2` with the same full SHA and tag `v2.0.0-beta.1`: verify first, then publish. Preserve the stable release and existing retention policy.
+
+### 2026-11-07 dashboard and Compass correction
+
+- Reuse the existing Honeycomb NG Test dashboard at its current URL. This supersedes the separate-dashboard decision. Preserve the layout, entities, actions and other cards. Keep a local backup before saving the converted dashboard. The live dashboard config and identifiers stay out of GitHub.
+- Use the round compass dial from approved Draft 02 for the in-card graphic. Keep the approved full hexagonal brand artwork for standalone branding. The card renderer already supplies the hexagonal frame.
+- The previous development installation copied and verified static assets. It did not register the resource or migrate the live dashboard. Those steps remain separate acceptance gates.
