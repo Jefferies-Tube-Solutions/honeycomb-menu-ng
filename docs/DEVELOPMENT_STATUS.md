@@ -1,4 +1,8 @@
-# Jefferies Navigation v2.0.0-beta.1
+# Jefferies Navigation v2.0.0-beta.2 candidate
+
+The display-name update is based on the published v2.0.0-beta.1. The new
+Marketplace manifest needs its own tested beta before stable promotion.
+The release candidate remains unpublished.
 
 The rewrite is based on v1.10.0 stable, master commit
 `25291186b07bfee81b8877fe731e00a417d56c12` (PR #169). The preceding promotion

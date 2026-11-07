@@ -31,7 +31,7 @@ function readBrand() {
 function validateBrand(brand) {
     assert.equal(brand.package.name, 'jefferies-navigation', 'Unexpected package identity');
     assert.equal(brand.package.repository.url, 'git+https://github.com/' + repository + '.git', 'Unexpected repository identity');
-    assert.equal(brand.hacs.name, 'Jefferies Navigation', 'Unexpected HACS name');
+    assert.equal(brand.hacs.name, 'JTS - Jefferies Navigation', 'Unexpected HACS name');
     assert.equal(brand.hacs.filename, 'jefferies-navigation.js', 'Unexpected HACS bundle name');
     const title = 'Jefferies Navigation v' + brand.package.version;
     assert.ok(brand.release.title === title || brand.release.title.startsWith(title + ' — '), 'Unexpected release identity');

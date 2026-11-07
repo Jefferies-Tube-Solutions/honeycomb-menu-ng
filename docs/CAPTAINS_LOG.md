@@ -12,6 +12,11 @@ implementation changes between releases.
 - [All tags](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/tags)
 - [Complete original Honeycomb Menu NG v1 notes](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/blob/25291186b07bfee81b8877fe731e00a417d56c12/RELEASE_NOTES.md)
 
+## Jefferies Navigation v2.0.0-beta.2
+
+- Home Assistant Marketplace display name is now **JTS - Jefferies Navigation**.
+- The README explains how to refresh stale Marketplace repository information.
+
 ## Jefferies Navigation v2.0.0-beta.1
 
 - Jefferies Navigation (JTS-N) succeeds Honeycomb Menu NG for Home Assistant.

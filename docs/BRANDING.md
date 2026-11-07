@@ -4,7 +4,9 @@ Jefferies Navigation (JTS-N) uses its approved full product lockup in the public
 README and the round Navigation compass in Home Assistant. The public repository
 slug is `Jefferies-Tube-Solutions/jefferies-navigation`. Historical release
 references and the original author's GPL attribution retain their original
-identity.
+identity. Home Assistant Marketplace displays **JTS - Jefferies Navigation**
+from the package manifest. The product artwork is shown in the README; the
+Dashboard listing uses Marketplace's category icon.
 
 Follow JTS Brand System v1.1.0 for theme variants, documentation, Home Assistant
 applicability and release status. The owner approved a product-specific README
