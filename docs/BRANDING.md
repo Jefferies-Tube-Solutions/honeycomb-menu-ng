@@ -2,8 +2,7 @@
 
 Jefferies Navigation (JTS-N) uses the JTS publisher identity in its public README
 and the Navigation compass in Home Assistant. The public repository slug is
-`Jefferies-Tube-Solutions/jefferies-navigation`. During the rename, GitHub
-workflows use the repository that started the run. Historical release references
+`Jefferies-Tube-Solutions/jefferies-navigation`. Historical release references
 and the original author's GPL attribution retain their original identity.
 
 Follow the JTS Brand System v1.1.0 policies for README hierarchy and theme
