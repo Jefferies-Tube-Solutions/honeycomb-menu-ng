@@ -1,41 +1,23 @@
-# v1.10.0 stable promotion from owner-accepted beta.10
+# Jefferies Navigation v2.0.0-beta.1
 
-Branch: release/v1.10.0-stable, directly from public beta.10
-`a54cd007fff030d14d89872c4026b92cf0184405`. Owner installed/tested that beta in
-real HA and explicitly authorized stable merge/publication in #163, comment
-6598062637. No additional general approval is needed. Do not repeat audit #154.
+The rewrite is based on v1.10.0 stable, master commit
+`25291186b07bfee81b8877fe731e00a417d56c12` (PR #169). The preceding promotion
+and owner acceptance are recorded in [the v1.10.0 release checklist](V1_10_STABLE_RELEASE.md)
+and issue #163. Previous release history remains available at the original tags.
 
-## Scope and source contract
+Feature branch: `feature/jefferies-navigation-v2`. The public names, resource
+and YAML changes are listed in [V2_MIGRATION.md](V2_MIGRATION.md). The compass
+is a round dial rendered from the approved Draft 02 scene. The shared cell draws
+the outer hexagon. The [branding gate](BRANDING.md) pins the runtime dial, public
+publisher artwork and product identity. The shared renderer, positioning
+engine, action registry, module boundaries and XY Pad teardown stay in place.
 
-Single cumulative promotion PR to master. Only version/release metadata, approval
-manifest, necessary promotion tests and documentation may change. Source, assets,
-HACS filename, dependencies and build semantics remain approved beta.10. Bundle
-may differ only in banner and two canonical build-info version literals. Manifest
-pins beta.10 source/src tree, public SHA-256 and size. Preserve XY safety, Beam,
-Climate, Sonos, Charger, Info, shared Bee, approved placement/sizing and YAML.
+Run `npm ci`, `npm test`, `NODE_OPTIONS=--openssl-legacy-provider npm run build`,
+`node scripts/check-beta.js` and `node scripts/check-hacs-package.js`. CI runs
+the Chromium and documentation regression matrix. See the feature branch
+checks for results tied to its commit.
 
-Audit is complete; [report](ARCHITECTURE_AUDIT_154.md) is retained here from docs-only
-#164. Its blocker was fixed/published in beta.10 (#168); optional #165–#167 stay
-deferred. Do not merge historical beta PRs individually or begin v1.11/Car.
-
-## Execution checkpoint — publication not yet complete
-
-Read [stable checklist](V1_10_STABLE_RELEASE.md) and [guarded procedure](RELEASING.md).
-Next: finish local source/artifact/docs checks, commit/push this branch, create the
-single PR, require exact-head push/PR full CI and official HACS success. Then
-merge normally, verify actual master/source/normalized bundle and await full
-exact-master CI. Dispatch stable-release.yml first publish=false then publish=true
-using the same full green master SHA. Independently verify public latest stable,
-assets/checksums/provenance/HACS and preserved history before reporting completion.
-
-RELEASE_RETENTION_ENABLED must remain explicitly false. The existing stable
-publisher checks it and forces retention dry-run only. Never query/change the
-inaccessible Variables API, bypass a failed gate, force refs or delete old tags,
-assets, releases, drafts or branches. No production HA commands/access.
-
-Local/remote gate results and final source/CI/release details will be recorded in
-#163 and the final permanent handoff after publication. Evidence outside Git:
-/workspace/build-output/stable110. Do not infer completion from a prepared PR,
-master merge, dispatch or this checkpoint. Keep exact candidate/master fixed
-through validation/publication. Put later handoff-only updates on a separate
-branch so the released master SHA stays pinned.
+Use the separate PAHA02-DEV dashboard for real Home Assistant verification.
+Publication uses the existing guarded manual beta workflow on the exact green
+feature-branch SHA, with a verification-only dispatch before publication. Keep
+release retention disabled and keep v1 stable as the default branch.
