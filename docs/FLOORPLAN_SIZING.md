@@ -17,7 +17,7 @@ are needed only for aspect ratio/cropping, not the cube-size baseline.
 type: picture-elements
 image: /local/floorplan.png
 elements:
-  - type: custom:jts-n-hub
+  - type: custom:navigation-hub
     size: auto
     auto_reference_width: 1500
     logo: auto
@@ -32,7 +32,7 @@ elements:
         entity: media_player.player_a
         favorites_sensor: sensor.favorites_a
         name: Player A
-  - type: custom:jts-n-control
+  - type: custom:navigation-control
     module: light
     entity: light.zone_b
     size: auto

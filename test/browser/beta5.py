@@ -23,7 +23,7 @@ FLOORPLAN='''async(config)=>{
  const image=imgHost.shadowRoot.querySelector('img');window.floorImage=image;
  image.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400"><rect width="640" height="400" fill="#30343a"/><path d="M0 200H640M320 0V400M64 40H576V360H64Z" stroke="#aaa" stroke-width="3" fill="none"/></svg>');
  window.addOverlay=(config,left='50%',top='50%')=>{
-  const el=document.createElement((config.type || 'jts-n-hub').replace('custom:',''));
+  const el=document.createElement((config.type || 'navigation-hub').replace('custom:',''));
   el.style.cssText=`position:absolute;left:${left};top:${top};transform:translate(-50%,-50%)`;
   if(config.style)Object.assign(el.style,config.style);el.setConfig(config);root.append(el);return el;
  };
@@ -35,7 +35,7 @@ class Beta5(Cubes):
   config={'size':'auto','auto_reference_width':640,'logo':'auto','items':[{'type':'light','entity':'light.zone_a'},{'type':'media','entity':'media_player.player_a'}]}
   config.update(options or {});self.page.evaluate(FLOORPLAN,config)
   
-  if config.get('type')!='custom:jts-n-control':self.page.wait_for_function('hub._hubMenu?.shadowRoot.querySelector("#navigation-cells")')
+  if config.get('type')!='custom:navigation-control':self.page.wait_for_function('hub._hubMenu?.shadowRoot.querySelector("#navigation-cells")')
   self.settle()
  def measured(self):
   return self.page.evaluate('''()=>{const m=hub._menuContext.scene;return {size:hub.size,menu:m.sizes.item,center:m._anchorX,y:m._anchorY,stack:hub._menuContext.stack.length,width:floorImage.getBoundingClientRect().width,translate:hub.style.translate}}''')
@@ -98,9 +98,9 @@ class Beta5(Cubes):
   self.back();self.settle();self.assertEqual(self.measured()['stack'],2)
   self.back();self.back();self.settle();self.assertEqual(self.measured()['stack'],0);self.assertAlmostEqual(self.measured()['menu'],41)
  def test_auto_control_and_no_image_fallback(self):
-  self.floor({'type':'custom:jts-n-control','module':'light','entity':'light.zone_a'});self.resize(320,200)
+  self.floor({'type':'custom:navigation-control','module':'light','entity':'light.zone_a'});self.resize(320,200)
   self.assertEqual(self.page.evaluate('hub.size'),41)
-  self.hold_input(self.page.locator('jts-n-control#anchor .interaction-surface') if self.page.locator('#anchor').count() else self.page.locator('hui-picture-elements-card jts-n-control .interaction-surface'))
+  self.hold_input(self.page.locator('navigation-control#anchor .interaction-surface') if self.page.locator('#anchor').count() else self.page.locator('hui-picture-elements-card navigation-control .interaction-surface'))
   self.settle();self.resize(480,300);self.assertEqual(self.page.evaluate('hub._autoSizedMenu.sizes.item'),61.5)
   self.page.evaluate("hub.remove();floor.remove();makeControl({size:'auto',auto_reference_width:640,module:'light',entity:'light.zone_a'})")
   self.assertEqual(self.page.evaluate('control.size'),82)
@@ -171,7 +171,7 @@ class Beta5(Cubes):
  def test_wave_many_cubes_bounded_animation_and_no_ha_polling(self):
   self.hub({'logo':False,'size':22,'items':[{'type':'generic','slot':i,'energy_wave':{'active':True,'available':True,'fault':False,'power_w':100},'tap_action':{'action':'none'}} for i in range(180)]})
   self.page.wait_for_timeout(150)
-  metrics=self.page.evaluate('''()=>{let cells=[...hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')];return {cells:cells.length,animations:cells.filter(c=>c.hasAttribute('energy-wave-running')).length,calls:calls.length}}''')
+  metrics=self.page.evaluate('''()=>{let cells=[...hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')];return {cells:cells.length,animations:cells.filter(c=>c.hasAttribute('energy-wave-running')).length,calls:calls.length}}''')
   self.assertEqual(metrics['cells'],180);self.assertGreater(metrics['animations'],0);self.assertLessEqual(metrics['animations'],24);self.assertEqual(metrics['calls'],0)
   if self.evidence:(self.evidence/f'{self.viewport["width"]}-wave-budget.json').write_text(json.dumps(metrics,indent=2))
  def test_logo_gradient_darkening_comparison_and_explicit_optout(self):

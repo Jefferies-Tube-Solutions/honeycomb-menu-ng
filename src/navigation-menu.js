@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import "./navigation-menu-item.js";
-import "./jts-n-control.js";
-import "./jts-n-hub.js";
+import "./navigation-control.js";
+import "./navigation-hub.js";
 import "./xy-pad.js";
 import "./info-cube.js";
 import { objectEvalTemplate, getTemplateOrValue, stringToBool, fireEvent, lovelace_view, provideHass, jts_n_menu_templates } from "./helpers.js";
@@ -277,7 +277,7 @@ window.addEventListener('blur', () => {
         if (context.scene) {
             context.scene._dragPointerActive = false;
             context.scene._dragPointerId = null;
-            context.scene.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control').forEach(item => item._cancelGesture());
+            context.scene.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control').forEach(item => item._cancelGesture());
         }
         notifyContext(context);
     }
@@ -298,7 +298,7 @@ document.body.addEventListener("ll-custom", e => {
     if (detail.jts_n_info) {
         const path=e.composedPath();
         const owner=path.find(node=>node && node._menuContext);
-        const source=path.find(node=>node && node.matches && node.matches('jts-n-menu-item,jts-n-control'));
+        const source=path.find(node=>node && node.matches && node.matches('jts-n-menu-item,navigation-control'));
         openInfo(owner ? owner._menuContext : manager,detail.jts_n_info,source);
         return;
     }
@@ -328,7 +328,7 @@ document.body.addEventListener("ll-custom", e => {
             const sourceItem = path.find(node =>
                 node &&
                 node.tagName &&
-                ['jts-n-menu-item','jts-n-control'].includes(node.tagName.toLowerCase())
+                ['jts-n-menu-item','navigation-control'].includes(node.tagName.toLowerCase())
             );
 
             if( sourceItem && typeof sourceItem.getBoundingClientRect === 'function' )
@@ -435,7 +435,7 @@ function openInfo(context, config, source = null)
     menu._clearIdleTimeout();
     menu._dragPointerActive=false;menu._dragPointerId=null;menu._dragHoverSlot=-1;
     menu.shadowRoot.querySelectorAll('#navigation-cells,jts-n-xy-pad').forEach(node=>{node.inert=true;});
-    menu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control,jts-n-xy-pad').forEach(item=>item._cancelGesture());
+    menu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control,jts-n-xy-pad').forEach(item=>item._cancelGesture());
     const topLayer=menu.hasAttribute('popover') && typeof menu.showPopover==='function' && menu.matches(':popover-open');
     if(topLayer){
         view.setAttribute('popover','manual');
@@ -750,11 +750,11 @@ class NavigationMenu extends LitElement
                 padding: 0;
             }
             jts-n-menu-item.center-item,
-            jts-n-control.center-item {
+            navigation-control.center-item {
                 z-index: 2;
             }
-            jts-n-control.center-item,
-            jts-n-control.ring-item {
+            navigation-control.center-item,
+            navigation-control.ring-item {
                 position: absolute;
                 width: var(--item-size);
                 pointer-events: all;
@@ -772,14 +772,14 @@ class NavigationMenu extends LitElement
                 filter: brightness(calc(var(--jts-n-center-brightness, 1.25) * 1.18));
             }
             jts-n-menu-item,
-            jts-n-control.ring-item,
+            navigation-control.ring-item,
             jts-n-xy-pad {
                 animation-duration: 0.5s;
                 animation-fill-mode: both;
                 animation-name: zoomIn;
             }
             :host([closing]) jts-n-menu-item,
-            :host([closing]) jts-n-control.ring-item,
+            :host([closing]) navigation-control.ring-item,
             :host([closing]) jts-n-xy-pad {
                 animation-name: zoomOut;
             }
@@ -788,7 +788,7 @@ class NavigationMenu extends LitElement
                 animation-name: bounceOut;
             }
             :host([no-animation]) jts-n-menu-item,
-            :host([no-animation]) jts-n-control.ring-item,
+            :host([no-animation]) navigation-control.ring-item,
             :host([no-animation]) jts-n-xy-pad {
                 animation: none !important;
                 animation-delay: 0ms !important;
@@ -836,13 +836,13 @@ class NavigationMenu extends LitElement
                         </defs>
                         <polygon fill=${'url(#'+this._originReference.id+')'} filter=${'url(#'+this._originReference.id+'-soft)'}></polygon>
                     </svg>
-                    <jts-n-control class="origin-reference" inert aria-hidden="true"
+                    <navigation-control class="origin-reference" inert aria-hidden="true"
                         .visualOnly=${true} .config=${this._originReference.config} .hass=${this.hass}>
-                    </jts-n-control>
+                    </navigation-control>
                 </div>` : ''}
             <div id="navigation-cells" class="navigation-cells">
                 ${this.config.persistent_center ? html`
-                    <jts-n-control
+                    <navigation-control
                         class="center-item persistent-center-item"
                         data-jts-n-id=${this.config.persistent_center._hub_item_id || ''}
                         style="
@@ -853,7 +853,7 @@ class NavigationMenu extends LitElement
                         .hass=${this.hass}
                         .config=${this.config.persistent_center}
                         .size=${this.sizes.item}>
-                    </jts-n-control>
+                    </navigation-control>
                 ` : (centerConfig ? html`
                     <jts-n-menu-item
                         class="center-item ${this._centerUseFilterFallback ? 'center-auto-style' : ''} ${this._dragHoverSlot === -2 ? 'drag-hover' : ''}"
@@ -913,7 +913,7 @@ class NavigationMenu extends LitElement
     set hass(value)
     {
         this._hass=value;
-        if (this.shadowRoot) this.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control,jts-n-xy-pad')
+        if (this.shadowRoot) this.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control,jts-n-xy-pad')
             .forEach(item=>{item.hass=value;});
         // Resolve caller colors before Info reads its source edge on this update.
         if (this._menuContext && this._menuContext.info) this._menuContext.info.hass=value;
@@ -1118,7 +1118,7 @@ class NavigationMenu extends LitElement
         document.removeEventListener('pointercancel', this._boundPointerUp, true);
 
         if (this.config.animate === false) { fireEvent(this,'jts-n-closing',{item:_item}); this.dispose(); fireEvent(this,'jts-n-closed',{item:_item}); return; }
-        const items = this.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control');
+        const items = this.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control');
         let ele = _item || items[items.length - 1];
 
         if( _item )
@@ -1580,7 +1580,7 @@ class NavigationMenu extends LitElement
 
         while( element && element !== this.shadowRoot )
         {
-            if( element.tagName && ['jts-n-menu-item','jts-n-control'].includes(element.tagName.toLowerCase()) )
+            if( element.tagName && ['jts-n-menu-item','navigation-control'].includes(element.tagName.toLowerCase()) )
                 return element;
 
             element = element.parentElement;

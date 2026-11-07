@@ -61,7 +61,7 @@ class RadioArtwork(Cubes):
   self.page.evaluate('hub.remove()')
   for mode in ['media','sonos']:
    self.page.evaluate("mode=>makeControl({module:mode,entity:'media_player.player_a',show_icon:false,styles:{card:[{'background-image':'url(/station-square.svg)'},{'background-size':'cover'}]}})",mode)
-   cube=self.page.locator('body > jts-n-control');box=cube.locator('.media-background-artwork');self.assertEqual(box.evaluate('e=>getComputedStyle(e).backgroundSize'),'contain');self.assertLess(box.bounding_box()['y']+box.bounding_box()['height'],cube.locator('.secondary').bounding_box()['y']);self.capture('custom-'+mode);self.page.evaluate('control.remove()')
+   cube=self.page.locator('body > navigation-control');box=cube.locator('.media-background-artwork');self.assertEqual(box.evaluate('e=>getComputedStyle(e).backgroundSize'),'contain');self.assertLess(box.bounding_box()['y']+box.bounding_box()['height'],cube.locator('.secondary').bounding_box()['y']);self.capture('custom-'+mode);self.page.evaluate('control.remove()')
   self.assertEqual(self.page.evaluate('calls.length'),0)
 
 def main():

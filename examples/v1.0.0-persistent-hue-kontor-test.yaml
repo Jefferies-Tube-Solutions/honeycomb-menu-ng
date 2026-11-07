@@ -8,7 +8,7 @@
 # 4. Closing the ring leaves the persistent center visible.
 # 5. External state changes are reflected by the wrapped center card.
 
-type: custom:jts-n-control
+type: custom:navigation-control
 entity: light.hue_kontor
 icon: mdi:lightbulb
 size: 82

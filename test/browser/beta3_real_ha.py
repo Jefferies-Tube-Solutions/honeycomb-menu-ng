@@ -15,14 +15,14 @@ class Beta3(Cubes):
   self.page.evaluate("pushState('light.zone_b','on',{brightness:190,rgb_color:[70,150,240],supported_color_modes:['hs']})")
   config={'size':'auto','auto_reference_width':1200,'logo':False,'collapsible':{'expanded_center':policy,'primary_slot':1,'mobile':True,'expanded_size':100,'idle_timeout':30000},'items':[{'type':'light','entity':'light.zone_a','slot':0},{'type':'light','entity':'light.zone_b','slot':2}]}
   self.page.evaluate(FLOORPLAN,config);self.page.wait_for_function('hub._hubMenu?.isConnected')
-  self.page.evaluate("()=>{floor.style.width=Math.min(innerWidth-30,900)+'px';imageHost.style.height=Math.min(innerWidth-30,900)*.625+'px';window.reference=addOverlay({type:'custom:jts-n-control',module:'light',entity:'light.zone_a',size:'auto',auto_reference_width:1200},'75%','65%');}")
+  self.page.evaluate("()=>{floor.style.width=Math.min(innerWidth-30,900)+'px';imageHost.style.height=Math.min(innerWidth-30,900)*.625+'px';window.reference=addOverlay({type:'custom:navigation-control',module:'light',entity:'light.zone_a',size:'auto',auto_reference_width:1200},'75%','65%');}")
   if wide_host:self.page.evaluate("hub.style.width='82px';floor.style.transform='translate(0px,0px)'")
   self.page.wait_for_timeout(150);self.settle()
  def measure(self):return self.page.evaluate("()=>({size:hub.size,menu:hub._hubMenu.sizes.item,anchor:hub.getBoundingClientRect().toJSON(),center:hub._hubMenu.shadowRoot.querySelector('.center-item').getBoundingClientRect().toJSON(),reference:reference.getBoundingClientRect().toJSON()})")
  def assert_collapsed(self):
   value=self.measure();self.assertAlmostEqual(value['center']['width'],value['reference']['width'],delta=.12)
   for axis,dimension in [('x','width'),('y','height')]:self.assertAlmostEqual(value['center'][axis]+value['center'][dimension]/2,value['anchor'][axis]+value['anchor'][dimension]/2,delta=.5)
-  self.assertEqual(self.page.locator('jts-n-menu :is(jts-n-menu-item,jts-n-control)').count(),1);self.assertFalse(self.page.locator('jts-n-menu').evaluate("e=>e.matches(':popover-open')"));return value
+  self.assertEqual(self.page.locator('jts-n-menu :is(jts-n-menu-item,navigation-control)').count(),1);self.assertFalse(self.page.locator('jts-n-menu').evaluate("e=>e.matches(':popover-open')"));return value
  def test_owner_1200_reference_both_policies_before_expand_after_Back(self):
   for policy in ['primary','compass']:
    self.setup_floor(policy,True);before=self.assert_collapsed();self.capture('collapsed-'+policy)
@@ -41,7 +41,7 @@ class Beta3(Cubes):
    self.page.set_viewport_size({'width':width,'height':height});self.page.evaluate("floor.style.width=Math.min(innerWidth-30,900)+'px';imageHost.style.height=Math.min(innerWidth-30,900)*.625+'px'");self.page.wait_for_timeout(150);self.settle()
    if width<=600:
     self.assertGreaterEqual(self.cell().bounding_box()['width'],44)
-    for cell in self.page.locator('jts-n-menu :is(jts-n-menu-item,jts-n-control)').all():
+    for cell in self.page.locator('jts-n-menu :is(jts-n-menu-item,navigation-control)').all():
      box=cell.bounding_box();self.assertGreaterEqual(box['x'],-1);self.assertGreaterEqual(box['y'],-1);self.assertLessEqual(box['x']+box['width'],width+1);self.assertLessEqual(box['y']+box['height'],height+1)
   self.page.clock.run_for(30100);self.settle();self.assert_collapsed();self.capture('collapsed-after-timeout');self.assertEqual(self.page.evaluate('calls.length'),0)
  def test_preview_multiple_hubs_and_removed_overlay_cleanup(self):
@@ -79,7 +79,7 @@ class Beta3(Cubes):
    const root=el.shadowRoot.querySelector('#root'),host=root.firstElementChild;host.attachShadow({mode:'open'}).innerHTML='<style>:host{display:block}.container{height:100%}img{display:block;height:100%;width:100%;object-fit:cover}</style><div class="container"><img id="image"></div>';
    view.append(el);const image=host.shadowRoot.querySelector('img');image.src=card.image;await image.decode();
    for(const [i,config]of [card.elements[0],{...card.elements[0],collapsible:false,style:{left:'75%',top:'65%'}}].entries()){
-    const cube=document.createElement('jts-n-hub');cube.classList.add('element');Object.assign(cube.style,config.style);cube.setConfig(config);root.append(cube);if(i===0)window.hub=cube;else window.normal=cube;
+    const cube=document.createElement('navigation-hub');cube.classList.add('element');Object.assign(cube.style,config.style);cube.setConfig(config);root.append(cube);if(i===0)window.hub=cube;else window.normal=cube;
    }
   }''',card)
   self.page.wait_for_function('hub._hubMenu?.isConnected && normal._hubMenu?.isConnected');self.page.wait_for_timeout(150);self.settle()

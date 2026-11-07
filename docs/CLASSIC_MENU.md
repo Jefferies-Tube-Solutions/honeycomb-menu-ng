@@ -15,7 +15,7 @@ For new room/device dashboards, start with the persistent Hub in the main [READM
 From v1.0.10, the root Jefferies Navigation `entity` is inherited throughout the menu tree.
 
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: light
 entity: light.zone_a
 size: 82

@@ -91,7 +91,7 @@ the pulse until valid, and never become untrusted CSS. For an existing measured
 sensor with normalized health attributes, this example changes only presentation:
 
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: generic
 entity: sensor.charging_power_a
 name: Power A

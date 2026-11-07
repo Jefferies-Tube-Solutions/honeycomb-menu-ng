@@ -9,7 +9,7 @@ const stable=require('../scripts/stable-release');
 const {assertPublication,assertAssets,assertRetained,context,verify,inventory,newDraft,filesFor,publish,digest}=stable;
 const {banner,withBanner}=require('../scripts/stable-approval');
 const SHA='a'.repeat(40),BETA='b'.repeat(40),TREE='c'.repeat(40),REPO='example/scene';
-const RAW=Buffer.from(' '.repeat(11000)+'\n"jts-n-hub";'),BUNDLE=Buffer.concat([Buffer.from(banner('1.7.1')),RAW]);
+const RAW=Buffer.from(' '.repeat(11000)+'\n"navigation-hub";'),BUNDLE=Buffer.concat([Buffer.from(banner('1.7.1')),RAW]);
 const ART={version:'1.7.1',tag:'v1.7.1',sha256:digest(BUNDLE),bytes:BUNDLE.length,filename:'jefferies-navigation.js'};
 const HACS={filename:ART.filename,content_in_root:true},PKG={version:ART.version,scripts:{test:'node test.js'}};
 const APPROVAL={version:ART.version,issue:`https://github.com/${REPO}/issues/102`,approved_beta:{tag:'v1.7.1-beta.8',commit:BETA,src_tree:TREE,sha256:digest(RAW),bytes:RAW.length},allowed_bundle_change:'version-banner-v1'};

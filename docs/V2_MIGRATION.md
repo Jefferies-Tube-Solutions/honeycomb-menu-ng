@@ -6,8 +6,8 @@ keys. Update the resource and YAML together. The examples in this branch use v2.
 | Honeycomb Menu NG v1 | Jefferies Navigation v2 |
 | --- | --- |
 | `honeycomb-menu-ng.js` | `jefferies-navigation.js` |
-| `custom:honeycomb-persistent-hub` | `custom:jts-n-hub` |
-| `custom:honeycomb-persistent-control` | `custom:jts-n-control` |
+| `custom:honeycomb-persistent-hub` | `custom:navigation-hub` |
+| `custom:honeycomb-persistent-control` | `custom:navigation-control` |
 | `honeycomb_menu` or `honeycomb_ng_menu` popup key | `jts_n_menu` |
 | `honeycomb_nested_menu` | `jts_n_nested_menu` |
 | `honeycomb_ng_info` event payload | `jts_n_info` |

@@ -11,7 +11,7 @@ from charger import charger
 
 class Beam(Geometry):
  configured_size=None
- def controls(self):return self.page.locator('jts-n-menu #navigation-cells > :is(jts-n-menu-item,jts-n-control)')
+ def controls(self):return self.page.locator('jts-n-menu #navigation-cells > :is(jts-n-menu-item,navigation-control)')
  def origin(self):return self.page.locator('jts-n-menu .origin-reference')
  def scene(self):return self.page.locator('jts-n-menu .origin-scene')
  def room(self,region='above',extra=None,items=None):

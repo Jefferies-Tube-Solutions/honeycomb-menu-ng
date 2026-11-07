@@ -42,7 +42,7 @@ electrical limits; confirm each charger's actual capabilities separately.
 ## Public API and shared presentation
 
 Use `type: charger` on a Hub item, or `module: charger` on a standalone
-`custom:jts-n-control`. The optional aggregate uses
+`custom:navigation-control`. The optional aggregate uses
 `type: charging-hub` (or standalone `module: charging-hub`) with a `chargers` list.
 It is an ordinary Hub item: use `slot: 0`, `logo: false` for the summary center.
 Other Light, Sonos, generic and future independent Car cubes retain their own slots.

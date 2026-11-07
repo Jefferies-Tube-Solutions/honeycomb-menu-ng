@@ -61,8 +61,8 @@ customElements.define('ha-icon',class extends HTMLElement{
 customElements.define('hui-error-card',class extends HTMLElement{setConfig(c){this.textContent=c.error}});
 document.addEventListener('hass-more-info',e=>moreInfo.push(e.detail.entityId));
 document.body.addEventListener('hass-action',e=>{const source=e.composedPath().find(n=>n.tagName==='BUTTON-CARD');const c=e.detail.config;const a=c[e.detail.action+'_action']||c.tap_action;if(!source||!a)return;if(a.action==='fire-dom-event')source.dispatchEvent(new CustomEvent('ll-custom',{detail:a,bubbles:true,composed:true}));else if(a.action==='perform-action'){const [d,s]=a.perform_action.split('.');hass.callService(d,s,a.data||{},a.target||{})}});
-window.makeHub=(config={})=>{const el=document.createElement('jts-n-hub');el.id='anchor';el.style.position='absolute';el.setConfig(config);el.style.left=(innerWidth/2-41)+'px';document.body.append(el);return window.hub=el};
-window.makeControl=(config={})=>{const el=document.createElement('jts-n-control');el.id='anchor';el.style.position='absolute';el.setConfig(config);el.style.left=(innerWidth/2-41)+'px';document.body.append(el);return window.control=el};
+window.makeHub=(config={})=>{const el=document.createElement('navigation-hub');el.id='anchor';el.style.position='absolute';el.setConfig(config);el.style.left=(innerWidth/2-41)+'px';document.body.append(el);return window.hub=el};
+window.makeControl=(config={})=>{const el=document.createElement('navigation-control');el.id='anchor';el.style.position='absolute';el.setConfig(config);el.style.left=(innerWidth/2-41)+'px';document.body.append(el);return window.control=el};
 </script>
 <script type="module">
 await import('/button-card.js');await customElements.whenDefined('button-card');await import('/bundle.js');window.ready=true;

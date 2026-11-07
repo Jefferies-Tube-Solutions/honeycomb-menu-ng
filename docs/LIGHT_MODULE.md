@@ -235,7 +235,7 @@ The persistent Light launcher:
 ## Full example
 
 ~~~yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Light A
 size: 82
 logo: auto
@@ -323,7 +323,7 @@ zoom. The existing recursive Color zoom is unchanged. No new YAML option or help
 is needed. [Complete synthetic Control example](../examples/v1.7/kelvin-light.yaml):
 
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: light
 entity: light.white_a
 ```

@@ -81,7 +81,7 @@ class Cubes(unittest.TestCase):
         if self.evidence:
             self.page.screenshot(path=str(self.evidence/f'{self.viewport["width"]}-{name}.png'))
     def controls(self):
-        return self.page.locator('jts-n-menu jts-n-menu-item, jts-n-menu jts-n-control')
+        return self.page.locator('jts-n-menu jts-n-menu-item, jts-n-menu navigation-control')
     def hold(self, locator):
         box=locator.bounding_box();self.page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2)
         self.page.mouse.down();self.page.wait_for_timeout(600);self.page.mouse.up()
@@ -131,7 +131,7 @@ class Cubes(unittest.TestCase):
     def test_issue78_hub_launchers_survive_repeated_light_navigation(self):
         self.issue78_hub()
         root_geometry=self.controls().evaluate_all('(els)=>els.map(el=>[el.offsetLeft,el.offsetTop,el.offsetWidth,el.offsetHeight])')
-        self.page.evaluate('''()=>{window.rootMenu=hub._hubMenu;window.rootCubes=[...rootMenu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')]}''')
+        self.page.evaluate('''()=>{window.rootMenu=hub._hubMenu;window.rootCubes=[...rootMenu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')]}''')
         for cycle in range(2):
             for slot,entity in [(1,'light.zone_a'),(3,'light.zone_b')]:
                 launcher=self.page.locator(f'jts-n-menu [data-jts-n-slot="{slot}"] .interaction-surface')
@@ -196,11 +196,11 @@ class Cubes(unittest.TestCase):
             self.back()
     def test_standalone_launcher_restores_after_close(self):
         self.page.evaluate('makeControl({module:"light",entity:"light.zone_a"})')
-        target=self.page.locator('body > jts-n-control .interaction-surface')
+        target=self.page.locator('body > navigation-control .interaction-surface')
         for cycle in range(2):
             self.hold_input(target)
             self.page.wait_for_function('view.querySelector("jts-n-menu")')
-            self.assertEqual(self.page.locator('body > jts-n-control').evaluate('(el)=>getComputedStyle(el).visibility'),'hidden')
+            self.assertEqual(self.page.locator('body > navigation-control').evaluate('(el)=>getComputedStyle(el).visibility'),'hidden')
             self.page.evaluate('ng.close()')
             self.page.wait_for_function('!view.querySelector("jts-n-menu")')
             self.assertTrue(target.is_visible())
@@ -361,7 +361,7 @@ class Cubes(unittest.TestCase):
         self.page.evaluate("pushState('device_tracker.vehicle_a','home')")
         self.settle();self.assertEqual(self.page.evaluate('hub._visibilityIndex.metrics.evaluations'),before)
         for condition in [{'condition':'xor'},{'condition':'state','entity':'device_tracker.vehicle_a'}]:
-            message=self.page.evaluate('''condition=>{try {const el=document.createElement('jts-n-hub');el.setConfig({items:[{type:'generic',visibility:[condition]}]});return null}catch(e){return e.message}}''',condition)
+            message=self.page.evaluate('''condition=>{try {const el=document.createElement('navigation-hub');el.setConfig({items:[{type:'generic',visibility:[condition]}]});return null}catch(e){return e.message}}''',condition)
             self.assertIn('items[0].visibility',message)
     def test_phase2_overflow_keeps_all_dependencies_and_all_hidden_hub_is_valid(self):
         self.page.evaluate('''()=>pushStates(Array.from({length:250},(_,i)=>['binary_sensor.item_'+i,'off']))''')
@@ -485,7 +485,7 @@ class Cubes(unittest.TestCase):
         item={'type':'light','entity':'light.zone_a','show_name':True,'name':'Light A','label':'Status','show_label':True,
               'colors':{'center':'#20262d','inner_border':'#2196f3','outer_border':'#34383d'},'border':{'inner_width':4,'outer_width':2}}
         self.hub({'logo':False,'items':[item]})
-        self.page.evaluate('item=>{makeControl({...item,type:"custom:jts-n-control",module:"light"});control.id="second";control.style.top="500px"}',item)
+        self.page.evaluate('item=>{makeControl({...item,type:"custom:navigation-control",module:"light"});control.id="second";control.style.top="500px"}',item)
         self.settle()
         values=self.page.evaluate('''()=>[hub._hubMenu.shadowRoot.querySelector('.center-item'),control].map(el=>({
             width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,
@@ -505,7 +505,7 @@ class Cubes(unittest.TestCase):
             # fractional scene origins otherwise add a screenshot edge row.
             self.page.evaluate("""()=>{const menu=hub._hubMenu;const r=menu.shadowRoot.querySelector('.center-item').getBoundingClientRect();menu.style.left=(parseFloat(menu.style.left)+Math.round(r.x)-r.x)+'px';menu.style.top=(parseFloat(menu.style.top)+Math.round(r.y)-r.y)+'px'}""")
             a=Image.open(io.BytesIO(self.page.locator('jts-n-menu .center-item').screenshot())).convert('RGB')
-            b=Image.open(io.BytesIO(self.page.locator('body > jts-n-control').screenshot())).convert('RGB')
+            b=Image.open(io.BytesIO(self.page.locator('body > navigation-control').screenshot())).convert('RGB')
             self.assertEqual(a.size,b.size)
             box=(10,10,a.width-10,a.height-10)
             difference=ImageChops.difference(a.crop(box),b.crop(box))
@@ -515,7 +515,7 @@ class Cubes(unittest.TestCase):
         self.hub({'logo':'auto','items':[{'type':'light','entity':'light.zone_a'},{'type':'sonos','entity':'media_player.player_a'}]})
         self.settle()
         self.assertEqual(self.controls().count(),3)
-        faces=self.page.evaluate('''()=>[...hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')].map(el=>({
+        faces=self.page.evaluate('''()=>[...hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')].map(el=>({
             width:el.getBoundingClientRect().width,points:el.shadowRoot.querySelector('.hex-outer').getAttribute('points'),
             fill:el.shadowRoot.querySelector('.hex-fill').getAttribute('fill'),outer:el.shadowRoot.querySelector('.hex-outer').getAttribute('fill')}))''')
         self.assertTrue(all(f['width']==82 and f['points'].startswith('50,0 ') and f['outer']=='#34383d' for f in faces))
@@ -543,7 +543,7 @@ class Cubes(unittest.TestCase):
     def zoom_open(self, standalone=False):
         if standalone:
             self.page.evaluate("makeControl({module:'light',entity:'light.zone_a'})")
-            target=self.page.locator('body > jts-n-control .interaction-surface')
+            target=self.page.locator('body > navigation-control .interaction-surface')
         else:
             self.hub({'logo':False,'items':[{'type':'light','entity':'light.zone_a'}]})
             target=self.page.locator('jts-n-menu .interaction-surface')
@@ -581,7 +581,7 @@ class Cubes(unittest.TestCase):
         self.assertIn('zoom',self.zoom_cell(10).get_attribute('aria-label'))
         self.zoom_cell(10).press('Enter');self.assertEqual(self.page.evaluate('calls.length'),1)
         self.zoom_cell(10).press('Escape');self.page.wait_for_function('!view.querySelector("jts-n-menu")')
-        self.hold_input(self.page.locator('body > jts-n-control .interaction-surface'))
+        self.hold_input(self.page.locator('body > navigation-control .interaction-surface'))
         self.page.wait_for_function('view.querySelector("jts-n-menu").buttons.filter(Boolean).length===6')
         self.zoom_tap(3);self.settle();self.assertEqual(self.zoom_palette(),original)
         target=self.zoom_cell(8)
@@ -593,7 +593,7 @@ class Cubes(unittest.TestCase):
         self.page.evaluate("([min,max])=>pushState('light.zone_a','on',{brightness:128,supported_color_modes:['color_temp'],min_color_temp_kelvin:min,max_color_temp_kelvin:max,color_temp_kelvin:3000})",[min_k,max_k])
         if standalone:
             self.page.evaluate("makeControl({module:'light',entity:'light.zone_a'})")
-            self.hold_input(self.page.locator('body > jts-n-control .interaction-surface'))
+            self.hold_input(self.page.locator('body > navigation-control .interaction-surface'))
         else:
             self.hub({'logo':False,'items':[{'type':'light','entity':'light.zone_a'}]})
             self.hold_input(self.page.locator('jts-n-menu .center-item .interaction-surface'))
@@ -663,11 +663,11 @@ class Cubes(unittest.TestCase):
         self.page.wait_for_timeout(550);self.assertEqual(self.kelvin_snapshot(),original);self.assertEqual(self.page.evaluate('calls.length'),0)
         self.zoom_cell(8).press('Escape');self.page.wait_for_function('!view.querySelector("jts-n-menu")')
         self.page.evaluate("pushState('light.zone_a','on',{supported_color_modes:['color_temp'],min_color_temp_kelvin:1800,max_color_temp_kelvin:7200})")
-        self.hold_input(self.page.locator('body > jts-n-control .interaction-surface'));self.settle();self.zoom_tap(3);self.settle()
+        self.hold_input(self.page.locator('body > navigation-control .interaction-surface'));self.settle();self.zoom_tap(3);self.settle()
         self.assertEqual((self.kelvin_palette()[0],self.kelvin_palette()[-1]),(1800,7200));self.capture('beta7-kelvin-reset-native-range')
         self.page.evaluate("pushState('light.zone_a','on',{supported_color_modes:['color_temp'],min_color_temp_kelvin:2990,max_color_temp_kelvin:3001})")
         self.zoom_cell(8).press('Escape');self.page.wait_for_function('!view.querySelector("jts-n-menu")')
-        self.hold_input(self.page.locator('body > jts-n-control .interaction-surface'));self.settle();self.zoom_tap(3);self.settle()
+        self.hold_input(self.page.locator('body > navigation-control .interaction-surface'));self.settle();self.zoom_tap(3);self.settle()
         self.assertIn('zoom limit',self.zoom_cell(8).get_attribute('aria-label'))
         self.zoom_cell(8).press('Shift+Enter');self.assertEqual(self.page.evaluate('calls.length'),0)
         self.zoom_cell(8).press('Escape');self.page.wait_for_function('!view.querySelector("jts-n-menu")')
@@ -930,7 +930,7 @@ class Cubes(unittest.TestCase):
             else:
                 item.pop('type');item['module']='sonos'
                 self.page.evaluate('config=>makeControl(config)',item)
-                target=self.page.locator('body > jts-n-control .interaction-surface')
+                target=self.page.locator('body > navigation-control .interaction-surface')
             self.hold_input(target)
             self.page.wait_for_function('view.querySelector("jts-n-menu").buttons.filter(Boolean).length===6')
             self.activate(self.sonos_slot(5).locator('.interaction-surface'))
@@ -987,7 +987,7 @@ class Cubes(unittest.TestCase):
         self.assertEqual(self.page.evaluate('moreInfo'),[]);self.assertEqual(self.page.evaluate('browseEvents'),0)
         self.page.evaluate('ng.disposeContext(hub._menuContext);hub.remove()')
         self.page.evaluate("makeControl({module:'generic',entity:'media_player.player_a',name:'Optional Browse',tap_action:{action:'navigate',navigation_path:'/media-browser/media_player.player_a'}})")
-        self.activate(self.page.locator('body > jts-n-control .interaction-surface'))
+        self.activate(self.page.locator('body > navigation-control .interaction-surface'))
         self.assertTrue(self.page.url.endswith('/media-browser/media_player/player_a') or self.page.url.endswith('/media-browser/media_player.player_a'))
         self.assertEqual(self.page.evaluate('browseEvents'),1)
     def test_beta2_registry_ws_failure_and_empty_discovery_are_distinct(self):
@@ -1359,7 +1359,7 @@ class Cubes(unittest.TestCase):
     def test_beta8_standalone_siblings_back_idle_and_late_discovery_restore_launcher(self):
         self.page.clock.install();self.sonos_setup()
         self.page.evaluate("()=>makeControl({module:'sonos',entity:'media_player.player_a',members:[{entity:'media_player.player_b'}]})")
-        self.hold_input(self.page.locator('body > jts-n-control .interaction-surface'))
+        self.hold_input(self.page.locator('body > navigation-control .interaction-surface'))
         self.page.evaluate('window.sonosContext=view.querySelector("jts-n-menu")._menuContext')
         for slot in [3,1,4,3,4,1]:
             self.activate(self.sonos_slot(slot).locator('.interaction-surface'))
@@ -1370,9 +1370,9 @@ class Cubes(unittest.TestCase):
         self.activate(self.sonos_slot(4).locator('.interaction-surface'))
         self.page.clock.fast_forward(8200);self.page.clock.run_for(200)
         self.page.wait_for_function('view.querySelectorAll("jts-n-menu").length===0')
-        self.assertEqual(self.page.locator('body > jts-n-control').evaluate('el=>getComputedStyle(el).visibility'),'visible')
+        self.assertEqual(self.page.locator('body > navigation-control').evaluate('el=>getComputedStyle(el).visibility'),'visible')
         self.page.evaluate("()=>{control.setConfig({module:'sonos',entity:'media_player.player_a'});window.discovery=[];hass.callWS=()=>new Promise(resolve=>discovery.push(resolve))}")
-        self.hold_input(self.page.locator('body > jts-n-control .interaction-surface'))
+        self.hold_input(self.page.locator('body > navigation-control .interaction-surface'))
         self.activate(self.sonos_slot(3).locator('.interaction-surface'))
         self.page.clock.fast_forward(8200);self.page.clock.run_for(200)
         self.page.evaluate("discovery[0]({entities:[{ei:'media_player.player_a',pl:'sonos'}]})")
@@ -1449,7 +1449,7 @@ class Cubes(unittest.TestCase):
         self.page.evaluate('''reference=>{
           const panel=document.createElement('div');panel.style.cssText='position:absolute;top:520px;left:20px;display:grid;grid-template-columns:120px 120px;gap:8px';
           for(const [title,config] of [['Light function',reference],['Sonos function',hub._hubMenu.shadowRoot.querySelector('[data-jts-n-slot="0"]').config]]){
-            const box=document.createElement('div');box.textContent=title;const cube=document.createElement('jts-n-control');cube.setConfig({...config,interactive:false});box.append(cube);panel.append(box);
+            const box=document.createElement('div');box.textContent=title;const cube=document.createElement('navigation-control');cube.setConfig({...config,interactive:false});box.append(cube);panel.append(box);
           }document.body.append(panel);
         }''',reference['config']);self.settle();self.capture('beta7-light-sonos-side-by-side')
 
@@ -1465,7 +1465,7 @@ class Cubes(unittest.TestCase):
                 for volume in ([0,.02,.42,1] if state=='playing' else [.42]):
                     self.page.evaluate("([state,volume])=>pushState('media_player.player_a',state,{...hass.states['media_player.player_a'].attributes,volume_level:volume})",[state,volume]);self.settle()
                     img=cube.locator('.station-artwork');img.wait_for(state='visible')
-                    self.page.wait_for_function('()=>[...document.querySelectorAll("jts-n-hub")].every(h=>!!h)')
+                    self.page.wait_for_function('()=>[...document.querySelectorAll("navigation-hub")].every(h=>!!h)')
                     details=img.evaluate('el=>({fit:getComputedStyle(el).objectFit,width:el.style.width,top:el.style.top,natural:[el.naturalWidth,el.naturalHeight],opacity:getComputedStyle(el).opacity})')
                     self.assertEqual(details['fit'],'contain');self.assertEqual(details['width'],'48%');self.assertEqual(details['opacity'],'1')
                     self.assertEqual(details['natural'],[160,80])
@@ -1573,7 +1573,7 @@ class Cubes(unittest.TestCase):
         self.page.wait_for_function('!hub._hubMenu.shadowRoot.querySelector(".center-item")._model.artwork')
         self.page.evaluate('ng.disposeContext(hub._menuContext);hub.remove()')
         self.page.evaluate("stationUpdate('playing',{group_members:['media_player.player_a'],media_content_id:'favorite_a'});makeControl({module:'sonos',entity:'media_player.player_a',favorites_sensor:'sensor.favorites'})")
-        self.page.locator('body > jts-n-control .station-artwork').wait_for(state='visible')
+        self.page.locator('body > navigation-control .station-artwork').wait_for(state='visible')
     def test_issue90_station_failed_image_and_unrelated_update(self):
         self.station_hub()
         self.page.evaluate('''()=>{window.stationRenders=0;const el=hub._hubMenu.shadowRoot.querySelector('.center-item');const original=el.render;el.render=function(){stationRenders++;return original.call(this)}}''')
@@ -1634,7 +1634,7 @@ class Cubes(unittest.TestCase):
         self.assertEqual(self.page.evaluate('calls.at(-1)[2].media_content_id'),'favorite_a')
     def test_standalone_media_menu_and_touch_cancel(self):
         self.page.evaluate('makeControl({module:"media",entity:"media_player.player_a"})')
-        target=self.page.locator('body > jts-n-control .interaction-surface')
+        target=self.page.locator('body > navigation-control .interaction-surface')
         target.dispatch_event('pointerdown',{'pointerId':55,'pointerType':'touch','clientX':190,'clientY':300,'button':0})
         target.dispatch_event('pointercancel',{'pointerId':55,'pointerType':'touch'})
         self.page.wait_for_timeout(550);self.assertEqual(self.page.evaluate('calls.length'),0)
@@ -1704,7 +1704,7 @@ class Cubes(unittest.TestCase):
         self.assertTrue(all(b[2]==30 for b in boxes));self.capture('fifty-items')
     def test_double_tap_keyboard_and_cancel_do_not_duplicate_actions(self):
         self.page.evaluate('makeControl({module:"generic",entity:"sensor.value_a",name:"Value A",tap_action:{action:"perform-action",perform_action:"test.tap"},double_tap_action:{action:"perform-action",perform_action:"test.double"}})')
-        target=self.page.locator('body > jts-n-control .interaction-surface')
+        target=self.page.locator('body > navigation-control .interaction-surface')
         target.dblclick();self.page.wait_for_timeout(350)
         self.assertEqual(self.page.evaluate('calls.map(c=>c[1])'),['double'])
         target.press('Enter');self.assertEqual(self.page.evaluate('calls.at(-1)[1]'),'tap')

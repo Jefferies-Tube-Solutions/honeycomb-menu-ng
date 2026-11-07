@@ -1,4 +1,4 @@
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Room A
 size: auto
 auto_reference_width: 1200

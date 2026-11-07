@@ -5,7 +5,7 @@ primary action; hold opens the full Hub. It automatically enlarges on a phone, t
 outside the floorplan image. Tap center to return, or wait 30 seconds without activity.
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 style: {left: 50%, top: 50%}
 collapsible: true
 items:

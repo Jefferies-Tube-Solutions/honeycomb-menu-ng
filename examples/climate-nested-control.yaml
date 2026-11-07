@@ -1,6 +1,6 @@
 # v1.10.0-beta.1 only. Standalone parent -> different Climate entity.
 # Replace both synthetic IDs with verified existing HA entities. Opening sends no command.
-type: custom:jts-n-control
+type: custom:navigation-control
 module: generic
 entity: sensor.value_a
 name: Parent A

@@ -63,14 +63,14 @@ class WaveColor(Cubes):
   self.page.evaluate("document.body.style.setProperty('--wave-accent','#00bfff')")
   for color,expected in [('blue','rgb(0, 0, 255)'),('var(--wave-accent, #22cc88)','rgb(0, 191, 255)'),('#00bfff80','rgba(0, 191, 255, 0.5)')]:
    self.page.evaluate('config=>makeControl(config)',{'module':'generic','name':'Synthetic wave','colors':{'inner_border':'#22cc88'},'energy_wave':{**WAVE,'color':color},'tap_action':{'action':'none'}})
-   c=self.page.locator('body > jts-n-control');self.page.wait_for_function('control.hasAttribute("energy-wave-running")');self.assertEqual(self.stroke(c),expected);self.page.evaluate('control.remove()')
+   c=self.page.locator('body > navigation-control');self.page.wait_for_function('control.hasAttribute("energy-wave-running")');self.assertEqual(self.stroke(c),expected);self.page.evaluate('control.remove()')
   # A CSS custom property cannot turn the color property into SVG paint.
   self.page.evaluate("document.body.style.setProperty('--wave-accent','url(https://example.org/paint.svg)')")
   self.page.evaluate('config=>makeControl(config)',{'module':'generic','energy_wave':{**WAVE,'color':'var(--wave-accent, #22cc88)'}});self.page.wait_for_timeout(50)
-  c=self.page.locator('body > jts-n-control');self.assertNotIn('url(',self.stroke(c));self.assertFalse(any('paint.svg' in url for url in requests));self.assertEqual(self.page.evaluate('calls.length'),0)
+  c=self.page.locator('body > navigation-control');self.assertNotIn('url(',self.stroke(c));self.assertFalse(any('paint.svg' in url for url in requests));self.assertEqual(self.page.evaluate('calls.length'),0)
  def test_invalid_literal_configuration_rejected_without_style_injection(self):
   for color in ['not-a-color','rgb(999, x, 2)','url(#paint)','#fff;opacity:1',None,True,{},'inherit']:
-   result=self.page.evaluate('config=>{const el=document.createElement("jts-n-control");try{el.setConfig(config);return "accepted"}catch(e){return e.message}}',{'module':'generic','energy_wave':{**WAVE,'color':color}})
+   result=self.page.evaluate('config=>{const el=document.createElement("navigation-control");try{el.setConfig(config);return "accepted"}catch(e){return e.message}}',{'module':'generic','energy_wave':{**WAVE,'color':color}})
    self.assertIn('energy_wave.color',result)
 
 def main():

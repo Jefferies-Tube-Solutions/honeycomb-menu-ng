@@ -20,7 +20,7 @@ class Info(Navigation):
     def dialog(self):return self.page.locator('jts-n-info-cube .surface')
     def snapshot(self):
         self.page.mouse.move(0,0);self.settle()
-        return self.page.evaluate('''()=>{const c=hub._menuContext,m=hub._hubMenu;return {config:JSON.stringify(c.currentConfig),stack:JSON.stringify(c.stack),navigation:c.navigation,anchor:[m._anchorX,m._anchorY],cells:[...m.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')].map(e=>{const r=e.getBoundingClientRect();return [e.config._hub_item_id,r.x,r.y,r.width]})}}''')
+        return self.page.evaluate('''()=>{const c=hub._menuContext,m=hub._hubMenu;return {config:JSON.stringify(c.currentConfig),stack:JSON.stringify(c.stack),navigation:c.navigation,anchor:[m._anchorX,m._anchorY],cells:[...m.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')].map(e=>{const r=e.getBoundingClientRect();return [e.config._hub_item_id,r.x,r.y,r.width]})}}''')
     def assert_safe(self):
         lines=self.page.locator('jts-n-info-cube').evaluate('''e=>{const g=e._geometry,l=e._layout;return [...e.shadowRoot.querySelectorAll('.info-line,.footer')].filter(t=>t.textContent).map(t=>{const b=t.getBBox();return {r:{x:b.x,y:b.y,width:b.width,height:b.height},g}});}''')
         for line in lines:
@@ -110,7 +110,7 @@ class Info(Navigation):
         self.page.wait_for_function('hub._menuContext.info._page===1');self.assert_safe();self.activate(self.dialog())
         self.assertEqual(self.page.locator('jts-n-info-cube').count(),0);self.assert_no_commands()
     def test_scaled_floorplan_empty_center_and_editor_cleanup(self):
-        config={'type':'custom:jts-n-hub','size':'auto','auto_reference_width':900,'logo':False,'items':[{'type':'generic','slot':1,'name':'Info','tap_action':{'action':'jts-n-info','info':{'text':'Scaled Info'}}}]}
+        config={'type':'custom:navigation-hub','size':'auto','auto_reference_width':900,'logo':False,'items':[{'type':'generic','slot':1,'name':'Info','tap_action':{'action':'jts-n-info','info':{'text':'Scaled Info'}}}]}
         self.page.evaluate(FLOORPLAN,config);self.page.evaluate('floor.style.width="450px";imageHost.style.height="300px"');self.page.wait_for_function('hub._hubMenu?.sizes.item===41');self.settle()
         self.open();self.assertAlmostEqual(self.page.evaluate('hub._menuContext.info._geometry.width'),81.57214,delta=.1);self.assert_safe()
         self.page.screenshot(path=str(self.evidence/f'{self.viewport["width"]}-info-auto41.png'))

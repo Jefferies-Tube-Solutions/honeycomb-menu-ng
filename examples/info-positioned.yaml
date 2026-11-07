@@ -1,5 +1,5 @@
 # Synthetic demonstration only. No physical charging commands.
-type: custom:jts-n-hub
+type: custom:navigation-hub
 size: 82
 logo: auto
 items:

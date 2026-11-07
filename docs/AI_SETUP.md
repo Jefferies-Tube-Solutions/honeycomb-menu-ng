@@ -195,7 +195,7 @@ Ask for actual IDs or omit optional features. Public examples must remain synthe
 Synthetic complete example; replace IDs with actual supplied entities:
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 logo: auto
 items:
   - type: light
@@ -216,9 +216,9 @@ the documented charging-hub descriptor, not an arbitrary root/menu.
 
 | Boundary | Keys and types |
 |---|---|
-| Hub root | `type: custom:jts-n-hub`; `name` string; `size` number (default 82 CSS px); `logo: auto/true/false` (default auto); `items` list; `auto_open` boolean (default true). Optional `menu.button_defaults` supplies menu button defaults. |
+| Hub root | `type: custom:navigation-hub`; `name` string; `size` number (default 82 CSS px); `logo: auto/true/false` (default auto); `items` list; `auto_open` boolean (default true). Optional `menu.button_defaults` supplies menu button defaults. |
 | Hub item | `type: light/sonos/media/generic` (legacy `hue` supported); optional explicit `module: light/media/sonos/generic`; `entity` literal ID; shared keys below; domain options below; `slot` integer 0–216; `slot_mode: hard/priority/soft`; `visibility` condition object/list; legacy `show` value/template. |
-| Control root | `type: custom:jts-n-control`; explicit `module`; `entity`; `size` (default 82); shared keys and domain options. No Hub `items`, `logo`, `visibility` or placement contract. |
+| Control root | `type: custom:navigation-control`; explicit `module`; `entity`; `size` (default 82); shared keys and domain options. No Hub `items`, `logo`, `visibility` or placement contract. |
 | Shared presentation | `name`, `label`, `icon` strings/templates; `show_name`, `show_label`, `show_icon` booleans/templates; `background`, `foreground`; `colors`; `border`; `styles`; `variables`; `custom_fields`; `interactive`; `off`; `active_color`; `show_brightness`, `show_volume`. |
 | Shared interaction | `tap_action`, `hold_action`, `double_tap_action` action objects; `hold_time` ms (default 500, minimum 250); `autoclose`; `audio`. Optional `menu` overrides the module menu; advanced Hub `persistent` overrides its compiled launcher. |
 | Light options | `presets.brightness: {entity, default?}`; `presets.kelvin: {entity, default?}`; `presets.color: {hue_entity, saturation_entity}`. See units and capability precedence below. |
@@ -246,7 +246,7 @@ replacing a held launcher's action while navigation is active.
 
 Implementation references: [shared compilation](../src/core/cube-config.js),
 [renderer/actions](../src/cube-element.js), [module registry](../src/modules/index.js),
-[Hub](../src/jts-n-hub.js). For advanced classic keys use the
+[Hub](../src/navigation-hub.js). For advanced classic keys use the
 [classic reference](CLASSIC_MENU.md), not guesses from other cards.
 
 ## Geometry, allocation and live updates
@@ -446,7 +446,7 @@ are the same examples; external device/service behavior still requires HA valida
 <!-- example:hub.yaml -->
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Hub A
 size: 82
 logo: auto
@@ -466,7 +466,7 @@ items:
 <!-- example:dynamic-hub.yaml -->
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Dynamic Hub A
 size: 82
 logo: false
@@ -515,7 +515,7 @@ items:
 <!-- example:control-light.yaml -->
 
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: light
 entity: light.zone_a
 name: Light A
@@ -537,7 +537,7 @@ presets:
 <!-- example:sonos.yaml -->
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Audio Hub A
 size: 82
 logo: false
@@ -564,7 +564,7 @@ items:
 ```yaml
 # Prerequisite: the real HA entity explicitly reports supported_color_modes: [onoff].
 # This is an HA state attribute, not a Jefferies Navigation configuration key.
-type: custom:jts-n-control
+type: custom:navigation-control
 module: light
 entity: light.switch_a
 name: Switch A
@@ -749,7 +749,7 @@ No `min_kelvin`, `zoom`, step or helper YAML keys are introduced. Use the standa
 
 <!-- example:kelvin-light.yaml -->
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: light
 entity: light.white_a
 ```

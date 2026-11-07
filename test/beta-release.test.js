@@ -9,7 +9,7 @@ const {validateArtifact} = require('../scripts/check-release');
 const {localBetaArtifact} = require('../scripts/check-beta');
 const {context,verify,assertUnused,assertAssets,filesFor,publish,backend,digest} = require('../scripts/beta-release');
 const SHA = 'a'.repeat(40), OTHER = 'b'.repeat(40), REPO = 'example/scene';
-const BUNDLE = Buffer.from(' '.repeat(11000)+'\n"jts-n-hub";');
+const BUNDLE = Buffer.from(' '.repeat(11000)+'\n"navigation-hub";');
 const ARTIFACT = {version:'1.8.0-beta.1',tag:'v1.8.0-beta.1',sha256:digest(BUNDLE),bytes:BUNDLE.length,filename:'jefferies-navigation.js'};
 const HACS = {filename:ARTIFACT.filename,content_in_root:true};
 function environment(branch='fix/synthetic') {

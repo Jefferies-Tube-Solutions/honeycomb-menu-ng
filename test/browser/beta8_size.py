@@ -20,7 +20,7 @@ def nested(depth):
 class Size(Geometry):
  configured_size=None
  def settle(self):
-  self.page.evaluate("""async()=>{await new Promise(requestAnimationFrame);const m=window.hub?._hubMenu;if(m){await m.updateComplete;await Promise.all([...m.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')].map(e=>e.updateComplete));await Promise.all(m.shadowRoot.getAnimations({subtree:true}).filter(a=>a.effect?.getComputedTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{})))}}""")
+  self.page.evaluate("""async()=>{await new Promise(requestAnimationFrame);const m=window.hub?._hubMenu;if(m){await m.updateComplete;await Promise.all([...m.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')].map(e=>e.updateComplete));await Promise.all(m.shadowRoot.getAnimations({subtree:true}).filter(a=>a.effect?.getComputedTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{})))}}""")
  def setup_room(self,size=None,expanded=None,debug=None):
   items=[{'type':'light','entity':'light.zone_a','slot':0},{'type':'light','entity':'light.zone_a','slot':2},{**self.sonos_item(),'slot':3},{'type':'climate','entity':'climate.room_a','slot':4},{**charger(1),'slot':5},{'type':'generic','entity':'sensor.value_a','slot':6,'icon':'mdi:circle','tap_action':{'action':'jts-n-open-nested','jts_n_nested_menu':nested(2)}}]
   extra={'collapsible':{'expanded_center':'compass','primary_slot':1,**({'expanded_size':expanded} if expanded is not None else {})},**({'size':size} if size is not None else {}),**({'size_debug':debug} if debug is not None else {})}
@@ -43,7 +43,7 @@ class Size(Geometry):
  def test_complete_size_matrix_all_modules(self):
   for policy,size,expanded,limit in MATRIX:
    print('MATRIX',self.viewport,policy,flush=True);self.setup_room(size,expanded,True);collapsed=self.box();self.assertLessEqual(collapsed['width'],82.15 if size in (None,'auto') else size+.15)
-   self.page.evaluate("limit=>{window.sizeOvershoots=[];const sample=()=>{if(hub?._hubExpanded)for(const e of hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')){const width=e.shadowRoot.querySelector('.hex-svg').getBoundingClientRect().width;if(width>limit+.15)sizeOvershoots.push(width)}window.sizeFrame=requestAnimationFrame(sample)};window.sizeFrame=requestAnimationFrame(sample)}",limit)
+   self.page.evaluate("limit=>{window.sizeOvershoots=[];const sample=()=>{if(hub?._hubExpanded)for(const e of hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')){const width=e.shadowRoot.querySelector('.hex-svg').getBoundingClientRect().width;if(width>limit+.15)sizeOvershoots.push(width)}window.sizeFrame=requestAnimationFrame(sample)};window.sizeFrame=requestAnimationFrame(sample)}",limit)
    self.measurements.append({'viewport':self.viewport,'policy':policy,'surface':'collapsed','limit':82 if size in (None,'auto') else size,'min':collapsed['width'],'max':collapsed['width'],'count':1})
    self.expand();self.page.wait_for_timeout(550);self.check('root-center-ring-Compass',limit,policy);self.assertEqual(self.state()['root']['region']['key'],'below');self.assert_fit(self.state()['root']['region']);root=self.boxes()
    self.cell(2).locator('.interaction-surface').hover();self.check('hover-no-overshoot',limit,policy);self.page.mouse.move(0,0)

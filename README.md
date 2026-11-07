@@ -44,7 +44,7 @@ and otherwise stays near the original floorplan anchor. Only configured cubes
 render. Tap its center to return. No extra sizing or positioning options are needed.
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 style: {left: 50%, top: 50%}
 collapsible: true
 items:
@@ -173,7 +173,7 @@ Add a Manual card and paste this complete [Hub example](examples/v1.7/hub.yaml).
 Replace the synthetic IDs with entities from HA Developer Tools → States.
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Hub A
 size: 82
 logo: auto
@@ -339,7 +339,7 @@ This complete [dynamic example](examples/v1.7/dynamic-hub.yaml) keeps a Light at
 center, prefers slot 2 for Person A when home, and uses free slots for other items:
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Dynamic Hub A
 size: 82
 logo: false
@@ -407,7 +407,7 @@ provide behavior. There is no separate Control visual engine.
 For a single device, use this [Control example with presets](examples/v1.7/control-light.yaml):
 
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: light
 entity: light.zone_a
 name: Light A

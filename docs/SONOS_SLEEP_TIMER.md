@@ -34,7 +34,7 @@ unused tag, owner authorization and every existing publisher safety gate.
 A complete minimal dashboard example (replace the synthetic entity with yours):
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 logo: false
 items:
   - type: sonos

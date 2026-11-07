@@ -23,7 +23,7 @@ SCENE='''async()=>{
  const root=shadow.querySelector('#root'),imageHost=root.firstElementChild;imageHost.attachShadow({mode:'open'}).innerHTML='<img id="image" style="display:block;width:100%;height:100%;object-fit:contain" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%27230%27%3E%3Crect width=%27600%27 height=%27230%27 fill=%27%23313f4c%27/%3E%3C/svg%3E">';await imageHost.shadowRoot.querySelector('img').decode();
  const hosts=[];
  for(let i=0;i<2;i++){
-  const h=document.createElement('jts-n-hub');h.style.cssText='position:absolute;left:'+(i?70:30)+'%;top:50%;transform:translate(-50%,-50%)';h.preview=preview;
+  const h=document.createElement('navigation-hub');h.style.cssText='position:absolute;left:'+(i?70:30)+'%;top:50%;transform:translate(-50%,-50%)';h.preview=preview;
   h.setConfig({size:82,logo:false,items:[{type:'light',entity:'light.zone_a',name:preview?'Preview':'Dashboard',show_name:true}]});root.append(h);hosts.push(h);trackHosts.push(h);
  }
  pane.hosts=hosts;return pane;
@@ -70,7 +70,7 @@ class Track3(Charger):
         self.assert_no_commands()
     def test_custom_media_background_is_contained_and_padded(self):
         self.page.evaluate('''()=>makeControl({module:'media',entity:'media_player.player_a',show_icon:false,styles:{card:[{'background-image':'url(/station-full-bleed.svg)'},{'background-size':'cover'}]}})''')
-        c=self.page.locator('body > jts-n-control');art=c.locator('.media-background-artwork');self.assertEqual(art.evaluate('e=>getComputedStyle(e).backgroundSize'),'contain')
+        c=self.page.locator('body > navigation-control');art=c.locator('.media-background-artwork');self.assertEqual(art.evaluate('e=>getComputedStyle(e).backgroundSize'),'contain')
         box=art.bounding_box();cell=c.bounding_box();self.assertGreater(box['x'],cell['x']+10);self.assertLess(box['x']+box['width'],cell['x']+cell['width']-10);self.assertLess(box['y']+box['height'],c.locator('.secondary').bounding_box()['y']);self.capture_scene('media-background-padding')
     def test_detached_view_reconnect_does_not_retain_or_duplicate_menus(self):
         self.ready_scene()
@@ -96,7 +96,7 @@ class Track3(Charger):
                 for key in ['dx','dy','width']:self.assertAlmostEqual(p[key],0,delta=.65,msg=str(p))
         self.capture_scene('scaled-preview');self.assert_no_commands()
     def test_standalone_control_dispose_keeps_other_hubs_and_global_close(self):
-        self.ready_scene();self.page.evaluate('''()=>{const c=document.createElement('jts-n-control');c.style.cssText='position:absolute;left:50%;top:50%';c.setConfig({module:'light',entity:'light.zone_a'});trackPreview.hosts[0].parentElement.append(c);window.trackControl=c;c._openMenu()}''')
+        self.ready_scene();self.page.evaluate('''()=>{const c=document.createElement('navigation-control');c.style.cssText='position:absolute;left:50%;top:50%';c.setConfig({module:'light',entity:'light.zone_a'});trackPreview.hosts[0].parentElement.append(c);window.trackControl=c;c._openMenu()}''')
         self.page.wait_for_function('trackControl._ownedMenuContext?.scene?.isConnected');self.assertEqual(self.page.locator('jts-n-menu').count(),5)
         self.page.evaluate('trackControl.remove()');self.assertEqual(self.page.locator('jts-n-menu').count(),4);self.assert_no_commands()
 

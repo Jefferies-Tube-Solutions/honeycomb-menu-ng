@@ -1,4 +1,4 @@
-type: custom:jts-n-hub
+type: custom:navigation-hub
 collapsible: true
 items:
   - type: light

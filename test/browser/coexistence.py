@@ -40,6 +40,9 @@ def main():
                         page.locator('honeycomb-menu honeycomb-menu-item').first.wait_for()
                     if 'ng' in order:
                         assert page.evaluate('window.jefferiesNavigation===ngAPI && jefferiesNavigation.apiVersion===2 && jefferiesNavigation.templates===ngTemplates && customElements.get("jts-n-menu")===ngElement')
+                        assert page.evaluate('''() => ['navigation-hub','navigation-control'].every(type =>
+                            customElements.get(type) && window.customCards.filter(card => card.type === type).length === 1)''')
+                        assert page.evaluate('!customElements.get("jts-n-hub") && !customElements.get("jts-n-control")')
                         page.evaluate("jefferiesNavigation.open({entity:'light.zone_a',animate:false,buttons:[{icon:'mdi:lightbulb',tap_action:{action:'more-info'}}]})")
                         page.locator('jts-n-menu jts-n-menu-item').first.wait_for()
                         target=page.locator('jts-n-menu jts-n-menu-item .interaction-surface').first

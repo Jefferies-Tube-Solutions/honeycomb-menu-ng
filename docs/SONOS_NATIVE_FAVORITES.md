@@ -32,7 +32,7 @@ Previous tagged releases retain their original cache support/documentation.
 [Complete Hub example](../examples/sonos-native-favorites.yaml):
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 logo: false
 size: 82
 items:
@@ -45,7 +45,7 @@ items:
 Standalone Control:
 
 ```yaml
-type: custom:jts-n-control
+type: custom:navigation-control
 module: sonos
 entity: media_player.player_a
 favorites_sensor: sensor.favorites_a

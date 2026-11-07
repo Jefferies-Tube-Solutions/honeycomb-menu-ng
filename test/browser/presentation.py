@@ -45,7 +45,7 @@ class Presentation(Cubes):
   self.page.evaluate("window.entries=Array.from({length:91},(_,i)=>['light.item_'+i,'on',{brightness:128,rgb_color:[255,128,0],supported_color_modes:['hs']}]);pushStates(entries)")
   self.hub({'logo':False,'items':[{'type':'light','entity':f'light.item_{i}'} for i in range(91)]});self.settle()
   result=self.page.evaluate('''async()=>{
-   const cells=[...hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')];
+   const cells=[...hub._hubMenu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')];
    const proto=Object.getPrototypeOf(customElements.get('jts-n-menu-item').prototype),render=proto.render;let renders=0;proto.render=function(){renders++;return render.call(this)};
    try{const start=performance.now();for(let i=0;i<1000;i++)pushState('sensor.unrelated',String(i));await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
     const unrelated=renders;pushState('light.item_0','off',{supported_color_modes:['hs']});await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);

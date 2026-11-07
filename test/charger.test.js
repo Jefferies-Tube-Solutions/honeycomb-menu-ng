@@ -36,7 +36,7 @@ const assigned=(charger='charger_1',car='vehicle_a',car_name='Vehicle A')=>({cha
 
 test('Charger public Hub/Control/aggregate API compiles fixed slots with inert navigation',()=>{
     const f=fixture();
-    for(const item of [f.item,{...f.item,type:'custom:jts-n-control',module:'charger'}]){
+    for(const item of [f.item,{...f.item,type:'custom:navigation-control',module:'charger'}]){
         validateCubeConfig(item);const cube=buildCubeConfig(item,f.hass,0,1);
         assert.equal(cube.mode,'charger');assert.equal(cube.face_mode,'cell');assert.equal(cube.tap_action.action,'jts-n-open-nested');
         assert.deepEqual(cube.menu.buttons.map(b=>[b.slot,b._charger_field]),[[1,'enabled'],[2,'permanent_lock'],[3,'session_energy'],[4,'vehicle'],[5,'current'],[6,'details']]);

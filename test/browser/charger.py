@@ -54,7 +54,7 @@ class Charger(Cubes):
             self.page.screenshot(path=str(self.evidence/f'{self.viewport["width"]}-{name}-focus.png'),clip={'x':x,'y':y,'width':right-x,'height':bottom-y})
     def settle(self):
         self.page.evaluate('''async()=>{await new Promise(r=>requestAnimationFrame(r));for(const menu of [hub._hubMenu].filter(Boolean)){
-          await menu.updateComplete;await Promise.all([...menu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control')].map(e=>e.updateComplete));
+          await menu.updateComplete;await Promise.all([...menu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control')].map(e=>e.updateComplete));
           await Promise.all(menu.shadowRoot.getAnimations({subtree:true}).filter(a=>a.effect?.getComputedTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{})));}}''')
     def cell(self,slot):
         return self.page.locator('jts-n-menu .center-item' if slot==0 else f'jts-n-menu [data-jts-n-slot="{slot-1}"]')
@@ -189,10 +189,10 @@ class Charger(Cubes):
         running=self.controls().evaluate_all('(els)=>els.filter(e=>e.hasAttribute("energy-wave-running")).length');self.assertLessEqual(running,24)
         self.page.evaluate('hub.remove()')
         for size,reference,width in [(60,None,900),(82,None,900),('auto',900,450)]:
-            config={'type':'custom:jts-n-control','module':'charger',**{k:v for k,v in charger().items() if k not in ('type','slot')},'size':size}
+            config={'type':'custom:navigation-control','module':'charger',**{k:v for k,v in charger().items() if k not in ('type','slot')},'size':size}
             if reference:config['auto_reference_width']=reference
             self.page.evaluate(FLOORPLAN,config);self.page.evaluate('w=>{floor.style.width=w+"px";imageHost.style.height=w*2/3+"px"}',width);self.page.wait_for_timeout(100)
-            control=self.page.locator('hui-picture-elements-card jts-n-control').last
+            control=self.page.locator('hui-picture-elements-card navigation-control').last
             self.assertAlmostEqual(control.bounding_box()['width'],41 if size=='auto' else size,delta=.1)
             control.locator('.interaction-surface').press('Enter');self.page.wait_for_function('hub._ownedMenuContext?.scene?.isConnected')
             self.assert_no_commands();self.page.evaluate('ng.close();hub.remove();floor.remove()');self.page.wait_for_timeout(300)

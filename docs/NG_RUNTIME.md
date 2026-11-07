@@ -2,7 +2,7 @@
 
 The runtime is available at `window.jefferiesNavigation`. It exposes
 `apiVersion === 2`, `version` and `commit`. Dashboard cards register
-`jts-n-hub` and `jts-n-control`. The popup, menu cell, Info Cube and XY Pad use
+`navigation-hub` and `navigation-control`. The popup, menu cell, Info Cube and XY Pad use
 the same `jts-n-` namespace.
 
 ```js

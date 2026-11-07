@@ -25,7 +25,7 @@ class CubeElement extends LitElement
 {
     static get is()
     {
-        return 'jts-n-control';
+        return 'navigation-control';
     }
 
     static get properties()
@@ -1186,7 +1186,7 @@ class CubeElement extends LitElement
         const showCompassSize=showCompassVersion && this._compassDebugEnabled();
         const versionFont=compass.versionFont();
         const external = this.config.custom_fields || (this.config.type &&
-            !['custom:button-card','custom:jts-n-control','custom:jts-n-hub'].includes(this.config.type));
+            !['custom:button-card','custom:navigation-control','custom:navigation-hub'].includes(this.config.type));
         this._externalContent = !!external;
         return html`<div class="persistent-center" style="--jts-n-persistent-size:${this.size}px;--jts-n-persistent-foreground:${m.foreground}">
             <svg class="hex-svg" viewBox="0 0 100 115.47" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -1251,7 +1251,7 @@ class CubeElement extends LitElement
         if(this._waveCleanup)energyWave.sync(this);
         const target = this.shadowRoot.querySelector('.external-content');
         if (target && !this._contentCard) {
-            const type=this.config.type && !['custom:jts-n-control','custom:jts-n-hub'].includes(this.config.type) ? this.config.type : 'custom:button-card';
+            const type=this.config.type && !['custom:navigation-control','custom:navigation-hub'].includes(this.config.type) ? this.config.type : 'custom:button-card';
             this._contentCard = createCard({...this.config,type,
                 tap_action:{action:'none'},hold_action:{action:'none'},double_tap_action:{action:'none'}});
             target.append(this._contentCard);

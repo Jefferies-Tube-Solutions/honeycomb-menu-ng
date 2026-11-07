@@ -650,7 +650,7 @@ function testArchitectureBoundaries()
     }
 
     const hubSource = fs.readFileSync(
-        path.resolve(__dirname, '../src/jts-n-hub.js'),
+        path.resolve(__dirname, '../src/navigation-hub.js'),
         'utf8'
     );
 

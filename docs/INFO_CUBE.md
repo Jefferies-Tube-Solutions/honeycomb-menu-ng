@@ -23,7 +23,7 @@ Info is a read-only overlay. It uses synthetic entities and mock plans in these 
 An ordinary Hub item or any module/menu button can use the same action:
 
 ```yaml
-type: custom:jts-n-hub
+type: custom:navigation-hub
 size: 82
 logo: auto
 items:

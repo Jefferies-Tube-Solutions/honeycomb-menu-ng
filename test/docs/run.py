@@ -95,13 +95,13 @@ def item(value,where):
     if 'border' in value: known(value['border'],{'inner_width','outer_width'},where)
 def card(config,where):
     assert isinstance(config,dict),where
-    if config['type']=='custom:jts-n-hub':
+    if config['type']=='custom:navigation-hub':
         if 'collapsible' in config:
             subprocess.run(['node','-e',"const c=JSON.parse(process.argv[1]);require('./src/core/collapsible-hub').settings(c.collapsible,c.size)",json.dumps(config)],check=True,cwd=ROOT)
         if 'size_debug' in config:assert type(config['size_debug']) is bool,where
         known(config,{'type','name','size','size_debug','logo','items','auto_open','menu','style','auto_reference_width','collapsible'},where)
         for i,value in enumerate(config['items']): item(value,f'{where} item {i}')
-    elif config['type']=='custom:jts-n-control':
+    elif config['type']=='custom:navigation-control':
         known(config,SHARED|SONOS|CHARGER|CLIMATE|{'type','module','size','style','auto_reference_width'},where)
         item({k:v for k,v in config.items() if k not in ('type','size','style','auto_reference_width')},where)
     elif config['type']=='button':
@@ -115,17 +115,17 @@ def card(config,where):
 def fragment(config,where):
     """Give reference fragments their documented context before checking contracts."""
     if isinstance(config,list):
-        if config and all(isinstance(v,dict) and v.get('type') in ('custom:jts-n-hub','custom:jts-n-control') for v in config):
+        if config and all(isinstance(v,dict) and v.get('type') in ('custom:navigation-hub','custom:navigation-control') for v in config):
             for i,value in enumerate(config):card(value,f'{where} picture element {i}')
             return None
         if all(isinstance(v,dict) and v.get('type') in ('light','sonos','media','generic') for v in config):
-            return {'type':'custom:jts-n-hub','items':config}
+            return {'type':'custom:navigation-hub','items':config}
         for value in config:known(value,SHARED|{'slot','slot_mode','position','active','show'},where)
     elif 'homeassistant' in config:
         assert config=={'homeassistant':{'packages':'packages'}},where
     elif 'type' in config:
         if config['type'] in ('light','sonos','media','generic','charger','charging-hub','climate'):
-            return {'type':'custom:jts-n-hub','items':[config]}
+            return {'type':'custom:navigation-hub','items':[config]}
         if config['type']=='state-icon':
             known(config,{'type','entity','style','tap_action','hold_action'},where)
             actions(config)
@@ -133,17 +133,17 @@ def fragment(config,where):
             known(config,{'type','image','elements'},where)
             for element in config['elements']:
 
-                if element.get('type') in ('custom:jts-n-hub','custom:jts-n-control'):card(element,where+' picture element')
+                if element.get('type') in ('custom:navigation-hub','custom:navigation-control'):card(element,where+' picture element')
                 else:known(element,{'type','entity','style','tap_action','hold_action'},where)
             actions(config)
         else:raise AssertionError(f'{where}: unrecognized card type')
     elif set(config)<={'presets'} or set(config)<=SONOS:
-        return {'type':'custom:jts-n-control','module':'light' if 'presets' in config else 'sonos',
+        return {'type':'custom:navigation-control','module':'light' if 'presets' in config else 'sonos',
                 'entity':'light.zone_a' if 'presets' in config else 'media_player.player_a',**config}
     elif 'collapsible' in config or 'size_debug' in config:
-        return {'type':'custom:jts-n-hub','items':[{'type':'light','entity':'light.zone_a','slot':0}],**config}
+        return {'type':'custom:navigation-hub','items':[{'type':'light','entity':'light.zone_a','slot':0}],**config}
     elif 'visibility' in config:
-        return {'type':'custom:jts-n-hub','items':[{'type':'generic','entity':'sensor.value_a',**config}]}
+        return {'type':'custom:navigation-hub','items':[{'type':'generic','entity':'sensor.value_a',**config}]}
     elif 'input_number' in config:
         for helper in config['input_number'].values():
             known(helper,{'name','min','max','step','initial'},where)
@@ -308,10 +308,10 @@ class Examples(BROWSER.Cubes):
         self.page.evaluate("()=>{hass.config={unit_system:{temperature:'°C'}};hass.services.climate={set_temperature:{},set_hvac_mode:{}};for(const entity of ['climate.room_a','climate.room_b'])pushState(entity,'heat',{supported_features:1,current_temperature:20.2,temperature:21,min_temp:7,max_temp:35,target_temp_step:.1,hvac_modes:['off','heat'],hvac_action:'heating'})}")
     def test_docs_climate_Hub_Control_and_exact_service(self):
         self.climate_seed();self.hub(load((ROOT/'examples/climate-hub.yaml').read_text()));self.assert_visible_unique_cells(2);self.activate(self.page.locator('jts-n-menu .center-item .interaction-surface'));self.settle();self.assertEqual(self.page.locator('jts-n-menu .center-item .primary').inner_text(),'20.2°C');self.capture('docs-climate-Hub');self.page.evaluate('hub.remove()')
-        self.page.evaluate('config=>makeControl(config)',load((ROOT/'examples/climate-control.yaml').read_text()));self.activate(self.page.locator('body > jts-n-control .interaction-surface'));self.settle();self.activate(self.page.locator('jts-n-menu [data-jts-n-slot="5"] .interaction-surface'));self.assertEqual(self.page.evaluate('calls.at(-1)'),['climate','set_temperature',{'temperature':21.1},{'entity_id':'climate.room_a'}]);self.capture('docs-climate-Control')
+        self.page.evaluate('config=>makeControl(config)',load((ROOT/'examples/climate-control.yaml').read_text()));self.activate(self.page.locator('body > navigation-control .interaction-surface'));self.settle();self.activate(self.page.locator('jts-n-menu [data-jts-n-slot="5"] .interaction-surface'));self.assertEqual(self.page.evaluate('calls.at(-1)'),['climate','set_temperature',{'temperature':21.1},{'entity_id':'climate.room_a'}]);self.capture('docs-climate-Control')
     def test_docs_climate_nested_entity_and_one_level_Back(self):
         self.climate_seed();self.hub(load((ROOT/'examples/climate-nested.yaml').read_text()));self.activate(self.page.locator('jts-n-menu .center-item .interaction-surface'));self.settle();self.activate(self.page.locator('jts-n-menu [data-jts-n-slot="0"] .interaction-surface'));self.settle();self.assertEqual(self.page.evaluate('hub._menuContext.currentConfig.entity'),'climate.room_b');self.assertEqual(self.page.evaluate('calls.length'),0);self.capture('docs-climate-nested');self.back();self.settle();self.assertEqual(self.page.evaluate('hub._menuContext.currentConfig.entity'),'sensor.value_a');self.back();self.settle();self.assertEqual(self.page.evaluate('hub._menuContext.stack.length'),0)
-        self.page.evaluate('hub.remove()');self.page.evaluate('config=>makeControl(config)',load((ROOT/'examples/climate-nested-control.yaml').read_text()));source=self.page.locator('body > jts-n-control');self.activate(source.locator('.interaction-surface'));self.settle();self.assertAlmostEqual(self.page.locator('jts-n-menu .center-item').bounding_box()['width'],82,delta=.05);self.assertEqual(self.page.locator('jts-n-menu .center-item .primary').inner_text(),'20.2°C');self.assertEqual(self.page.evaluate('calls.length'),0);self.activate(self.page.locator('jts-n-menu .center-item .interaction-surface'));self.page.wait_for_selector('jts-n-menu',state='detached');self.assertTrue(source.is_visible())
+        self.page.evaluate('hub.remove()');self.page.evaluate('config=>makeControl(config)',load((ROOT/'examples/climate-nested-control.yaml').read_text()));source=self.page.locator('body > navigation-control');self.activate(source.locator('.interaction-surface'));self.settle();self.assertAlmostEqual(self.page.locator('jts-n-menu .center-item').bounding_box()['width'],82,delta=.05);self.assertEqual(self.page.locator('jts-n-menu .center-item .primary').inner_text(),'20.2°C');self.assertEqual(self.page.evaluate('calls.length'),0);self.activate(self.page.locator('jts-n-menu .center-item .interaction-surface'));self.page.wait_for_selector('jts-n-menu',state='detached');self.assertTrue(source.is_visible())
     def test_docs_classic_popup(self):
         config=self.examples['classic-popup.yaml']
         self.page.evaluate('config=>{const el=document.createElement("button");el.textContent="Light A";el.style.cssText="position:absolute;left:120px;top:280px";el.addEventListener("click",()=>el.dispatchEvent(new CustomEvent("ll-custom",{detail:config.hold_action,bubbles:true,composed:true})));document.body.append(el);}',config)
@@ -354,7 +354,7 @@ def main():
             if file.name in ('V1_7_PHASE1.md','V1_7_PHASE2.md'):
                 continue  # Archived v1 examples are parsed but use the v1 schema.
             source=f'{file.name} YAML {index+1}'
-            if isinstance(config,dict) and config.get('type','').startswith(('custom:jts-n-','button')):
+            if isinstance(config,dict) and config.get('type','').startswith(('custom:navigation-','button')):
                 cards.append({'source':source,'config':config})
             else:
                 contextual=fragment(config,source)

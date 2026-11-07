@@ -15,7 +15,7 @@ function validateArtifact(pkg, release, hacs, bytes, {stable = false} = {}) {
     if (!prerelease) assert.equal(release.title, `Jefferies Navigation v${pkg.version} — Stable`);
     assert.equal(hacs.filename, 'jefferies-navigation.js', 'HACS bundle filename mismatch');
     assert.equal(hacs.content_in_root, true);
-    assert.ok(bytes.length > 10000 && bytes.toString().includes('jts-n-hub'), 'Incomplete bundle');
+    assert.ok(bytes.length > 10000 && bytes.toString().includes('navigation-hub'), 'Incomplete bundle');
     new vm.Script(bytes.toString());
     return {version: pkg.version, tag: `v${pkg.version}`, sha256: crypto.createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length, filename: hacs.filename};
 }

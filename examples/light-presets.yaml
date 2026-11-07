@@ -1,6 +1,6 @@
 # Jefferies Navigation v1.7: numeric values may live on a separate device/integration.
 # Both number.* and input_number.* are supported; create/verify them in HA first.
-type: custom:jts-n-hub
+type: custom:navigation-hub
 name: Hub A
 size: 82
 logo: auto

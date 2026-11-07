@@ -54,7 +54,7 @@ class NativeFavorites(Cubes):
   blocks=re.findall(r'```yaml\s*\n(.*?)```',(root/'docs/SONOS_NATIVE_FAVORITES.md').read_text(),re.S)
   self.page.evaluate('config=>makeControl(config)',yaml.safe_load(blocks[1]))
   self.page.wait_for_function("control._model.artwork?.url==='/station-a.svg'")
-  self.assertTrue(self.page.locator('jts-n-control .station-artwork').is_visible());self.capture('native-favorites-documented-control')
+  self.assertTrue(self.page.locator('navigation-control .station-artwork').is_visible());self.capture('native-favorites-documented-control')
  def test_native_no_templates_both_surfaces_radio_actions_and_live_pause(self):
   self.page.evaluate("browseMode='hold'");self.start();self.page.wait_for_function('browseCalls.length===1');self.assertEqual(self.image().count(),0);self.capture('native-favorites-before')
   self.page.evaluate("browseMode='ok';browsePending.shift()({children:[{media_content_type:'favorites_folder',media_content_id:'object.item.audioItem.audioBroadcast'}]})")
@@ -77,7 +77,7 @@ class NativeFavorites(Cubes):
   self.page.evaluate("hass.states['sensor.sonos_favorites_cache'].attributes.items[0].thumbnail='/station-full-bleed.svg';pushState('sensor.unrelated','1')")
   self.assertEqual(self.sonos_slot(7).locator('.station-artwork').get_attribute('src'),'/station-a.svg');self.assertEqual(self.page.evaluate('browseCalls.length'),2)
   errors=self.page.evaluate("""()=>[ {favorites_cache_sensor:'sensor.sonos_favorites_cache'}, {favorites_browse:false} ].map(option=>{
-   const control=document.createElement('jts-n-control');try{control.setConfig({module:'sonos',entity:'media_player.player_a',...option});return 'accepted'}catch(error){return error.message}
+   const control=document.createElement('navigation-control');try{control.setConfig({module:'sonos',entity:'media_player.player_a',...option});return 'accepted'}catch(error){return error.message}
   })""")
   self.assertTrue(all('Remove' in error or 'removed' in error for error in errors))
  def test_browse_failure_never_falls_back_to_cache_and_missing_map_never_browses(self):
@@ -96,7 +96,7 @@ class NativeFavorites(Cubes):
   self.page.evaluate('ng.disposeContext(hub._menuContext);hub.remove()');self.page.wait_for_timeout(200);self.assertEqual(self.page.locator('jts-n-menu').count(),0)
  def test_reconnect_reload_ttl_and_shared_multi_card_dedup(self):
   self.page.clock.install();self.start();self.page.clock.run_for(150);self.wait_image();self.assertEqual(self.page.evaluate('browseCalls.length'),2)
-  self.page.evaluate("window.second=document.createElement('jts-n-control');second.setConfig({module:'sonos',entity:'media_player.player_a',favorites_sensor:'sensor.favorites'});document.body.append(second)")
+  self.page.evaluate("window.second=document.createElement('navigation-control');second.setConfig({module:'sonos',entity:'media_player.player_a',favorites_sensor:'sensor.favorites'});document.body.append(second)")
   self.page.clock.run_for(150);self.assertEqual(self.page.evaluate('browseCalls.length'),2)
   self.page.evaluate("hass.connection.connected=false;hass.connection.dispatchEvent(new Event('disconnected'))");self.page.clock.run_for(150);self.assertEqual(self.image().count(),0)
   self.page.evaluate("hass.connection.connected=true;hass.connection.dispatchEvent(new Event('ready'))");self.page.clock.run_for(200);self.wait_image();self.assertEqual(self.page.evaluate('browseCalls.length'),4)

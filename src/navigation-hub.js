@@ -19,7 +19,7 @@ class NavigationHub extends CubeElement
 {
     static get is()
     {
-        return 'jts-n-hub';
+        return 'navigation-hub';
     }
 
     constructor()
@@ -488,7 +488,7 @@ class NavigationHub extends CubeElement
                 try{const m=new DOMMatrixReadOnly(css.transform);if(!m.is2D || Math.abs(m.b)>.0001 || Math.abs(m.c)>.0001 || m.a<=0 || m.d<=0)visible=false;}catch(_){visible=false;}
             }
         }
-        const targets=[...menu.shadowRoot.querySelectorAll('#navigation-cells > jts-n-menu-item,#navigation-cells > jts-n-control')]
+        const targets=[...menu.shadowRoot.querySelectorAll('#navigation-cells > jts-n-menu-item,#navigation-cells > navigation-control')]
             .map(cell=>cell.shadowRoot.querySelector('.hex-svg'))
             .filter(Boolean).map(hex=>hex.getBoundingClientRect()).filter(r=>r.width && r.height).map(originBeam.hex);
         const geometry=visible && originBeam.connection(source,targets);
@@ -560,7 +560,7 @@ class NavigationHub extends CubeElement
         const context=this._menuContext;
         if(context.info)return false;
         const menu=context.scene;
-        for(const item of menu.shadowRoot.querySelectorAll('jts-n-menu-item,jts-n-control'))item._cancelGesture();
+        for(const item of menu.shadowRoot.querySelectorAll('jts-n-menu-item,navigation-control'))item._cancelGesture();
         context.stack=[];
         context.currentConfig._persistent_hub_root=true;
         this._clearExpansion();
