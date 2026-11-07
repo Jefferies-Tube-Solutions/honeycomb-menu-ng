@@ -85,3 +85,6 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - The owner selected a single full Jefferies Navigation product lockup for this README. Use its white lettering on the dark GitHub theme and Deep Space lettering on the light theme. This is a scoped override of the generic publisher-plus-product README layout.
 - Pin both approved v1 images and the theme selectors in the product's branding gate. Keep the circular in-card compass as a separate asset. Retain the version badge and the rest of the README.
 - The change supersedes the candidate that was previously in CI. The public beta remains on hold until the updated candidate passes its own checks.
+
+- JTS Brand System PR [#7](https://github.com/Jefferies-Tube-Solutions/jts-brand-system/pull/7) merged after its self-check passed. It records the Navigation product-lockup exception and separate change-history rule.
+- The [Captain’s Log](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/blob/feature/jefferies-navigation-v2/docs/CAPTAINS_LOG.md) preserves prior release notes and moved README history, records all 67 public releases and 52 additional tag-only entries, and links the complete commit history. The branding gate requires the log link and the one visible themed product lockup. Exact candidate: `21f8f91ff10aff73c17b2a9b888ab249750f1a48`.
