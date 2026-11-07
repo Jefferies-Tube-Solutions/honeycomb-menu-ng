@@ -88,3 +88,8 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 
 - JTS Brand System PR [#7](https://github.com/Jefferies-Tube-Solutions/jts-brand-system/pull/7) merged after its self-check passed. It records the Navigation product-lockup exception and separate change-history rule.
 - The [Captain’s Log](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation/blob/feature/jefferies-navigation-v2/docs/CAPTAINS_LOG.md) preserves prior release notes and moved README history, records all 67 public releases and 52 additional tag-only entries, and links the complete commit history. The branding gate requires the log link and the one visible themed product lockup. Exact candidate: `21f8f91ff10aff73c17b2a9b888ab249750f1a48`.
+
+### JTS product README structure
+
+- Use the same top-level flow as JTS Tariff Engine: Mission Directive, System Registry, Commissioning, Operational Protocol, Verification, Fault Isolation and Recovery, Manuals, Operations Log and Approved artwork. Navigation retains its separately approved full product lockup and Captain’s Log link.
+- Existing technical prose, YAML, links and examples were retained. The Navigation branding check now enforces section order. Candidate: `63a41d5c255a7ab59116bc6ff1c47017d664d6a6`.
