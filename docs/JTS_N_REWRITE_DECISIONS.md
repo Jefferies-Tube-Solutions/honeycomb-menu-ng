@@ -59,3 +59,11 @@ Baseline located. Development host and file-share access verified. Rewrite and a
 - The desired repository slug is `Jefferies-Tube-Solutions/jefferies-navigation`. This supersedes the earlier choice to retain the old slug for beta. Keep the same repository history and existing release records.
 - v2 is a clean cutover. Do not add HC aliases, resource shims, compatibility adapters or fallback bundle filenames. Historical documentation, license notices and existing release records keep their original identity.
 - Future candidates must pass an automated branding check through the existing CI and release test entry points. Document the approved artwork source and separate the circular in-card image from the full hexagonal product logo. Record asset hashes and confirm naming/packaging rules.
+
+### Existing dashboard acceptance and release candidate
+
+- Renamed the GitHub repository in place to [jefferies-navigation](https://github.com/Jefferies-Tube-Solutions/jefferies-navigation). PR #170 and repository history were retained. The GitHub About text now uses Jefferies Navigation.
+- Registered the JTS-N resource in the Home Assistant UI. Converted the existing test dashboard, including its Hub and standalone Control, at the same URL. It now displays as JTS-N DEV / JTS-N Test. Preserved the floorplan, entity assignments and geometry. A local backup was taken.
+- Rendered the round compass directly from the approved Blender compass collection, leaving the enclosing hexagon to the JTS-N card. Verified the new dial in real Home Assistant and activated it to display `v2.0.0 beta 1`. No device service was called.
+- Future builds and guarded releases run the JTS branding check through `npm test`. It enforces the package, runtime, HACS and release names, checksums for the approved artwork, and README brand elements.
+- Public release notes contain only the owner-requested breaking-change notice. Branch, commit and checksum evidence remains in the release provenance assets. Exact final candidate `d7ecfa61b4be4752379b1f2b761d730d3a055ae3` contains the publisher-only follow-up. Final exact-head CI and publication are pending.
